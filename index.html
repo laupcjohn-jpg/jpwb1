@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>日语学习 · 单词与测验</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+
+    <!-- ===================== 侧边栏 ===================== -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">日</div>
+        <div class="brand-text">
+          <h1>日语学习</h1>
+          <span>单词 · 测验</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-btn is-active" data-view="input">✏️ 添加单词</button>
+        <button class="nav-btn" data-view="library">📚 单词库</button>
+        <button class="nav-btn" data-view="quiz">🎯 测验练习</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="stat-card">
+          <div class="stat-number" id="stat-total">0</div>
+          <div class="stat-label">单词总数</div>
+        </div>
+        <div class="actions">
+          <button id="btn-export" class="btn btn-ghost btn-sm">导出备份</button>
+          <button id="btn-import" class="btn btn-ghost btn-sm">导入备份</button>
+        </div>
+        <p class="hint">数据保存在浏览器本地，建议定期导出备份。</p>
+      </div>
+    </aside>
+
+    <!-- ===================== 主内容区 ===================== -->
+    <main class="main">
+
+      <!-- 视图：添加单词 -->
+      <section id="view-input" class="view is-active">
+        <header class="view-header">
+          <h2>添加单词</h2>
+          <p>录入新单词，包含汉字、假名、词性和意思。</p>
+        </header>
+
+        <form id="word-form" class="card form-card">
+          <div class="field">
+            <label for="f-kanji">汉字 <span class="opt">（可选）</span></label>
+            <input type="text" id="f-kanji" placeholder="例：食べる" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="f-kana">假名 <span class="req">*</span></label>
+            <input type="text" id="f-kana" placeholder="例：たべる" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="f-pos">词性 <span class="req">*</span></label>
+            <select id="f-pos"></select>
+          </div>
+          <div class="field">
+            <label for="f-meaning">意思 <span class="req">*</span></label>
+            <input type="text" id="f-meaning" placeholder="例：吃" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="f-example">例句 <span class="opt">（可选）</span></label>
+            <input type="text" id="f-example" placeholder="例：毎朝パンを食べる。" autocomplete="off">
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">保存单词</button>
+            <span id="form-msg" class="form-msg"></span>
+          </div>
+        </form>
+
+        <div class="tip-card">
+          <strong>提示：</strong>词性从你设置的分类中选择，可在「单词库 → 分类管理」里增删改。分类用于归类查看和测验中「同一词性」的干扰项抽取。
+        </div>
+      </section>
+
+      <!-- 视图：单词库（按词性分类） -->
+      <section id="view-library" class="view">
+        <header class="view-header">
+          <h2>单词库</h2>
+          <p>按词性分类查看，并跟踪每个单词的出现次数与正确率。</p>
+        </header>
+
+        <!-- 分类管理 -->
+        <div class="card cat-panel">
+          <div class="cat-panel-head">
+            <h3>分类管理</h3>
+            <button type="button" class="btn btn-ghost btn-sm" id="cat-toggle">收起</button>
+          </div>
+          <div id="cat-body">
+            <div id="cat-list" class="cat-list"></div>
+            <div class="cat-add">
+              <input type="text" id="cat-new" placeholder="输入新分类名称，例如「一类动词」" autocomplete="off">
+              <button type="button" class="btn btn-primary btn-sm" id="cat-add-btn">添加分类</button>
+            </div>
+            <p id="cat-msg" class="form-msg"></p>
+          </div>
+        </div>
+
+        <div id="library-empty" class="empty" style="display:none">暂无单词，请先到「添加单词」录入。</div>
+        <div id="library-groups"></div>
+      </section>
+
+      <!-- 视图：测验练习 -->
+      <section id="view-quiz" class="view">
+        <!-- 内容由 JS 渲染 -->
+      </section>
+
+    </main>
+  </div>
+
+  <!-- 编辑单词弹窗 -->
+  <div id="edit-modal" class="modal-overlay" hidden>
+    <div class="modal card">
+      <h3>编辑单词</h3>
+      <form id="edit-form">
+        <div class="field">
+          <label for="e-kanji">汉字 <span class="opt">（可选）</span></label>
+          <input type="text" id="e-kanji" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="e-kana">假名 <span class="req">*</span></label>
+          <input type="text" id="e-kana" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="e-pos">词性 <span class="req">*</span></label>
+          <select id="e-pos"></select>
+        </div>
+        <div class="field">
+          <label for="e-meaning">意思 <span class="req">*</span></label>
+          <input type="text" id="e-meaning" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="e-example">例句 <span class="opt">（可选）</span></label>
+          <input type="text" id="e-example" autocomplete="off">
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" id="edit-cancel">取消</button>
+          <button type="submit" class="btn btn-primary">保存修改</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <input type="file" id="import-file" accept="application/json,.json" style="display:none">
+
+  <script src="js/store.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

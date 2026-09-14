@@ -1,0 +1,162 @@
+/* =========================================================
+ * quiz.js —— 测验核心逻辑
+ *  - 按「已掌握」权重随机抽取 N 个单词（无放回）
+ *  - 每个单词生成：看汉字写假名（读音题，纯假名词跳过）+ 意思四选一
+ *  - 判分与假名归一化（平假名/片假名视为等价）
+ *
+ * 掌握规则：出现次数 > 5 且 正确率 > 80% 时，降低出现概率。
+ * ========================================================= */
+window.Quiz = (function () {
+  'use strict';
+
+  var QUIZ_SIZE = 10;              // 每次练习的单词数
+  var MASTER_APPEARED = 5;         // 出题次数阈值（严格大于）
+  var MASTER_RATE = 0.8;           // 正确率阈值（严格大于）
+  var MASTER_WEIGHT = 0.2;         // 已掌握单词的抽取权重（降低出现概率）
+  var NORMAL_WEIGHT = 1.0;
+
+  /* ---------- 掌握判定 ---------- */
+  function correctRate(w) {
+    if (!w.stats.appeared) return 0;
+    return w.stats.correct / w.stats.appeared;
+  }
+
+  function isMastered(w) {
+    return w.stats.appeared > MASTER_APPEARED && correctRate(w) > MASTER_RATE;
+  }
+
+  function weightOf(w) {
+    return isMastered(w) ? MASTER_WEIGHT : NORMAL_WEIGHT;
+  }
+
+  /* ---------- 随机工具 ---------- */
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  /* ---------- 加权抽取（无放回） ---------- */
+  function pickWeighted(pool, n) {
+    var remaining = pool.slice();
+    var picked = [];
+    while (picked.length < n && remaining.length > 0) {
+      var total = 0;
+      remaining.forEach(function (w) { total += weightOf(w); });
+      var r = Math.random() * total;
+      var idx = 0;
+      for (var i = 0; i < remaining.length; i++) {
+        r -= weightOf(remaining[i]);
+        if (r <= 0) { idx = i; break; }
+      }
+      picked.push(remaining[idx]);
+      remaining.splice(idx, 1);
+    }
+    return picked;
+  }
+
+  /* ---------- 意思干扰项抽取（同词性优先，去重） ---------- */
+  function pickDistractors(w, allWords) {
+    var correctMeaning = String(w.meaning).trim();
+    var samePos = shuffle(allWords.filter(function (x) {
+      return x.id !== w.id && x.pos === w.pos;
+    }));
+    var others = shuffle(allWords.filter(function (x) {
+      return x.id !== w.id && x.pos !== w.pos;
+    }));
+
+    var used = {};
+    used[correctMeaning] = true;
+    var distractors = [];
+
+    function tryAdd(x) {
+      if (distractors.length >= 3) return;
+      var m = String(x.meaning).trim();
+      if (used[m]) return;
+      used[m] = true;
+      distractors.push(x);
+    }
+
+    samePos.forEach(tryAdd);
+    // 同词性干扰项不足 3 个时（小词库/意思大量重复），用其它词性的意思兜底，
+    // 以保证选项数量；这是有意的降级，仅在某个词性分组词数不足时触发。
+    if (distractors.length < 3) others.forEach(tryAdd);
+    return distractors;
+  }
+
+  /* 判断字符串是否含汉字（CJK 表意文字），用于决定是否考读音 */
+  function hasKanji(s) {
+    return /[㐀-䶿一-鿿豈-﫿]/.test(String(s || ''));
+  }
+
+  /* ---------- 生成单个单词的题目 ---------- */
+  function buildQuestion(w, allWords) {
+    // 只保留「看汉字写假名」：有汉字才考读音；纯假名词（无汉字）跳过读音题，得分由意思题决定
+    var readPart = hasKanji(w.kanji)
+      ? { mode: 'read', prompt: w.kanji, target: w.kana, label: '请写出假名（读音）' }
+      : null;
+
+    var distractors = pickDistractors(w, allWords);
+    var options = shuffle([{ id: w.id, meaning: w.meaning }]
+      .concat(distractors.map(function (x) { return { id: x.id, meaning: x.meaning }; })));
+
+    return {
+      wordId: w.id,
+      kanji: w.kanji,
+      kana: w.kana,
+      pos: w.pos,
+      meaning: w.meaning,
+      readPart: readPart,
+      meaningOptions: options
+    };
+  }
+
+  /* ---------- 生成一次练习的题目集 ---------- */
+  function makeSession(allWords) {
+    if (!allWords || allWords.length === 0) return [];
+    var n = Math.min(QUIZ_SIZE, allWords.length);
+    var selected = pickWeighted(allWords, n);
+    return selected.map(function (w) { return buildQuestion(w, allWords); });
+  }
+
+  /* ---------- 假名归一化 ---------- */
+  // 片假名 -> 平假名（利用 Unicode 固定偏移）
+  function toHiragana(str) {
+    var out = '';
+    for (var i = 0; i < str.length; i++) {
+      var c = str.codePointAt(i);
+      if (c >= 0x30A1 && c <= 0x30F6) {
+        out += String.fromCodePoint(c - 0x60);
+      } else {
+        out += str[i];
+      }
+    }
+    return out;
+  }
+
+  function normalizeKana(s) {
+    return toHiragana(String(s || '').trim()).replace(/[\s　]/g, '');
+  }
+
+  /* ---------- 判分 ---------- */
+  function checkRead(q, input) {
+    return normalizeKana(input) === normalizeKana(q.readPart.target);
+  }
+
+  function checkMeaning(q, selectedId) {
+    return selectedId === q.wordId;
+  }
+
+  return {
+    QUIZ_SIZE: QUIZ_SIZE,
+    makeSession: makeSession,
+    isMastered: isMastered,
+    correctRate: correctRate,
+    checkRead: checkRead,
+    checkMeaning: checkMeaning,
+    normalizeKana: normalizeKana
+  };
+})();
