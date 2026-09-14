@@ -106,6 +106,54 @@ body {
 
 .hint { font-size: 11px; color: var(--muted); margin: 12px 0 0; }
 
+/* ===================== 云同步 ===================== */
+.sync-panel {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.sync-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.sync-title { font-size: 12px; font-weight: 600; }
+.sync-status {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+  max-width: 62%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sync-status.is-ok { color: var(--good); }
+.sync-status.is-error { color: var(--bad); }
+.sync-status.is-syncing { color: var(--accent-dark); }
+
+.sync-key-row { display: flex; gap: 8px; }
+.sync-key-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.sync-key-row input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.sync-key-row .btn { flex: none; }
+.sync-now { width: 100%; margin-top: 8px; }
+.sync-panel .hint { margin-top: 8px; }
+
 /* ===================== 视图 ===================== */
 .view { display: none; animation: fade .2s ease; }
 .view.is-active { display: block; }
@@ -512,6 +560,21 @@ body {
 .fb-title { font-weight: 700; font-size: 16px; margin-bottom: 8px; }
 .fb-lines div { padding: 2px 0; }
 .fb-word { margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(0,0,0,.12); color: #4a4f5c; }
+/* 答完后展示的例句，样式与单词库里的「例：」保持一致 */
+.fb-example {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(0, 0, 0, .12);
+  font-size: 13px;
+  line-height: 1.6;
+  color: #5c6472;
+}
+.fb-example::before {
+  content: "例：";
+  margin-right: 2px;
+  color: var(--muted);
+  font-weight: 600;
+}
 
 /* ===================== 测验结果 ===================== */
 .quiz-result { max-width: 620px; text-align: center; padding: 36px 32px; }
@@ -573,7 +636,19 @@ body {
   .brand { margin-bottom: 0; }
   .nav { flex-direction: row; }
   .nav-btn { width: auto; }
-  .sidebar-footer { display: none; }
+  /* 手机上侧边栏收成一行：统计/导入导出让位，但云同步必须留着——手机端也要能填同步码 */
+  .sidebar-footer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 0;
+    padding-top: 0;
+  }
+  .sidebar-footer .stat-card,
+  .sidebar-footer .actions,
+  .sidebar-footer > .hint { display: none; }
+  .sync-panel { width: 100%; margin-top: 0; padding-top: 0; border-top: none; }
+  .sync-panel .hint { display: none; }
   .main { padding: 20px 16px; }
   .word-row { grid-template-columns: 1.1fr 1.1fr 1.5fr auto; }
   .c-stat { display: none; }

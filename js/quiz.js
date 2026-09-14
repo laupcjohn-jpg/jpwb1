@@ -2,6 +2,7 @@
  * quiz.js —— 测验核心逻辑
  *  - 按「已掌握」权重随机抽取 N 个单词（无放回）
  *  - 每个单词生成：看汉字写假名（读音题，纯假名词跳过）+ 意思四选一
+ *  - 例句随题目带出，但只在答完后的反馈里展示（答题时展示会剧透意思题）
  *  - 判分与假名归一化（平假名/片假名视为等价）
  *
  * 掌握规则：出现次数 > 5 且 正确率 > 80% 时，降低出现概率。
@@ -109,6 +110,7 @@ window.Quiz = (function () {
       kana: w.kana,
       pos: w.pos,
       meaning: w.meaning,
+      example: w.example || '',
       readPart: readPart,
       meaningOptions: options
     };

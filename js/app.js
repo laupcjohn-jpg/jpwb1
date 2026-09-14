@@ -10,6 +10,14 @@
   function $(sel, root) { return (root || document).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
 
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+  function timeLabel(ts) {
+    if (!ts) return '';
+    var d = new Date(ts);
+    return pad2(d.getHours()) + ':' + pad2(d.getMinutes()) + ':' + pad2(d.getSeconds());
+  }
+
   function escapeHtml(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -699,6 +707,7 @@
         '<div class="quiz-feedback ' + (ok ? 'is-correct' : 'is-wrong') + '">' +
           '<div class="fb-title">' + (ok ? '✅ 回答正确！' : '❌ 回答错误') + '</div>' +
           '<div class="fb-word">' + escapeHtml(q.kanji || q.kana) + ' 「' + escapeHtml(q.kana) + '」 — ' + escapeHtml(q.meaning) + '</div>' +
+          (q.example ? '<div class="fb-example">' + escapeHtml(q.example) + '</div>' : '') +
         '</div>' +
         '<button class="btn btn-primary btn-lg" id="quiz-next" style="width:100%">' +
           (isLast ? '查看结果' : '下一题') + '</button>' +
@@ -719,15 +728,15 @@
     var total = st.questions.length;
     var score = st.results.filter(function (r) { return r && r.allCorrect; }).length;
 
-    // 记录出现次数与答对次数
+    // 记录出现次数与答对次数（走 Store.recordResults，以便刷新 updatedAt 供同步使用）
+    var ids = [];
+    var flags = [];
     st.results.forEach(function (r, i) {
       if (!r) return;
-      var w = Store.get(st.questions[i].wordId);
-      if (!w) return;
-      w.stats.appeared += 1;
-      if (r.allCorrect) w.stats.correct += 1;
+      ids.push(st.questions[i].wordId);
+      flags.push(r.allCorrect);
     });
-    try { Store.save(); } catch (e) { /* 忽略，不影响展示 */ }
+    try { Store.recordResults(ids, flags); } catch (e) { /* 忽略，不影响展示 */ }
 
     var rows = st.questions.map(function (q, i) {
       var r = st.results[i];
@@ -818,6 +827,78 @@
   }
 
   /* =========================================================
+   * 云同步面板
+   * ========================================================= */
+  var SYNC_STATUS_CLASS = { idle: '', syncing: 'is-syncing', ok: 'is-ok', error: 'is-error' };
+
+  function initSync() {
+    var statusEl = $('#sync-status');
+    var keyInput = $('#sync-key');
+    var connectBtn = $('#sync-connect');
+    var nowBtn = $('#sync-now');
+
+    function renderSyncStatus() {
+      var st = Sync.status();
+      var text;
+
+      if (!st.key) text = '未设置同步码';
+      else if (st.status === 'syncing') text = '同步中…';
+      else if (st.status === 'ok') text = '已同步 ' + timeLabel(st.lastSyncAt);
+      else if (st.status === 'error') text = st.message || '同步失败';
+      else text = st.message || '等待同步';
+
+      statusEl.textContent = text;
+      statusEl.className = 'sync-status ' + (SYNC_STATUS_CLASS[st.status] || '');
+      // 失败原因常常很长，放 title 里免得挤压侧边栏
+      statusEl.title = st.status === 'error' ? (st.message || '') : text;
+
+      if (document.activeElement !== keyInput) keyInput.value = st.key;
+      connectBtn.textContent = st.key ? '更换' : '连接';
+      nowBtn.hidden = !st.key;
+    }
+
+    function connect() {
+      var code = keyInput.value.trim();
+      var current = Sync.getKey();
+
+      if (!code) { Sync.setKey(''); renderSyncStatus(); return; }
+
+      if (!Sync.isValidKey(code)) {
+        alert('同步码只能使用字母、数字、点、下划线、连字符，长度 1–64。');
+        keyInput.focus();
+        return;
+      }
+      if (code === current) { Sync.syncNow(); return; }
+      // 已有同步码时换成另一个，意味着把本机词库并到另一份数据里，先确认
+      if (current && !confirm('切换到同步码「' + code + '」？\n\n本机现有词库会与该同步码下的数据合并。')) return;
+
+      Sync.setKey(code);
+      Sync.syncNow();
+    }
+
+    Sync.onStatus(renderSyncStatus);
+
+    // 云端合并下来的数据要立刻反映到界面
+    Sync.onApplied(function () {
+      refreshPosSelects();
+      renderCategories();
+      renderLibrary();
+      updateSidebarStats();
+      // 测验进行中就不打断；同步来的数据会在交卷时自然生效
+      if (!quizState && $('#view-quiz').classList.contains('is-active')) renderQuizView();
+    });
+
+    connectBtn.addEventListener('click', connect);
+    nowBtn.addEventListener('click', function () { Sync.syncNow(); });
+    keyInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); connect(); }
+    });
+
+    Sync.init();
+    renderSyncStatus();
+  }
+
+  /* =========================================================
    * 初始化
    * ========================================================= */
   function init() {
@@ -834,6 +915,7 @@
     $('#library-groups').addEventListener('click', onLibraryClick);
 
     updateSidebarStats();
+    initSync();
     $('#f-kanji').focus();
   }
 

@@ -35,6 +35,20 @@
           <button id="btn-import" class="btn btn-ghost btn-sm">导入备份</button>
         </div>
         <p class="hint">数据保存在浏览器本地，建议定期导出备份。</p>
+
+        <!-- 云同步 -->
+        <div class="sync-panel">
+          <div class="sync-head">
+            <span class="sync-title">☁️ 云同步</span>
+            <span id="sync-status" class="sync-status">未设置同步码</span>
+          </div>
+          <div class="sync-key-row">
+            <input type="text" id="sync-key" placeholder="同步码" autocomplete="off" spellcheck="false">
+            <button type="button" id="sync-connect" class="btn btn-ghost btn-sm">连接</button>
+          </div>
+          <button type="button" id="sync-now" class="btn btn-ghost btn-sm sync-now" hidden>立即同步</button>
+          <p class="hint">手机和电脑填同一个同步码，即可共享同一份词库。</p>
+        </div>
       </div>
     </aside>
 
@@ -152,6 +166,7 @@
 
   <script src="js/store.js"></script>
   <script src="js/quiz.js"></script>
+  <script src="js/sync.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

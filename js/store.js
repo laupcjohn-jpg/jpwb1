@@ -10,20 +10,27 @@
  *     meaning: string,     // 意思（必填）
  *     example: string,     // 例句（可为空）
  *     createdAt: number,   // 创建时间戳
+ *     updatedAt: number,   // 最后修改时间戳（多端同步时用来判断谁更新）
  *     stats: { appeared: number, correct: number }  // correct <= appeared
  *   }
  *
  * 持久化采用「先写入 localStorage 成功后再提交到内存」的原子方式，
  * 保证存储失败时内存与持久化状态一致（不会静默丢失）。
+ *
+ * 多端同步支持：变更后通过 onChange 通知同步模块；删除会写「墓碑」
+ * （DEL_KEY），使删除能传播到其它设备而不被云端旧数据复活。
  * ========================================================= */
 window.Store = (function () {
   'use strict';
 
   var KEY = 'jpStudy.words.v1';
   var CAT_KEY = 'jpStudy.cats.v1';
+  var DEL_KEY = 'jpStudy.deleted.v1';
   var DEFAULT_CATS = ['一类动词', '二类动词', '三类动词', '一类形容词', '二类形容词', '名词'];
   var words = [];
   var cats = [];
+  var deleted = {};   // id -> 删除时间戳（墓碑）
+  var changeCbs = []; // 变更监听（同步模块用）
 
   function uid() {
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -59,6 +66,12 @@ window.Store = (function () {
     var appeared = toInt(item.stats && item.stats.appeared);
     var correct = toInt(item.stats && item.stats.correct, appeared); // 钳制 correct <= appeared
 
+    // createdAt 缺省取当前时间；updatedAt 缺省回落到 createdAt。
+    // 关键：旧数据缺 updatedAt 时不能赋「当前时间」，否则每次加载都会让本地
+    // 时间戳凭空变新、永远赢过云端，同步就失效了。
+    var createdAt = toInt(item.createdAt) || Date.now();
+    var updatedAt = toInt(item.updatedAt) || createdAt;
+
     return {
       id: id,
       kanji: kanji,
@@ -66,7 +79,8 @@ window.Store = (function () {
       pos: pos,
       meaning: meaning,
       example: example,
-      createdAt: item.createdAt || Date.now(),
+      createdAt: createdAt,
+      updatedAt: updatedAt,
       stats: { appeared: appeared, correct: correct }
     };
   }
@@ -86,8 +100,58 @@ window.Store = (function () {
   }
 
   /* 写入 localStorage；arr 缺省时序列化当前内存数据。写入失败会抛出。 */
-  function save(arr) {
+  function persistWords(arr) {
     localStorage.setItem(KEY, JSON.stringify(arr || words));
+  }
+
+  /* 公开的 save：持久化并通知同步模块（测验改完成统计后由 app.js 调用） */
+  function save(arr) {
+    persistWords(arr);
+    emitChange();
+  }
+
+  /* ---------- 变更通知（同步模块据此做防抖自动上传） ---------- */
+  function emitChange() {
+    changeCbs.forEach(function (cb) {
+      try { cb(); } catch (e) { /* 单个回调出错不影响其它回调 */ }
+    });
+  }
+
+  function onChange(cb) {
+    if (typeof cb === 'function') changeCbs.push(cb);
+  }
+
+  /* ---------- 墓碑：记录删除，让删除能同步到其它设备 ---------- */
+  function loadDeleted() {
+    try {
+      var raw = localStorage.getItem(DEL_KEY);
+      var parsed = raw ? JSON.parse(raw) : null;
+      deleted = {};
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        Object.keys(parsed).forEach(function (id) {
+          if (/^[A-Za-z0-9._-]+$/.test(id)) {
+            deleted[id] = toInt(parsed[id]) || Date.now();
+          }
+        });
+      }
+    } catch (e) {
+      deleted = {};
+    }
+    return deleted;
+  }
+
+  /* 墓碑写入失败不应阻断删除本身，故吞掉异常 */
+  function saveDeleted(next) {
+    deleted = next;
+    try {
+      localStorage.setItem(DEL_KEY, JSON.stringify(next));
+    } catch (e) { /* 忽略：本地删除仍然生效，只是暂时无法同步出去 */ }
+  }
+
+  function deletedMap() {
+    var out = {};
+    Object.keys(deleted).forEach(function (k) { out[k] = deleted[k]; });
+    return out;
   }
 
   /* ============ 分类（词性）管理 ============ */
@@ -116,8 +180,9 @@ window.Store = (function () {
   /**
    * 同时持久化单词与分类。任一写入失败则回滚两者，
    * 避免出现「分类改了但单词没跟上」的错位状态。
+   * silent=true 时不触发变更通知（同步模块写回合并结果时用，避免自激循环）。
    */
-  function saveBoth(nextWords, nextCats) {
+  function saveBoth(nextWords, nextCats, silent) {
     var prevWordsRaw = JSON.stringify(words);
     var prevCatsRaw = JSON.stringify(cats);
     try {
@@ -132,6 +197,7 @@ window.Store = (function () {
     }
     words = nextWords;
     cats = nextCats;
+    if (!silent) emitChange();
   }
 
   function categories() { return cats; }
@@ -148,6 +214,7 @@ window.Store = (function () {
     var next = cats.concat([name]);
     localStorage.setItem(CAT_KEY, JSON.stringify(next)); // 失败会抛出，内存不变
     cats = next;
+    emitChange();
     return name;
   }
 
@@ -160,12 +227,14 @@ window.Store = (function () {
     if (oldName === newName) return true;
     if (cats.indexOf(newName) >= 0) throw new Error('已存在同名分类');
 
+    var now = Date.now();
     var nextCats = cats.map(function (c) { return c === oldName ? newName : c; });
     var nextWords = words.map(function (w) {
       if (w.pos !== oldName) return w;
       return {
         id: w.id, kanji: w.kanji, kana: w.kana, pos: newName,
-        meaning: w.meaning, createdAt: w.createdAt, stats: w.stats
+        meaning: w.meaning, example: w.example,
+        createdAt: w.createdAt, updatedAt: now, stats: w.stats
       };
     });
     saveBoth(nextWords, nextCats);
@@ -180,6 +249,7 @@ window.Store = (function () {
     var next = cats.filter(function (c) { return c !== name; });
     localStorage.setItem(CAT_KEY, JSON.stringify(next));
     cats = next;
+    emitChange();
     return true;
   }
 
@@ -201,14 +271,16 @@ window.Store = (function () {
       throw new Error('缺少必填字段（假名/词性/意思）');
     }
     var next = words.concat([w]);
-    save(next);       // 先持久化
-    words = next;     // 成功后再提交内存
+    persistWords(next); // 先持久化
+    words = next;       // 成功后再提交内存
+    emitChange();       // 内存已就绪才通知，同步模块才能读到新数据
     return w;
   }
 
   function update(id, patch) {
     var w = get(id);
     if (!w) return false;
+    var now = Date.now();
     var next = words.map(function (x) {
       if (x.id !== id) return x;
       return {
@@ -219,20 +291,65 @@ window.Store = (function () {
         meaning: patch.meaning !== undefined ? String(patch.meaning).trim() : x.meaning,
         example: patch.example !== undefined ? String(patch.example).trim() : (x.example || ''),
         createdAt: x.createdAt,
+        updatedAt: now,
         stats: x.stats
       };
     });
-    save(next);
+    persistWords(next);
     words = next;
+    emitChange();
     return true;
   }
 
   function remove(id) {
     var next = words.filter(function (w) { return w.id !== id; });
     if (next.length === words.length) return false;
-    save(next);
+    persistWords(next);
     words = next;
+
+    // 留一个墓碑：否则同步时云端那条旧记录会被当成「本地没有」而原样拉回来
+    var nextDel = deletedMap();
+    nextDel[id] = Date.now();
+    saveDeleted(nextDel);
+
+    emitChange();
     return true;
+  }
+
+  /**
+   * 批量记录一次测验结果：出现次数 +1，答对时答对次数 +1。
+   *
+   * 这里必须刷新 updatedAt。若沿用旧时间戳，同步遇到云端同时间的记录会走
+   * 「指纹裁决」，而指纹是字符串比较——appeared 从 9 变 10 时 "10" < "9"，
+   * 新统计反而会输给旧值，白丢一次作答记录。
+   *
+   * ids/correctFlags 等长；返回实际更新的单词数。
+   */
+  function recordResults(ids, correctFlags) {
+    var now = Date.now();
+    var flags = {};
+    for (var i = 0; i < ids.length; i++) flags[ids[i]] = !!correctFlags[i];
+
+    var updated = 0;
+    var next = words.map(function (w) {
+      if (!Object.prototype.hasOwnProperty.call(flags, w.id)) return w;
+      updated++;
+      return {
+        id: w.id, kanji: w.kanji, kana: w.kana, pos: w.pos,
+        meaning: w.meaning, example: w.example,
+        createdAt: w.createdAt, updatedAt: now,
+        stats: {
+          appeared: w.stats.appeared + 1,
+          correct: w.stats.correct + (flags[w.id] ? 1 : 0)
+        }
+      };
+    });
+
+    if (!updated) return 0;
+    persistWords(next);
+    words = next;
+    emitChange();
+    return updated;
   }
 
   function exportData() {
@@ -272,6 +389,11 @@ window.Store = (function () {
 
     var newCats = [];
     if (toAdd.length) {
+      // 导入的条目一律标成「刚更新」。备份里的旧时间戳会让它们在同步时
+      // 输给云端旧版本，导致刚导入的内容推不上去。
+      var now = Date.now();
+      toAdd.forEach(function (w) { w.updatedAt = now; });
+
       var next = words.concat(toAdd);
       // 导入数据里出现的新词性自动登记到分类表，避免产生「未登记分类」
       toAdd.forEach(function (w) {
@@ -280,15 +402,28 @@ window.Store = (function () {
       if (newCats.length) {
         saveBoth(next, cats.concat(newCats));
       } else {
-        save(next);
+        persistWords(next);
         words = next;
+        emitChange();
       }
     }
     return { added: toAdd.length, ignored: ignored, newCategories: newCats };
   }
 
+  /**
+   * 用合并结果整体替换本地数据（同步模块专用）。
+   * silent 写回：不触发 onChange，避免「同步 → 通知 → 再同步」的自激循环。
+   */
+  function replaceAll(nextWords, nextCats, nextDeleted) {
+    var w = (nextWords || []).map(normalizeWord).filter(function (x) { return x; });
+    var c = (nextCats && nextCats.length) ? nextCats.slice() : cats.slice();
+    saveBoth(w, c, true);
+    if (nextDeleted) saveDeleted(nextDeleted);
+  }
+
   load();
   loadCats();
+  loadDeleted();
 
   return {
     all: all,
@@ -296,6 +431,7 @@ window.Store = (function () {
     add: add,
     update: update,
     remove: remove,
+    recordResults: recordResults,
     exportData: exportData,
     importData: importData,
     save: save,
@@ -304,6 +440,10 @@ window.Store = (function () {
     catCount: catCount,
     addCategory: addCategory,
     renameCategory: renameCategory,
-    deleteCategory: deleteCategory
+    deleteCategory: deleteCategory,
+    /* 多端同步 */
+    onChange: onChange,
+    replaceAll: replaceAll,
+    deletedMap: deletedMap
   };
 })();
