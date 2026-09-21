@@ -126,7 +126,7 @@ window.Sync = (function () {
   function fingerprint(w) {
     var s = w.stats || {};
     return [
-      w.kanji, w.kana, w.pos, w.meaning, w.example,
+      w.type || 'word', w.kanji, w.kana, w.pos, w.meaning, w.example,
       s.appeared || 0, s.correct || 0, w.createdAt || 0
     ].join('');
   }

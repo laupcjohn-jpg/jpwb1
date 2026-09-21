@@ -24,10 +24,22 @@
     });
   }
 
+  /* 过长文本截断（确认框里用，避免整句撑满弹窗） */
+  function clip(s, n) {
+    s = String(s == null ? '' : s);
+    return s.length > n ? s.slice(0, n) + '…' : s;
+  }
+
+  /* 语句条目（只输入句子）与普通单词共用同一份数据，靠 type 区分 */
+  function isSentence(w) { return !!w && w.type === 'sentence'; }
+
   /* ---------- 测验会话状态 ---------- */
   var quizState = null; // { questions, index, results[] }
   var editId = null;    // 当前正在编辑的单词 id
   var libraryPos = null; // 当前查看的分类名，null 表示分类列表模式
+  var searchTerm = '';     // 已提交的检索关键词，空串表示未检索（行内不高亮）
+  var searchMatches = [];  // 命中条目的 id，按词库顺序
+  var searchCursor = -1;   // 最近一次跳转落在 searchMatches 的下标，回车时循环前进
 
   /* ---------- 词性展示顺序：按分类表顺序，未登记的排最后 ---------- */
   function orderPosKeys(posKeys) {
@@ -107,15 +119,86 @@
     });
   }
 
-  function setFormMsg(text, ok) {
-    var msg = $('#form-msg');
+  /* 表单提示：sel 缺省作用于「添加单词」表单；计时器挂在元素上，
+     这样单词表单与语句表单各自的提示互不干扰 */
+  function setFormMsg(text, ok, sel) {
+    var msg = $(sel || '#form-msg');
+    if (!msg) return;
     msg.textContent = text;
     msg.className = 'form-msg ' + (ok ? 'is-ok' : 'is-error');
-    clearTimeout(setFormMsg._t);
-    setFormMsg._t = setTimeout(function () {
+    clearTimeout(msg._t);
+    msg._t = setTimeout(function () {
       msg.textContent = '';
       msg.className = 'form-msg';
     }, 3000);
+  }
+
+  function clearFormMsgs() {
+    ['#form-msg', '#s-form-msg'].forEach(function (sel) {
+      var el = $(sel);
+      if (!el) return;
+      clearTimeout(el._t);
+      el.textContent = '';
+      el.className = 'form-msg';
+    });
+  }
+
+  /* ---------- 录入模式：单词 / 语句 ---------- */
+  var inputMode = 'word';
+
+  function setInputMode(mode) {
+    inputMode = mode === 'sentence' ? 'sentence' : 'word';
+    $$('#input-mode .mode-btn').forEach(function (b) {
+      b.classList.toggle('is-active', b.dataset.mode === inputMode);
+    });
+    var isSent = inputMode === 'sentence';
+    $('#word-form').hidden = isSent;
+    $('#sentence-form').hidden = !isSent;
+    $('#tip-word').hidden = isSent;
+    $('#tip-sentence').hidden = !isSent;
+    clearFormMsgs();
+    (isSent ? $('#s-text') : $('#f-kanji')).focus();
+  }
+
+  function initInputMode() {
+    $('#input-mode').addEventListener('click', function (e) {
+      var btn = e.target.closest('.mode-btn');
+      if (btn && btn.dataset.mode !== inputMode) setInputMode(btn.dataset.mode);
+    });
+  }
+
+  /* ---------- 添加语句表单（只输入句子，翻译可选） ---------- */
+  function saveSentence() {
+    var text = $('#s-text').value.trim();
+    if (!text) {
+      setFormMsg('请填写句子', false, '#s-form-msg');
+      $('#s-text').focus();
+      return;
+    }
+    try {
+      Store.addSentence(text, $('#s-meaning').value);
+    } catch (err) {
+      setFormMsg('保存失败：本地存储不可用', false, '#s-form-msg');
+      return;
+    }
+    setFormMsg('已保存 ✓', true, '#s-form-msg');
+    $('#sentence-form').reset();
+    updateSidebarStats();
+    $('#s-text').focus();
+  }
+
+  function initSentenceForm() {
+    $('#sentence-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      saveSentence();
+    });
+    // 多行输入框里回车是换行，用 Ctrl/Cmd + Enter 提交
+    $('#s-text').addEventListener('keydown', function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        saveSentence();
+      }
+    });
   }
 
   /* =========================================================
@@ -156,8 +239,19 @@
     }
   }
 
+  /* 一组条目是否全是语句：是的话表头与统计列都不该出现 */
+  function allSentences(list) {
+    return list.length > 0 && list.every(isSentence);
+  }
+
+  /* 统计量：语句不参与测验，也就没有「已掌握」可算 */
+  function masteredCount(list) {
+    return list.filter(function (w) { return !isSentence(w) && Quiz.isMastered(w); }).length;
+  }
+
   function renderGroup(pos, list) {
-    var mastered = list.filter(function (w) { return Quiz.isMastered(w); }).length;
+    var mastered = masteredCount(list);
+    var sentencesOnly = allSentences(list);
     // 词性不在当前分类表里（例如导入的数据或分类被改名前的残留）
     var isOrphan = Store.categories().indexOf(pos) < 0;
 
@@ -170,23 +264,26 @@
       '<div class="group-title">' +
         '<span class="pos-badge">' + escapeHtml(pos) + '</span>' +
         (isOrphan ? '<span class="group-orphan" title="该词性不在当前分类表中，可在上方「分类管理」里添加同名分类">未登记分类</span>' : '') +
-        '<span class="group-count">' + list.length + ' 个单词</span>' +
-        '<span class="group-mastered">已掌握 ' + mastered + '</span>' +
+        '<span class="group-count">' + list.length + (sentencesOnly ? ' 条语句' : ' 个单词') + '</span>' +
+        (mastered ? '<span class="group-mastered">已掌握 ' + mastered + '</span>' : '') +
       '</div>';
     section.appendChild(header);
 
     var table = document.createElement('div');
     table.className = 'word-table';
-    table.innerHTML =
-      '<div class="word-row word-row-head">' +
-        '<span class="c-kanji">汉字</span>' +
-        '<span class="c-kana">假名</span>' +
-        '<span class="c-meaning">意思</span>' +
-        '<span class="c-stat">出现</span>' +
-        '<span class="c-stat">答对</span>' +
-        '<span class="c-stat">正确率</span>' +
-        '<span class="c-actions"></span>' +
-      '</div>';
+    // 语句没有假名/统计，整行表头都省掉
+    if (!sentencesOnly) {
+      table.innerHTML =
+        '<div class="word-row word-row-head">' +
+          '<span class="c-kanji">汉字</span>' +
+          '<span class="c-kana">假名</span>' +
+          '<span class="c-meaning">意思</span>' +
+          '<span class="c-stat">出现</span>' +
+          '<span class="c-stat">答对</span>' +
+          '<span class="c-stat">正确率</span>' +
+          '<span class="c-actions"></span>' +
+        '</div>';
+    }
 
     list.forEach(function (w) {
       table.appendChild(renderWordRow(w));
@@ -207,7 +304,7 @@
 
     posKeys.forEach(function (pos) {
       var list = words.filter(function (w) { return w.pos === pos; });
-      var mastered = list.filter(function (w) { return Quiz.isMastered(w); }).length;
+      var mastered = masteredCount(list);
       var isOrphan = cats.indexOf(pos) < 0;
 
       var card = document.createElement('button');
@@ -220,8 +317,8 @@
           (isOrphan ? '<span class="group-orphan">未登记</span>' : '') +
         '</div>' +
         '<div class="cat-card-meta">' +
-          '<span>' + list.length + ' 个单词</span>' +
-          '<span class="cat-card-mastered">已掌握 ' + mastered + '</span>' +
+          '<span>' + list.length + (allSentences(list) ? ' 条语句' : ' 个单词') + '</span>' +
+          (mastered ? '<span class="cat-card-mastered">已掌握 ' + mastered + '</span>' : '') +
         '</div>' +
         '<span class="cat-card-arrow">›</span>';
       grid.appendChild(card);
@@ -240,25 +337,53 @@
     return wrap;
   }
 
+  /**
+   * 检索关键词高亮：先转义再包 <mark>，大小写不敏感。
+   * 高亮的是「已提交的关键词」（searchTerm），不是输入框里正在敲的内容。
+   */
+  function highlightTerm(text) {
+    var s = String(text == null ? '' : text);
+    if (!searchTerm) return escapeHtml(s);
+    var idx = s.toLowerCase().indexOf(searchTerm.toLowerCase());
+    if (idx < 0) return escapeHtml(s);
+    var end = idx + searchTerm.length;
+    return escapeHtml(s.slice(0, idx)) +
+      '<mark>' + escapeHtml(s.slice(idx, end)) + '</mark>' +
+      escapeHtml(s.slice(end));
+  }
+
   function renderWordRow(w) {
+    var row = document.createElement('div');
+    row.dataset.id = w.id; // 检索定位用（id 已限安全字符，可直接进选择器）
+
+    var actionsHtml =
+      '<button class="icon-btn" data-action="edit" data-id="' + escapeHtml(w.id) + '" title="编辑">✎</button>' +
+      '<button class="icon-btn danger" data-action="delete" data-id="' + escapeHtml(w.id) + '" title="删除">🗑</button>';
+
+    // 语句：整句 + 翻译单独一行，没有假名与统计
+    if (isSentence(w)) {
+      row.className = 'word-row sentence-row';
+      row.innerHTML =
+        '<span class="c-sentence">' + highlightTerm(w.kanji) + '</span>' +
+        (w.meaning ? '<span class="c-sentence-meaning">' + highlightTerm(w.meaning) + '</span>' : '') +
+        '<span class="c-actions">' + actionsHtml + '</span>';
+      return row;
+    }
+
     var rate = w.stats.appeared > 0
       ? Math.round(w.stats.correct / w.stats.appeared * 100) + '%'
       : '—';
 
-    var row = document.createElement('div');
     row.className = 'word-row';
     row.innerHTML =
-      '<span class="c-kanji">' + (escapeHtml(w.kanji) || '<em class="muted">（无）</em>') + '</span>' +
-      '<span class="c-kana">' + escapeHtml(w.kana) + '</span>' +
-      '<span class="c-meaning">' + escapeHtml(w.meaning) + '</span>' +
+      '<span class="c-kanji">' + (highlightTerm(w.kanji) || '<em class="muted">（无）</em>') + '</span>' +
+      '<span class="c-kana">' + highlightTerm(w.kana) + '</span>' +
+      '<span class="c-meaning">' + highlightTerm(w.meaning) + '</span>' +
       '<span class="c-stat">' + w.stats.appeared + '</span>' +
       '<span class="c-stat">' + w.stats.correct + '</span>' +
       '<span class="c-stat rate">' + rate + '</span>' +
-      '<span class="c-actions">' +
-        '<button class="icon-btn" data-action="edit" data-id="' + escapeHtml(w.id) + '" title="编辑">✎</button>' +
-        '<button class="icon-btn danger" data-action="delete" data-id="' + escapeHtml(w.id) + '" title="删除">🗑</button>' +
-      '</span>' +
-      (w.example ? '<span class="c-example">' + escapeHtml(w.example) + '</span>' : '');
+      '<span class="c-actions">' + actionsHtml + '</span>' +
+      (w.example ? '<span class="c-example">' + highlightTerm(w.example) + '</span>' : '');
     return row;
   }
 
@@ -287,8 +412,11 @@
   function deleteWord(id) {
     var w = Store.get(id);
     if (!w) return;
-    var label = w.kanji ? w.kanji + '（' + w.kana + '）' : w.kana;
-    if (confirm('确定删除单词「' + label + '」吗？')) {
+    var label = isSentence(w)
+      ? clip(w.kanji, 24)
+      : (w.kanji ? w.kanji + '（' + w.kana + '）' : w.kana);
+    var kind = isSentence(w) ? '语句' : '单词';
+    if (confirm('确定删除' + kind + '「' + label + '」吗？')) {
       try {
         Store.remove(id);
       } catch (err) {
@@ -300,11 +428,93 @@
     }
   }
 
+  /* =========================================================
+   * 单词库检索（跳转 + 高亮）
+   *   回车 → 跳到第一个匹配条目所在分类，滚动到该行并闪烁；
+   *   再按回车 → 在多个匹配之间循环。
+   *   匹配范围：汉字 / 假名 / 意思 / 例句（语句则匹配句子正文与翻译）。
+   * ========================================================= */
+  function matchesTerm(w, term) {
+    var t = term.toLowerCase();
+    return [w.kanji, w.kana, w.meaning, w.example].some(function (f) {
+      return String(f == null ? '' : f).toLowerCase().indexOf(t) >= 0;
+    });
+  }
+
+  function setSearchInfo(text, isError) {
+    var el = $('#lib-search-info');
+    el.textContent = text;
+    el.className = 'search-info' + (isError ? ' is-error' : '');
+  }
+
+  function resetSearch() {
+    searchTerm = '';
+    searchMatches = [];
+    searchCursor = -1;
+    setSearchInfo('');
+  }
+
+  /* 滚动到刚渲染出的那一行，并闪烁一下提示「就是这行」 */
+  function flashRow(id) {
+    var row = $('#library-groups .word-row[data-id="' + id + '"]');
+    if (!row) return;
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    row.classList.remove('flash');
+    void row.offsetWidth; // 强制重排，保证连续跳同一行时动画能重放
+    row.classList.add('flash');
+    clearTimeout(flashRow._t);
+    flashRow._t = setTimeout(function () { row.classList.remove('flash'); }, 1600);
+  }
+
+  function runSearch() {
+    var term = $('#lib-search').value.trim();
+
+    if (!term) { resetSearch(); renderLibrary(); return; }
+
+    // 关键词变了就重新从第一个匹配开始，否则在同一个词上继续回车是「下一个」
+    if (term !== searchTerm || !searchMatches.length) {
+      searchTerm = term;
+      searchMatches = Store.all()
+        .filter(function (w) { return matchesTerm(w, term); })
+        .map(function (w) { return w.id; });
+      searchCursor = -1;
+    }
+
+    if (!searchMatches.length) {
+      renderLibrary(); // 清掉上一次检索留下的高亮
+      setSearchInfo('未找到「' + term + '」', true);
+      return;
+    }
+
+    searchCursor = (searchCursor + 1) % searchMatches.length;
+    var target = Store.get(searchMatches[searchCursor]);
+    if (!target) { resetSearch(); renderLibrary(); return; }
+
+    libraryPos = target.pos; // 跳进该条目所在的分类
+    renderLibrary();
+    setSearchInfo('第 ' + (searchCursor + 1) + ' / ' + searchMatches.length + ' 个匹配');
+    flashRow(target.id);
+  }
+
+  function initSearch() {
+    $('#lib-search').addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      runSearch();
+    });
+    // 清空输入框即退出检索状态，恢复完整列表
+    $('#lib-search').addEventListener('input', function () {
+      if (!this.value.trim()) { resetSearch(); renderLibrary(); }
+      else if (this.value.trim() !== searchTerm) setSearchInfo('回车跳到匹配行');
+    });
+  }
+
   /* ---------- 编辑弹窗 ---------- */
   function openEdit(id) {
     var w = Store.get(id);
     if (!w) return;
     editId = id;
+    if (isSentence(w)) { openEditSentence(w); return; }
     $('#e-kanji').value = w.kanji;
     $('#e-kana').value = w.kana;
     renderPosSelect($('#e-pos'), w.pos);
@@ -348,6 +558,41 @@
   function closeEdit() {
     $('#edit-modal').hidden = true;
     editId = null;
+  }
+
+  /* ---------- 编辑语句弹窗 ---------- */
+  function openEditSentence(w) {
+    $('#es-text').value = w.kanji;
+    $('#es-meaning').value = w.meaning || '';
+    $('#edit-sentence-modal').hidden = false;
+    $('#es-text').focus();
+  }
+
+  function closeEditSentence() {
+    $('#edit-sentence-modal').hidden = true;
+    editId = null;
+  }
+
+  function initEditSentenceModal() {
+    $('#edit-sentence-cancel').addEventListener('click', closeEditSentence);
+    $('#edit-sentence-modal').addEventListener('click', function (e) {
+      if (e.target === $('#edit-sentence-modal')) closeEditSentence();
+    });
+    $('#edit-sentence-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var text = $('#es-text').value.trim();
+      if (!text) { alert('请填写句子'); return; }
+      try {
+        // 只改正文与翻译；词性、type、统计都由 Store.update 原样保留
+        Store.update(editId, { kanji: text, meaning: $('#es-meaning').value });
+      } catch (err) {
+        alert('保存失败：本地存储不可用或空间不足。');
+        return;
+      }
+      closeEditSentence();
+      renderLibrary();
+      updateSidebarStats();
+    });
   }
 
   /* =========================================================
@@ -500,11 +745,16 @@
   }
 
   function renderQuizStart() {
-    var words = Store.all();
+    // 语句不参与测验，页面上显示的词库规模也只算单词
+    var words = Store.all().filter(function (w) { return !isSentence(w); });
     var container = $('#view-quiz');
 
     if (words.length === 0) {
-      container.innerHTML = '<div class="empty">词库为空，请先到「添加单词」录入单词，再开始练习。</div>';
+      container.innerHTML = '<div class="empty">' +
+        (Store.all().length
+          ? '词库里只有语句，没有可测验的单词。请先到「添加单词」录入单词，再开始练习。'
+          : '词库为空，请先到「添加单词」录入单词，再开始练习。') +
+        '</div>';
       return;
     }
 
@@ -903,9 +1153,13 @@
    * ========================================================= */
   function init() {
     initForm();
+    initSentenceForm();
+    initInputMode();
     initEditModal();
+    initEditSentenceModal();
     initImportExport();
     initCategories();
+    initSearch();
     refreshPosSelects();
 
     $$('.nav-btn').forEach(function (btn) {

@@ -4,15 +4,19 @@
  * 数据结构：
  *   Word {
  *     id: string,          // 唯一标识（仅允许安全字符，防注入）
- *     kanji: string,       // 汉字（可为空，表示纯假名词）
- *     kana: string,        // 假名（读音，必填）
- *     pos: string,         // 词性（必填，用于分类与干扰项抽取）
- *     meaning: string,     // 意思（必填）
+ *     type: string,        // 'word'（单词，默认）| 'sentence'（语句）
+ *     kanji: string,       // 汉字（可为空，表示纯假名词）；type='sentence' 时存句子正文
+ *     kana: string,        // 假名（读音，单词必填；语句为空）
+ *     pos: string,         // 词性（单词必填，用于分类与干扰项抽取）；语句固定为「语句」
+ *     meaning: string,     // 意思（单词必填）；语句存中文翻译（可为空）
  *     example: string,     // 例句（可为空）
  *     createdAt: number,   // 创建时间戳
  *     updatedAt: number,   // 最后修改时间戳（多端同步时用来判断谁更新）
  *     stats: { appeared: number, correct: number }  // correct <= appeared
  *   }
+ *
+ * 语句（type='sentence'）是「只输入句子」的轻量条目：不参与测验、不记统计，
+ * 只作为独立的「语句」分类展示，因此 kana 为空、meaning 可为空。
  *
  * 持久化采用「先写入 localStorage 成功后再提交到内存」的原子方式，
  * 保证存储失败时内存与持久化状态一致（不会静默丢失）。
@@ -26,7 +30,8 @@ window.Store = (function () {
   var KEY = 'jpStudy.words.v1';
   var CAT_KEY = 'jpStudy.cats.v1';
   var DEL_KEY = 'jpStudy.deleted.v1';
-  var DEFAULT_CATS = ['一类动词', '二类动词', '三类动词', '一类形容词', '二类形容词', '名词'];
+  var SENTENCE_POS = '语句';  // 语句专用分类（保留名，普通单词不应占用）
+  var DEFAULT_CATS = ['一类动词', '二类动词', '三类动词', '一类形容词', '二类形容词', '名词', SENTENCE_POS];
   var words = [];
   var cats = [];
   var deleted = {};   // id -> 删除时间戳（墓碑）
@@ -44,14 +49,16 @@ window.Store = (function () {
     return n;
   }
 
-  /* 内容指纹，用于导入去重 */
+  /* 内容指纹，用于导入去重。带上 type，避免同文的单词与语句被判成重复 */
   function contentKey(w) {
-    return [w.kanji, w.kana, w.pos, w.meaning].join('');
+    return [w.type || 'word', w.kanji, w.kana, w.pos, w.meaning].join('');
   }
 
   /* 归一化单个条目；非法（非对象 / 全空）返回 null */
   function normalizeWord(item) {
     if (!item || typeof item !== 'object' || Array.isArray(item)) return null;
+    // 只认 'sentence'，其余（含旧数据缺字段）一律当作普通单词
+    var type = item.type === 'sentence' ? 'sentence' : 'word';
     var kanji = String(item.kanji == null ? '' : item.kanji).trim();
     var kana = String(item.kana == null ? '' : item.kana).trim();
     var pos = String(item.pos == null ? '' : item.pos).trim();
@@ -74,6 +81,7 @@ window.Store = (function () {
 
     return {
       id: id,
+      type: type,
       kanji: kanji,
       kana: kana,
       pos: pos,
@@ -232,7 +240,8 @@ window.Store = (function () {
     var nextWords = words.map(function (w) {
       if (w.pos !== oldName) return w;
       return {
-        id: w.id, kanji: w.kanji, kana: w.kana, pos: newName,
+        id: w.id, type: w.type || 'word',
+        kanji: w.kanji, kana: w.kana, pos: newName,
         meaning: w.meaning, example: w.example,
         createdAt: w.createdAt, updatedAt: now, stats: w.stats
       };
@@ -277,6 +286,34 @@ window.Store = (function () {
     return w;
   }
 
+  /**
+   * 新增一条语句（「只输入句子」的轻量条目）。
+   * 正文存在 kanji 字段，中文翻译存在 meaning 字段（可空），词性固定为「语句」。
+   * 需要时把「语句」一并登记进分类表，保证它一定能作为分类出现在单词库里。
+   */
+  function addSentence(text, meaning) {
+    text = String(text == null ? '' : text).trim();
+    if (!text) throw new Error('句子不能为空');
+    var w = normalizeWord({
+      type: 'sentence',
+      kanji: text,
+      kana: '',
+      pos: SENTENCE_POS,
+      meaning: String(meaning == null ? '' : meaning).trim()
+    });
+    if (!w) throw new Error('句子不能为空');
+
+    var next = words.concat([w]);
+    if (cats.indexOf(SENTENCE_POS) < 0) {
+      saveBoth(next, cats.concat([SENTENCE_POS])); // 单词 + 分类一起原子写入
+    } else {
+      persistWords(next);
+      words = next;
+      emitChange();
+    }
+    return w;
+  }
+
   function update(id, patch) {
     var w = get(id);
     if (!w) return false;
@@ -285,6 +322,7 @@ window.Store = (function () {
       if (x.id !== id) return x;
       return {
         id: x.id,
+        type: x.type || 'word', // 逐字段重建时必须带上，否则语句会退化成普通单词
         kanji: patch.kanji !== undefined ? String(patch.kanji).trim() : x.kanji,
         kana: patch.kana !== undefined ? String(patch.kana).trim() : x.kana,
         pos: patch.pos !== undefined ? String(patch.pos).trim() : x.pos,
@@ -335,7 +373,8 @@ window.Store = (function () {
       if (!Object.prototype.hasOwnProperty.call(flags, w.id)) return w;
       updated++;
       return {
-        id: w.id, kanji: w.kanji, kana: w.kana, pos: w.pos,
+        id: w.id, type: w.type || 'word',
+        kanji: w.kanji, kana: w.kana, pos: w.pos,
         meaning: w.meaning, example: w.example,
         createdAt: w.createdAt, updatedAt: now,
         stats: {
@@ -378,7 +417,15 @@ window.Store = (function () {
     json.forEach(function (item) {
       var w = normalizeWord(item);
       if (!w) { ignored++; return; }
-      if (!w.kana || !w.pos || !w.meaning) { ignored++; return; }
+      // 语句只要句子正文齐全即可（无假名/翻译）；单词仍要求假名/词性/意思齐全。
+      // 语句一律归到「语句」分类，避免外来的 pos 把它散落到别的分类里。
+      if (w.type === 'sentence') {
+        if (!w.kanji) { ignored++; return; }
+        w.pos = SENTENCE_POS;
+      } else if (!w.kana || !w.pos || !w.meaning) {
+        ignored++;
+        return;
+      }
       if (existingIds[w.id]) { ignored++; return; }  // 相同 id，跳过
       var ck = contentKey(w);
       if (existingContent[ck]) { ignored++; return; } // 相同内容，跳过（防重复导入）
@@ -429,6 +476,8 @@ window.Store = (function () {
     all: all,
     get: get,
     add: add,
+    addSentence: addSentence,
+    SENTENCE_POS: SENTENCE_POS,
     update: update,
     remove: remove,
     recordResults: recordResults,

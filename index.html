@@ -28,7 +28,7 @@
       <div class="sidebar-footer">
         <div class="stat-card">
           <div class="stat-number" id="stat-total">0</div>
-          <div class="stat-label">单词总数</div>
+          <div class="stat-label">词条总数</div>
         </div>
         <div class="actions">
           <button id="btn-export" class="btn btn-ghost btn-sm">导出备份</button>
@@ -55,12 +55,17 @@
     <!-- ===================== 主内容区 ===================== -->
     <main class="main">
 
-      <!-- 视图：添加单词 -->
+      <!-- 视图：添加单词 / 语句 -->
       <section id="view-input" class="view is-active">
         <header class="view-header">
-          <h2>添加单词</h2>
-          <p>录入新单词，包含汉字、假名、词性和意思。</p>
+          <h2>添加内容</h2>
+          <p>录入单词（汉字 / 假名 / 词性 / 意思），或只录入一句语句。</p>
         </header>
+
+        <div class="mode-toggle" id="input-mode" role="tablist" aria-label="录入类型">
+          <button type="button" class="mode-btn is-active" data-mode="word">📝 单词</button>
+          <button type="button" class="mode-btn" data-mode="sentence">💬 语句</button>
+        </div>
 
         <form id="word-form" class="card form-card">
           <div class="field">
@@ -89,8 +94,27 @@
           </div>
         </form>
 
-        <div class="tip-card">
+        <!-- 语句：只输入句子本身，翻译可选 -->
+        <form id="sentence-form" class="card form-card" hidden>
+          <div class="field">
+            <label for="s-text">句子 <span class="req">*</span></label>
+            <textarea id="s-text" rows="3" placeholder="例：毎朝パンを食べる。" autocomplete="off"></textarea>
+          </div>
+          <div class="field">
+            <label for="s-meaning">中文翻译 <span class="opt">（可选）</span></label>
+            <input type="text" id="s-meaning" placeholder="例：每天早上吃面包。" autocomplete="off">
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">保存语句</button>
+            <span id="s-form-msg" class="form-msg"></span>
+          </div>
+        </form>
+
+        <div class="tip-card" id="tip-word">
           <strong>提示：</strong>词性从你设置的分类中选择，可在「单词库 → 分类管理」里增删改。分类用于归类查看和测验中「同一词性」的干扰项抽取。
+        </div>
+        <div class="tip-card" id="tip-sentence" hidden>
+          <strong>提示：</strong>语句只需输入句子本身，翻译可留空。保存后会自动归到单词库的「语句」分类下，<strong>不参与测验</strong>。
         </div>
       </section>
 
@@ -98,8 +122,15 @@
       <section id="view-library" class="view">
         <header class="view-header">
           <h2>单词库</h2>
-          <p>按词性分类查看，并跟踪每个单词的出现次数与正确率。</p>
+          <p>按分类查看，并跟踪每个单词的出现次数与正确率。</p>
         </header>
+
+        <!-- 检索：输入后回车跳到匹配的那一行 -->
+        <div class="library-search">
+          <input type="search" id="lib-search" placeholder="检索：输入汉字 / 假名 / 意思，回车跳到该行"
+                 autocomplete="off" spellcheck="false">
+          <span id="lib-search-info" class="search-info"></span>
+        </div>
 
         <!-- 分类管理 -->
         <div class="card cat-panel">
@@ -156,6 +187,27 @@
         </div>
         <div class="form-actions">
           <button type="button" class="btn btn-ghost" id="edit-cancel">取消</button>
+          <button type="submit" class="btn btn-primary">保存修改</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 编辑语句弹窗 -->
+  <div id="edit-sentence-modal" class="modal-overlay" hidden>
+    <div class="modal card">
+      <h3>编辑语句</h3>
+      <form id="edit-sentence-form">
+        <div class="field">
+          <label for="es-text">句子 <span class="req">*</span></label>
+          <textarea id="es-text" rows="3"></textarea>
+        </div>
+        <div class="field">
+          <label for="es-meaning">中文翻译 <span class="opt">（可选）</span></label>
+          <input type="text" id="es-meaning" autocomplete="off">
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" id="edit-sentence-cancel">取消</button>
           <button type="submit" class="btn btn-primary">保存修改</button>
         </div>
       </form>

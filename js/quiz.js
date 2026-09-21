@@ -62,11 +62,12 @@ window.Quiz = (function () {
   /* ---------- 意思干扰项抽取（同词性优先，去重） ---------- */
   function pickDistractors(w, allWords) {
     var correctMeaning = String(w.meaning).trim();
+    // 语句不参与测验，也不能当干扰项：整句当作「意思」选项没有意义
     var samePos = shuffle(allWords.filter(function (x) {
-      return x.id !== w.id && x.pos === w.pos;
+      return x.id !== w.id && x.pos === w.pos && x.type !== 'sentence';
     }));
     var others = shuffle(allWords.filter(function (x) {
-      return x.id !== w.id && x.pos !== w.pos;
+      return x.id !== w.id && x.pos !== w.pos && x.type !== 'sentence';
     }));
 
     var used = {};
@@ -118,10 +119,12 @@ window.Quiz = (function () {
 
   /* ---------- 生成一次练习的题目集 ---------- */
   function makeSession(allWords) {
-    if (!allWords || allWords.length === 0) return [];
-    var n = Math.min(QUIZ_SIZE, allWords.length);
-    var selected = pickWeighted(allWords, n);
-    return selected.map(function (w) { return buildQuestion(w, allWords); });
+    // 语句（type='sentence'）不参与测验：既没有读音题，翻译也不适合当四选一
+    var pool = (allWords || []).filter(function (w) { return w.type !== 'sentence'; });
+    if (pool.length === 0) return [];
+    var n = Math.min(QUIZ_SIZE, pool.length);
+    var selected = pickWeighted(pool, n);
+    return selected.map(function (w) { return buildQuestion(w, pool); });
   }
 
   /* ---------- 假名归一化 ---------- */
