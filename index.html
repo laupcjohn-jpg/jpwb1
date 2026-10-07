@@ -49,6 +49,20 @@
           <button type="button" id="sync-now" class="btn btn-ghost btn-sm sync-now" hidden>立即同步</button>
           <p class="hint">手机和电脑填同一个同步码，即可共享同一份词库。</p>
         </div>
+
+        <!-- AI 造句判题 -->
+        <div class="sync-panel ai-panel">
+          <div class="sync-head">
+            <span class="sync-title">🤖 AI 造句判题</span>
+            <span id="ai-status" class="sync-status">未检测</span>
+          </div>
+          <div class="sync-key-row">
+            <input type="text" id="ai-model" list="ai-model-list" placeholder="模型 ID" autocomplete="off" spellcheck="false">
+            <datalist id="ai-model-list"></datalist>
+            <button type="button" id="ai-check" class="btn btn-ghost btn-sm">检测</button>
+          </div>
+          <p class="hint">批改在服务端完成，页面里不存任何 AI 密钥；用同步码当访问凭证。</p>
+        </div>
       </div>
     </aside>
 
@@ -59,7 +73,7 @@
       <section id="view-input" class="view is-active">
         <header class="view-header">
           <h2>添加内容</h2>
-          <p>录入单词（汉字 / 假名 / 词性 / 意思），或只录入一句语句。</p>
+          <p>录入单词（汉字 / 假名 / 词性 / 自他 / 意思），或只录入一句语句。</p>
         </header>
 
         <div class="mode-toggle" id="input-mode" role="tablist" aria-label="录入类型">
@@ -79,6 +93,10 @@
           <div class="field">
             <label for="f-pos">词性 <span class="req">*</span></label>
             <select id="f-pos"></select>
+          </div>
+          <div class="field">
+            <label for="f-vt">自他 <span class="opt">（可选，动词填）</span></label>
+            <select id="f-vt"></select>
           </div>
           <div class="field">
             <label for="f-meaning">意思 <span class="req">*</span></label>
@@ -111,7 +129,7 @@
         </form>
 
         <div class="tip-card" id="tip-word">
-          <strong>提示：</strong>词性从你设置的分类中选择，可在「单词库 → 分类管理」里增删改。分类用于归类查看和测验中「同一词性」的干扰项抽取。
+          <strong>提示：</strong>词性从你设置的分类中选择，可在「单词库 → 分类管理」里增删改。分类用于归类查看和测验中「同一词性」的干扰项抽取。「自他」可以留空，只有动词需要填，它会显示在单词库的动词分类里。
         </div>
         <div class="tip-card" id="tip-sentence" hidden>
           <strong>提示：</strong>语句只需输入句子本身，翻译可留空。保存后会自动归到单词库的「语句」分类下，<strong>不参与测验</strong>。
@@ -127,7 +145,7 @@
 
         <!-- 检索：输入后回车跳到匹配的那一行 -->
         <div class="library-search">
-          <input type="search" id="lib-search" placeholder="检索：输入汉字 / 假名 / 意思，回车跳到该行"
+          <input type="search" id="lib-search" placeholder="检索：输入汉字 / 假名 / 意思 / 自他，回车跳到该行"
                  autocomplete="off" spellcheck="false">
           <span id="lib-search-info" class="search-info"></span>
         </div>
@@ -178,6 +196,10 @@
           <select id="e-pos"></select>
         </div>
         <div class="field">
+          <label for="e-vt">自他 <span class="opt">（可选，动词填）</span></label>
+          <select id="e-vt"></select>
+        </div>
+        <div class="field">
           <label for="e-meaning">意思 <span class="req">*</span></label>
           <input type="text" id="e-meaning" autocomplete="off">
         </div>
@@ -219,6 +241,7 @@
   <script src="js/store.js"></script>
   <script src="js/quiz.js"></script>
   <script src="js/sync.js"></script>
+  <script src="js/ai.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

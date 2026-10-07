@@ -1,0 +1,6227 @@
+[
+  {
+    "id": "mu1bhtsdz30dhx",
+    "type": "word",
+    "kanji": "経営",
+    "kana": "けいえい",
+    "pos": "名词",
+    "meaning": "经营",
+    "example": "彼は会社を経営している。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsd4jpczz",
+    "type": "word",
+    "kanji": "女優",
+    "kana": "じょゆう",
+    "pos": "名词",
+    "meaning": "女演员",
+    "example": "彼女は有名な女優です。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdstuv1x",
+    "type": "word",
+    "kanji": "男優",
+    "kana": "だんゆう",
+    "pos": "名词",
+    "meaning": "男演员",
+    "example": "あの男優は人気がある。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsda4q43h",
+    "type": "word",
+    "kanji": "俳優",
+    "kana": "はいゆう",
+    "pos": "名词",
+    "meaning": "演员",
+    "example": "私は俳優になりたい。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsd1hjhuu",
+    "type": "word",
+    "kanji": "女性声優",
+    "kana": "じょせいせいゆう",
+    "pos": "名词",
+    "meaning": "女声优",
+    "example": "彼女は人気の女性声優です。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdzk8kb3",
+    "type": "word",
+    "kanji": "道路",
+    "kana": "どうろ",
+    "pos": "名词",
+    "meaning": "道路",
+    "example": "この道路は広い。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsd5zk2ei",
+    "type": "word",
+    "kanji": "道",
+    "kana": "みち",
+    "pos": "名词",
+    "meaning": "路",
+    "example": "この道をまっすぐ行ってください。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdg8dsr4",
+    "type": "word",
+    "kanji": "通り",
+    "kana": "とおり",
+    "pos": "名词",
+    "meaning": "街道",
+    "example": "あの通りを渡ってください。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789466590365,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhtsdyojpp7",
+    "type": "word",
+    "kanji": "交通量",
+    "kana": "こうつうりょう",
+    "pos": "名词",
+    "meaning": "交通量",
+    "example": "朝は交通量が多い。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdal3c94",
+    "type": "word",
+    "kanji": "交通渋滞",
+    "kana": "こうつうじゅうたい",
+    "pos": "名词",
+    "meaning": "交通拥堵",
+    "example": "朝の交通渋滞がひどい。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsd0u1asn",
+    "type": "word",
+    "kanji": "空港",
+    "kana": "くうこう",
+    "pos": "名词",
+    "meaning": "机场",
+    "example": "空港まで車で行きます。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdqyj4sb",
+    "type": "word",
+    "kanji": "港",
+    "kana": "みなと",
+    "pos": "名词",
+    "meaning": "港口",
+    "example": "港に船が着いた。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsd9u93nj",
+    "type": "word",
+    "kanji": "港町",
+    "kana": "みなとまち",
+    "pos": "名词",
+    "meaning": "港城",
+    "example": "この港町は静かです。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdbqeux0",
+    "type": "word",
+    "kanji": "エレベーター",
+    "kana": "エレベーター",
+    "pos": "名词",
+    "meaning": "电梯",
+    "example": "エレベーターで5階へ行きます。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdwfdw9x",
+    "type": "word",
+    "kanji": "時差",
+    "kana": "じさ",
+    "pos": "名词",
+    "meaning": "时差",
+    "example": "日本と中国の時差は1時間です。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsde7ws4f",
+    "type": "word",
+    "kanji": "時",
+    "kana": "とき",
+    "pos": "名词",
+    "meaning": "时候",
+    "example": "子供の時、よく遊んだ。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdvht7dt",
+    "type": "word",
+    "kanji": "交差点",
+    "kana": "こうさてん",
+    "pos": "名词",
+    "meaning": "十字路口",
+    "example": "次の交差点を右へ曲がってください。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsd8hmxm1",
+    "type": "word",
+    "kanji": "自然",
+    "kana": "しぜん",
+    "pos": "二类形容词",
+    "meaning": "自然",
+    "example": "自然な話し方／自然に思い出した",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdnl052a",
+    "type": "word",
+    "kanji": "思い出す",
+    "kana": "おもいだす",
+    "pos": "一类动词",
+    "meaning": "想起",
+    "example": "昔のことを思い出した。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789444362903,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhtsd7mmuuq",
+    "type": "word",
+    "kanji": "給料",
+    "kana": "きゅうりょう",
+    "pos": "名词",
+    "meaning": "工资",
+    "example": "今月の給料をもらった。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdb5dum6",
+    "type": "word",
+    "kanji": "料金",
+    "kana": "りょうきん",
+    "pos": "名词",
+    "meaning": "费用",
+    "example": "タクシーの料金は高い。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsd5xtp22",
+    "type": "word",
+    "kanji": "泊まる",
+    "kana": "とまる",
+    "pos": "一类动词",
+    "meaning": "住宿",
+    "example": "ホテルに泊まります。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdcnpnd7",
+    "type": "word",
+    "kanji": "泊",
+    "kana": "とまり",
+    "pos": "名词",
+    "meaning": "住宿一晚",
+    "example": "一泊二日の旅行でした。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdo0wekv",
+    "type": "word",
+    "kanji": "結ぶ",
+    "kana": "むすぶ",
+    "pos": "一类动词",
+    "meaning": "系；打结",
+    "example": "靴のひもを結ぶ。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsda154wy",
+    "type": "word",
+    "kanji": "中国結び",
+    "kana": "ちゅうごくむすび",
+    "pos": "名词",
+    "meaning": "中国结",
+    "example": "中国結びを作るのが好きです。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789444362903,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhtsdw08s9t",
+    "type": "word",
+    "kanji": "縁結び",
+    "kana": "えんむすび",
+    "pos": "名词",
+    "meaning": "结缘",
+    "example": "この神社は縁結びで有名です。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789503184461,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhtsdppicns",
+    "type": "word",
+    "kanji": "食事を取る",
+    "kana": "しょくじをとる",
+    "pos": "一类动词",
+    "meaning": "吃饭",
+    "example": "まず食事を取ってください。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdvlzj4c",
+    "type": "word",
+    "kanji": "メモをとる",
+    "kana": "メモをとる",
+    "pos": "一类动词",
+    "meaning": "记笔记",
+    "example": "彼はいつもメモをとる。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsd35komp",
+    "type": "word",
+    "kanji": "生まれる",
+    "kana": "うまれる",
+    "pos": "二类动词",
+    "meaning": "出生",
+    "example": "女の子が生まれた／東京生まれ",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsd3yjrzv",
+    "type": "word",
+    "kanji": "育ち",
+    "kana": "そだち",
+    "pos": "名词",
+    "meaning": "成长；出身",
+    "example": "彼は東京育ちです。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdz2qe7c",
+    "type": "word",
+    "kanji": "倒産する",
+    "kana": "とうさんする",
+    "pos": "三类动词",
+    "meaning": "破产",
+    "example": "あの会社は倒産した。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdr44v8z",
+    "type": "word",
+    "kanji": "生産",
+    "kana": "せいさん",
+    "pos": "名词",
+    "meaning": "生产",
+    "example": "この工場は車を生産している。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsd4h4a5u",
+    "type": "word",
+    "kanji": "学生",
+    "kana": "がくせい",
+    "pos": "名词",
+    "meaning": "学生",
+    "example": "私は大学の学生です。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdcc8v6t",
+    "type": "word",
+    "kanji": "渋滞する",
+    "kana": "じゅうたいする",
+    "pos": "三类动词",
+    "meaning": "拥堵",
+    "example": "業務が渋滞します",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdgp463y",
+    "type": "word",
+    "kanji": "豊か",
+    "kana": "ゆたか",
+    "pos": "二类形容词",
+    "meaning": "丰富",
+    "example": "豊かな暮らし",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdy4yzm0",
+    "type": "word",
+    "kanji": "貧しい",
+    "kana": "まずしい",
+    "pos": "一类形容词",
+    "meaning": "贫穷",
+    "example": "昔は貧しかった。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789394853901,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhtsdaqg5gd",
+    "type": "word",
+    "kanji": "別に",
+    "kana": "べつに",
+    "pos": "副词",
+    "meaning": "并不",
+    "example": "別に問題ありません。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789466916888,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhtsdafo580",
+    "type": "word",
+    "kanji": "つい",
+    "kana": "つい",
+    "pos": "副词",
+    "meaning": "不知不觉",
+    "example": "つい食べすぎてしまった。",
+    "createdAt": 1789394853901,
+    "updatedAt": 1789444362903,
+    "stats": {
+      "appeared": 1,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k3jjzu0",
+    "type": "word",
+    "kanji": "雨",
+    "kana": "あめ",
+    "pos": "名词",
+    "meaning": "雨",
+    "example": "外は雨が降っている。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k9wyngj",
+    "type": "word",
+    "kanji": "飴",
+    "kana": "あめ",
+    "pos": "名词",
+    "meaning": "糖",
+    "example": "子供は飴が好きだ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789444362903,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2kcbbxp0",
+    "type": "word",
+    "kanji": "大雨",
+    "kana": "おおあめ",
+    "pos": "名词",
+    "meaning": "大雨",
+    "example": "昨日は大雨だった。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kofkxod",
+    "type": "word",
+    "kanji": "梅雨",
+    "kana": "つゆ",
+    "pos": "名词",
+    "meaning": "梅雨",
+    "example": "日本では六月に梅雨がある。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k4usck3",
+    "type": "word",
+    "kanji": "風邪",
+    "kana": "かぜ",
+    "pos": "名词",
+    "meaning": "感冒",
+    "example": "風邪を引いた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ksmyn3p",
+    "type": "word",
+    "kanji": "花見",
+    "kana": "はなみ",
+    "pos": "名词",
+    "meaning": "赏花",
+    "example": "春に公園で花見をする。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kx96iap",
+    "type": "word",
+    "kanji": "桜吹雪",
+    "kana": "さくらふぶき",
+    "pos": "名词",
+    "meaning": "落樱纷飞",
+    "example": "風で桜吹雪が舞う。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kn4xb5z",
+    "type": "word",
+    "kanji": "花筏",
+    "kana": "はないかだ",
+    "pos": "名词",
+    "meaning": "水面浮樱",
+    "example": "川に花筏が浮かんでいる。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kfprmlm",
+    "type": "word",
+    "kanji": "お客様",
+    "kana": "おきゃくさま",
+    "pos": "名词",
+    "meaning": "客人（敬称）",
+    "example": "お客様、何名様ですか。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kilp1xz",
+    "type": "word",
+    "kanji": "仲",
+    "kana": "なか",
+    "pos": "名词",
+    "meaning": "交情",
+    "example": "二人は仲がいい。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k13jh42",
+    "type": "word",
+    "kanji": "仲間",
+    "kana": "なかま",
+    "pos": "名词",
+    "meaning": "伙伴",
+    "example": "彼は大切な仲間だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k660cxc",
+    "type": "word",
+    "kanji": "味方",
+    "kana": "みかた",
+    "pos": "名词",
+    "meaning": "自己人；伙伴",
+    "example": "私はあなたの味方だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kyy0vcg",
+    "type": "word",
+    "kanji": "敵",
+    "kana": "てき",
+    "pos": "名词",
+    "meaning": "敌人",
+    "example": "敵が攻めてきた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kklfsfl",
+    "type": "word",
+    "kanji": "挨拶",
+    "kana": "あいさつ",
+    "pos": "名词",
+    "meaning": "问候；打招呼",
+    "example": "朝は挨拶をしましょう。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789466590365,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2ky1mgf6",
+    "type": "word",
+    "kanji": "握手",
+    "kana": "あくしゅ",
+    "pos": "名词",
+    "meaning": "握手",
+    "example": "初めて会って握手をした。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789444362903,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2k4puw9y",
+    "type": "word",
+    "kanji": "お辞儀",
+    "kana": "おじぎ",
+    "pos": "名词",
+    "meaning": "鞠躬",
+    "example": "日本ではお辞儀をして挨拶する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kgnb2qu",
+    "type": "word",
+    "kanji": "普通",
+    "kana": "ふつう",
+    "pos": "名词",
+    "meaning": "普通；一般",
+    "example": "普通はそう言わない。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kfiifpk",
+    "type": "word",
+    "kanji": "次",
+    "kana": "つぎ",
+    "pos": "名词",
+    "meaning": "下一个",
+    "example": "次の電車に乗る。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kcnmok3",
+    "type": "word",
+    "kanji": "お支払い",
+    "kana": "おしはらい",
+    "pos": "名词",
+    "meaning": "付款",
+    "example": "お支払いはカードでお願いします。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kir4iic",
+    "type": "word",
+    "kanji": "支払う",
+    "kana": "しはらう",
+    "pos": "一类动词",
+    "meaning": "支付",
+    "example": "現金で支払う。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2keniw6x",
+    "type": "word",
+    "kanji": "払う",
+    "kana": "はらう",
+    "pos": "一类动词",
+    "meaning": "支付",
+    "example": "電気代を払う。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k7oi1b4",
+    "type": "word",
+    "kanji": "別々",
+    "kana": "べつべつ",
+    "pos": "名词",
+    "meaning": "分别；各自",
+    "example": "別々に会計してください。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ka1yvro",
+    "type": "word",
+    "kanji": "忘れ物",
+    "kana": "わすれもの",
+    "pos": "名词",
+    "meaning": "遗失的东西",
+    "example": "電車に忘れ物をした。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kqpo6dk",
+    "type": "word",
+    "kanji": "習慣",
+    "kana": "しゅうかん",
+    "pos": "名词",
+    "meaning": "习惯",
+    "example": "早起きは良い習慣だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789503184461,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2kmb4asr",
+    "type": "word",
+    "kanji": "学習",
+    "kana": "がくしゅう",
+    "pos": "名词",
+    "meaning": "学习",
+    "example": "日本語の学習を続ける。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k90yzvw",
+    "type": "word",
+    "kanji": "慣れる",
+    "kana": "なれる",
+    "pos": "二类动词",
+    "meaning": "习惯；适应",
+    "example": "日本の生活に慣れた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kckaffq",
+    "type": "word",
+    "kanji": "豊作",
+    "kana": "ほうさく",
+    "pos": "名词",
+    "meaning": "丰收",
+    "example": "今年は豊作だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kng993y",
+    "type": "word",
+    "kanji": "豊富",
+    "kana": "ほうふ",
+    "pos": "二类形容词",
+    "meaning": "丰富",
+    "example": "この国は資源が豊富だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2khg67e7",
+    "type": "word",
+    "kanji": "作品",
+    "kana": "さくひん",
+    "pos": "名词",
+    "meaning": "作品",
+    "example": "これは彼の代表作だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k19cj86",
+    "type": "word",
+    "kanji": "会費",
+    "kana": "かいひ",
+    "pos": "名词",
+    "meaning": "会费",
+    "example": "毎月会費を払う。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k8qnx0i",
+    "type": "word",
+    "kanji": "会社",
+    "kana": "かいしゃ",
+    "pos": "名词",
+    "meaning": "公司",
+    "example": "毎日会社に通っている。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k07jzyd",
+    "type": "word",
+    "kanji": "発言",
+    "kana": "はつげん",
+    "pos": "名词",
+    "meaning": "发言",
+    "example": "会議で発言する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kfswa4j",
+    "type": "word",
+    "kanji": "発表",
+    "kana": "はっぴょう",
+    "pos": "名词",
+    "meaning": "发表；宣布",
+    "example": "研究の結果を発表する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k038ep1",
+    "type": "word",
+    "kanji": "言語",
+    "kana": "げんご",
+    "pos": "名词",
+    "meaning": "语言",
+    "example": "言語を学ぶのは楽しい。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789466916888,
+    "stats": {
+      "appeared": 1,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ksshtgc",
+    "type": "word",
+    "kanji": "優勝",
+    "kana": "ゆうしょう",
+    "pos": "名词",
+    "meaning": "夺冠",
+    "example": "チームが優勝した。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k546ube",
+    "type": "word",
+    "kanji": "優秀",
+    "kana": "ゆうしゅう",
+    "pos": "二类形容词",
+    "meaning": "优秀",
+    "example": "彼は優秀な学生だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789503184461,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2k6s60zn",
+    "type": "word",
+    "kanji": "勝負",
+    "kana": "しょうぶ",
+    "pos": "名词",
+    "meaning": "胜负",
+    "example": "勝負に勝った。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kdzqthy",
+    "type": "word",
+    "kanji": "防ぐ",
+    "kana": "ふせぐ",
+    "pos": "一类动词",
+    "meaning": "防止；防御",
+    "example": "病気を防ぐ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2klgzf13",
+    "type": "word",
+    "kanji": "回る",
+    "kana": "まわる",
+    "pos": "一类动词",
+    "meaning": "转动；绕",
+    "example": "手が回らない。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k4ucz2j",
+    "type": "word",
+    "kanji": "挨拶回り",
+    "kana": "あいさつまわり",
+    "pos": "名词",
+    "meaning": "巡访问候",
+    "example": "正月に挨拶回りをする。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kcg8uel",
+    "type": "word",
+    "kanji": "吹く",
+    "kana": "ふく",
+    "pos": "一类动词",
+    "meaning": "吹",
+    "example": "風が吹いている。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k71ehbw",
+    "type": "word",
+    "kanji": "挙げる",
+    "kana": "あげる",
+    "pos": "二类动词",
+    "meaning": "举；举例",
+    "example": "質問がある人は手を挙げてください。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kvifgfw",
+    "type": "word",
+    "kanji": "足りる",
+    "kana": "たりる",
+    "pos": "二类动词",
+    "meaning": "足够",
+    "example": "お金が全然足りない。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kax3313",
+    "type": "word",
+    "kanji": "合格する",
+    "kana": "ごうかくする",
+    "pos": "三类动词",
+    "meaning": "合格",
+    "example": "試験に合格する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2khxfar9",
+    "type": "word",
+    "kanji": "約束する",
+    "kana": "やくそくする",
+    "pos": "三类动词",
+    "meaning": "约定",
+    "example": "友達と約束する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kywaee5",
+    "type": "word",
+    "kanji": "もしかしたら",
+    "kana": "もしかしたら",
+    "pos": "副词",
+    "meaning": "也许",
+    "example": "もしかしたら、来ないかも。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789466590365,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2k0y3g8l",
+    "type": "word",
+    "kanji": "すぐに",
+    "kana": "すぐに",
+    "pos": "副词",
+    "meaning": "马上",
+    "example": "すぐに来る。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kkss014",
+    "type": "word",
+    "kanji": "ほとんど",
+    "kana": "ほとんど",
+    "pos": "副词",
+    "meaning": "几乎；大部分",
+    "example": "仕事はほとんど終わった。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kisdw41",
+    "type": "word",
+    "kanji": "それで",
+    "kana": "それで",
+    "pos": "接续词",
+    "meaning": "因此",
+    "example": "それで、どうしました。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789503184461,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2kjgx8hk",
+    "type": "word",
+    "kanji": "割引",
+    "kana": "わりびき",
+    "pos": "名词",
+    "meaning": "打折",
+    "example": "この商品は割引中だ／三割引",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k457g9p",
+    "type": "word",
+    "kanji": "割",
+    "kana": "わり",
+    "pos": "名词",
+    "meaning": "成（十分之一）",
+    "example": "三割引きで買った。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789466916888,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2k7hfona",
+    "type": "word",
+    "kanji": "高校",
+    "kana": "こうこう",
+    "pos": "名词",
+    "meaning": "高中",
+    "example": "兄は高校に通っている。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kvpb9rm",
+    "type": "word",
+    "kanji": "教師",
+    "kana": "きょうし",
+    "pos": "名词",
+    "meaning": "教师",
+    "example": "彼は高校の教師だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kn4ippi",
+    "type": "word",
+    "kanji": "アルバイト",
+    "kana": "アルバイト",
+    "pos": "名词",
+    "meaning": "打工",
+    "example": "コンビニでアルバイトをしている。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kwcy0cm",
+    "type": "word",
+    "kanji": "アルバイトする",
+    "kana": "アルバイトする",
+    "pos": "三类动词",
+    "meaning": "打工",
+    "example": "週末はアルバイトする。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k6g2khs",
+    "type": "word",
+    "kanji": "日記",
+    "kana": "にっき",
+    "pos": "名词",
+    "meaning": "日记",
+    "example": "毎日日本語で日記を書く。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k209m5n",
+    "type": "word",
+    "kanji": "経済",
+    "kana": "けいざい",
+    "pos": "名词",
+    "meaning": "经济",
+    "example": "日本の経済について学ぶ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kxlsjr6",
+    "type": "word",
+    "kanji": "営業",
+    "kana": "えいぎょう",
+    "pos": "名词",
+    "meaning": "营业",
+    "example": "営業は九時に始まる。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kugaraj",
+    "type": "word",
+    "kanji": "企画",
+    "kana": "きかく",
+    "pos": "名词",
+    "meaning": "企划",
+    "example": "新しい企画を考えた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2krmsbs1",
+    "type": "word",
+    "kanji": "映画",
+    "kana": "えいが",
+    "pos": "名词",
+    "meaning": "电影",
+    "example": "映画を見に行こう。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kvrz3l2",
+    "type": "word",
+    "kanji": "絵",
+    "kana": "え",
+    "pos": "名词",
+    "meaning": "画",
+    "example": "彼は絵が上手だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kzurq9a",
+    "type": "word",
+    "kanji": "企業",
+    "kana": "きぎょう",
+    "pos": "名词",
+    "meaning": "企业",
+    "example": "この企業は有名だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k37vheo",
+    "type": "word",
+    "kanji": "部品",
+    "kana": "ぶひん",
+    "pos": "名词",
+    "meaning": "零件",
+    "example": "車の部品を交換した。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kknxv6x",
+    "type": "word",
+    "kanji": "グラフ",
+    "kana": "グラフ",
+    "pos": "名词",
+    "meaning": "图表",
+    "example": "グラフで結果を示す。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789466590365,
+    "stats": {
+      "appeared": 2,
+      "correct": 2
+    }
+  },
+  {
+    "id": "mu1bhx2k9em60s",
+    "type": "word",
+    "kanji": "お年寄り",
+    "kana": "おとしより",
+    "pos": "名词",
+    "meaning": "老年人",
+    "example": "電車でお年寄りに席を譲った。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kp2fa48",
+    "type": "word",
+    "kanji": "入園料",
+    "kana": "にゅうえんりょう",
+    "pos": "名词",
+    "meaning": "入园费",
+    "example": "動物園の入園料は安い。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k2yyub8",
+    "type": "word",
+    "kanji": "スポーツセンター",
+    "kana": "スポーツセンター",
+    "pos": "名词",
+    "meaning": "体育中心",
+    "example": "スポーツセンターで泳ぐ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k28wzdh",
+    "type": "word",
+    "kanji": "国際関係",
+    "kana": "こくさいかんけい",
+    "pos": "名词",
+    "meaning": "国际关系",
+    "example": "大学で国際関係を学ぶ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789466916888,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2k7i01te",
+    "type": "word",
+    "kanji": "海外旅行",
+    "kana": "かいがいりょこう",
+    "pos": "名词",
+    "meaning": "海外旅行",
+    "example": "夏に海外旅行に行きたい。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kmm34v2",
+    "type": "word",
+    "kanji": "スピーチ大会",
+    "kana": "スピーチたいかい",
+    "pos": "名词",
+    "meaning": "演讲比赛",
+    "example": "スピーチ大会に出場した。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k6x7n15",
+    "type": "word",
+    "kanji": "ノーベル賞",
+    "kana": "ノーベルしょう",
+    "pos": "名词",
+    "meaning": "诺贝尔奖",
+    "example": "彼はノーベル賞を受賞した。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kr8bnat",
+    "type": "word",
+    "kanji": "お昼",
+    "kana": "おひる",
+    "pos": "名词",
+    "meaning": "中午",
+    "example": "お昼を食べに行こう。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kbi1opy",
+    "type": "word",
+    "kanji": "砂糖",
+    "kana": "さとう",
+    "pos": "名词",
+    "meaning": "糖",
+    "example": "コーヒーに砂糖を入れる。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k9il546",
+    "type": "word",
+    "kanji": "ハサミ",
+    "kana": "ハサミ",
+    "pos": "名词",
+    "meaning": "剪刀",
+    "example": "ハサミで紙を切る。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kfghmcu",
+    "type": "word",
+    "kanji": "挟む",
+    "kana": "はさむ",
+    "pos": "一类动词",
+    "meaning": "夹",
+    "example": "パンにハムを挟む。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kfmfcft",
+    "type": "word",
+    "kanji": "信号",
+    "kana": "しんごう",
+    "pos": "名词",
+    "meaning": "信号；红绿灯",
+    "example": "信号が赤になった。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kdyoluz",
+    "type": "word",
+    "kanji": "黄信号",
+    "kana": "きしんごう",
+    "pos": "名词",
+    "meaning": "黄灯",
+    "example": "黄信号で止まった。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kkqg2zi",
+    "type": "word",
+    "kanji": "通う",
+    "kana": "かよう",
+    "pos": "一类动词",
+    "meaning": "往返；通勤",
+    "example": "毎日会社に通っている。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789466590365,
+    "stats": {
+      "appeared": 1,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ksjzvyh",
+    "type": "word",
+    "kanji": "集まる",
+    "kana": "あつまる",
+    "pos": "一类动词",
+    "meaning": "聚集",
+    "example": "大勢の人が集まっている。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kfijhkt",
+    "type": "word",
+    "kanji": "踊る",
+    "kana": "おどる",
+    "pos": "一类动词",
+    "meaning": "跳舞",
+    "example": "音楽に合わせて踊る。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k4fmeyz",
+    "type": "word",
+    "kanji": "要る",
+    "kana": "いる",
+    "pos": "一类动词",
+    "meaning": "需要",
+    "example": "はい、要ります。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kh8ut14",
+    "type": "word",
+    "kanji": "困る",
+    "kana": "こまる",
+    "pos": "一类动词",
+    "meaning": "为难；困扰",
+    "example": "お金がなくて困っている。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k5j2z89",
+    "type": "word",
+    "kanji": "叩く",
+    "kana": "たたく",
+    "pos": "一类动词",
+    "meaning": "敲；拍",
+    "example": "ドアを叩く。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k23rv7w",
+    "type": "word",
+    "kanji": "入れる",
+    "kana": "いれる",
+    "pos": "二类动词",
+    "meaning": "放入（他动）",
+    "example": "野菜を箱に入れる。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k14sxxp",
+    "type": "word",
+    "kanji": "入る",
+    "kana": "はいる",
+    "pos": "一类动词",
+    "meaning": "进入（自动）",
+    "example": "部屋に入る。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ksybjiu",
+    "type": "word",
+    "kanji": "看病する",
+    "kana": "かんびょうする",
+    "pos": "三类动词",
+    "meaning": "看护",
+    "example": "母の看病をする。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k8fyvmg",
+    "type": "word",
+    "kanji": "喧嘩する",
+    "kana": "けんかする",
+    "pos": "三类动词",
+    "meaning": "吵架",
+    "example": "彼は喧嘩を売るような言い方をした。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k8c6865",
+    "type": "word",
+    "kanji": "利用する",
+    "kana": "りようする",
+    "pos": "三类动词",
+    "meaning": "利用；使用",
+    "example": "図書館を利用する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789466916888,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2kie9pag",
+    "type": "word",
+    "kanji": "相談する",
+    "kana": "そうだんする",
+    "pos": "三类动词",
+    "meaning": "商量；咨询",
+    "example": "先生に相談する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k9x5uhm",
+    "type": "word",
+    "kanji": "彼氏",
+    "kana": "かれし",
+    "pos": "名词",
+    "meaning": "男朋友",
+    "example": "彼氏ができた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k2y9o0y",
+    "type": "word",
+    "kanji": "彼女",
+    "kana": "かのじょ",
+    "pos": "名词",
+    "meaning": "女朋友；她",
+    "example": "彼女は日本語が上手だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kx240oa",
+    "type": "word",
+    "kanji": "他に",
+    "kana": "ほかに",
+    "pos": "副词",
+    "meaning": "其他",
+    "example": "他に何か質問がある？",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k5x3hxt",
+    "type": "word",
+    "kanji": "しばらく",
+    "kana": "しばらく",
+    "pos": "副词",
+    "meaning": "一阵子；暂且",
+    "example": "しばらくお待ちください。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k0o5a5m",
+    "type": "word",
+    "kanji": "そう言えば",
+    "kana": "そういえば",
+    "pos": "接续词",
+    "meaning": "说起来",
+    "example": "そう言えば、彼は元気かな。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2klndbip",
+    "type": "word",
+    "kanji": "気が付く",
+    "kana": "きがつく",
+    "pos": "一类动词",
+    "meaning": "注意到；察觉",
+    "example": "間違いに気が付いた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2krjfh3o",
+    "type": "word",
+    "kanji": "便",
+    "kana": "べん",
+    "pos": "名词",
+    "meaning": "班次；航班",
+    "example": "次の便で行く。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2klxzi6o",
+    "type": "word",
+    "kanji": "行き",
+    "kana": "いき",
+    "pos": "名词",
+    "meaning": "开往",
+    "example": "京都行きの電車に乗る。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kc937o9",
+    "type": "word",
+    "kanji": "それに",
+    "kana": "それに",
+    "pos": "接续词",
+    "meaning": "而且",
+    "example": "それに、値段も安い。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kwuzj5p",
+    "type": "word",
+    "kanji": "辺",
+    "kana": "へん",
+    "pos": "名词",
+    "meaning": "一带",
+    "example": "この辺は静かだ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k9j5mki",
+    "type": "word",
+    "kanji": "辺り",
+    "kana": "あたり",
+    "pos": "名词",
+    "meaning": "附近",
+    "example": "この辺りは静かだ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k4c82rp",
+    "type": "word",
+    "kanji": "どうした",
+    "kana": "どうした",
+    "pos": "其他",
+    "meaning": "怎么了",
+    "example": "どうしたの？顔色が悪いよ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789503184461,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2krpx4ue",
+    "type": "word",
+    "kanji": "マフラー",
+    "kana": "マフラー",
+    "pos": "名词",
+    "meaning": "围巾",
+    "example": "冬はマフラーをする。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kksigve",
+    "type": "word",
+    "kanji": "ネックレス",
+    "kana": "ネックレス",
+    "pos": "名词",
+    "meaning": "项链",
+    "example": "母にネックレスをもらった。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k107uik",
+    "type": "word",
+    "kanji": "ネクタイ",
+    "kana": "ネクタイ",
+    "pos": "名词",
+    "meaning": "领带",
+    "example": "会議ではネクタイを締める。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kp5ra9q",
+    "type": "word",
+    "kanji": "文章",
+    "kana": "ぶんしょう",
+    "pos": "名词",
+    "meaning": "文章",
+    "example": "この文章は読みやすい。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kaaeq8s",
+    "type": "word",
+    "kanji": "意味",
+    "kana": "いみ",
+    "pos": "名词",
+    "meaning": "意思；含义",
+    "example": "この言葉の意味が分からない。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k2ulru7",
+    "type": "word",
+    "kanji": "発音",
+    "kana": "はつおん",
+    "pos": "名词",
+    "meaning": "发音",
+    "example": "発音を直してもらった。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kti8esg",
+    "type": "word",
+    "kanji": "アクセント",
+    "kana": "アクセント",
+    "pos": "名词",
+    "meaning": "重音；口音",
+    "example": "アクセントがきれいだ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k2jkaxo",
+    "type": "word",
+    "kanji": "雰囲気",
+    "kana": "ふんいき",
+    "pos": "名词",
+    "meaning": "氛围",
+    "example": "この店は雰囲気がいい。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ks99bw1",
+    "type": "word",
+    "kanji": "不動産屋",
+    "kana": "ふどうさんや",
+    "pos": "名词",
+    "meaning": "房产中介",
+    "example": "不動産屋で部屋を探す。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k6l5kxr",
+    "type": "word",
+    "kanji": "運動",
+    "kana": "うんどう",
+    "pos": "名词",
+    "meaning": "运动",
+    "example": "毎朝運動している。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789444362903,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2kmllbj8",
+    "type": "word",
+    "kanji": "産業",
+    "kana": "さんぎょう",
+    "pos": "名词",
+    "meaning": "产业",
+    "example": "この町は産業が盛んだ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k1gz12d",
+    "type": "word",
+    "kanji": "飲食店",
+    "kana": "いんしょくてん",
+    "pos": "名词",
+    "meaning": "餐饮店",
+    "example": "この辺は飲食店が多い。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kx7gmd2",
+    "type": "word",
+    "kanji": "大使館",
+    "kana": "たいしかん",
+    "pos": "名词",
+    "meaning": "大使馆",
+    "example": "ビザを取りに大使館へ行く。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kmbcyq8",
+    "type": "word",
+    "kanji": "引っ越す",
+    "kana": "ひっこす",
+    "pos": "一类动词",
+    "meaning": "搬家",
+    "example": "来月引っ越す予定だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kbyupnf",
+    "type": "word",
+    "kanji": "家具",
+    "kana": "かぐ",
+    "pos": "名词",
+    "meaning": "家具",
+    "example": "新しい家具を買った。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kdt6laj",
+    "type": "word",
+    "kanji": "新居",
+    "kana": "しんきょ",
+    "pos": "名词",
+    "meaning": "新居",
+    "example": "新居に友達を招待する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kqxvv0w",
+    "type": "word",
+    "kanji": "新聞",
+    "kana": "しんぶん",
+    "pos": "名词",
+    "meaning": "报纸",
+    "example": "毎朝新聞を読む。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k4vrerb",
+    "type": "word",
+    "kanji": "新年",
+    "kana": "しんねん",
+    "pos": "名词",
+    "meaning": "新年",
+    "example": "新年おめでとうございます。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kj5m5yf",
+    "type": "word",
+    "kanji": "近所",
+    "kana": "きんじょ",
+    "pos": "名词",
+    "meaning": "附近；街坊",
+    "example": "近所にスーパーがある。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k4atl96",
+    "type": "word",
+    "kanji": "最近",
+    "kana": "さいきん",
+    "pos": "名词",
+    "meaning": "最近",
+    "example": "最近とても忙しい。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k7fqcb7",
+    "type": "word",
+    "kanji": "就職",
+    "kana": "しゅうしょく",
+    "pos": "名词",
+    "meaning": "就业",
+    "example": "来年就職するつもりだ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kf66azn",
+    "type": "word",
+    "kanji": "職業",
+    "kana": "しょくぎょう",
+    "pos": "名词",
+    "meaning": "职业",
+    "example": "お父さんの職業は何ですか。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kfzoklk",
+    "type": "word",
+    "kanji": "係",
+    "kana": "かかり",
+    "pos": "名词",
+    "meaning": "负责人员",
+    "example": "受付係の人に聞く。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kv09c29",
+    "type": "word",
+    "kanji": "生き物係",
+    "kana": "いきものかかり",
+    "pos": "名词",
+    "meaning": "生物委员",
+    "example": "彼はクラスの生き物係だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kupm00q",
+    "type": "word",
+    "kanji": "拾う",
+    "kana": "ひろう",
+    "pos": "一类动词",
+    "meaning": "捡",
+    "example": "道でお金を拾った。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k072i49",
+    "type": "word",
+    "kanji": "訳す",
+    "kana": "やくす",
+    "pos": "一类动词",
+    "meaning": "翻译",
+    "example": "文章を日本語に訳す。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kkdo4d4",
+    "type": "word",
+    "kanji": "翻訳",
+    "kana": "ほんやく",
+    "pos": "名词",
+    "meaning": "翻译（笔译）",
+    "example": "この小説は翻訳が上手だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kn74306",
+    "type": "word",
+    "kanji": "通訳",
+    "kana": "つうやく",
+    "pos": "名词",
+    "meaning": "口译",
+    "example": "通訳として働いている。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k9ojzxd",
+    "type": "word",
+    "kanji": "届ける",
+    "kana": "とどける",
+    "pos": "二类动词",
+    "meaning": "送到；上报",
+    "example": "荷物を家に届ける。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k4di06p",
+    "type": "word",
+    "kanji": "案内する",
+    "kana": "あんないする",
+    "pos": "三类动词",
+    "meaning": "引路；介绍",
+    "example": "京都を案内する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k590f09",
+    "type": "word",
+    "kanji": "紹介する",
+    "kana": "しょうかいする",
+    "pos": "三类动词",
+    "meaning": "介绍",
+    "example": "友達を紹介する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kv05be7",
+    "type": "word",
+    "kanji": "交換する",
+    "kana": "こうかんする",
+    "pos": "三类动词",
+    "meaning": "交换",
+    "example": "名刺を交換する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kuh77bo",
+    "type": "word",
+    "kanji": "素敵",
+    "kana": "すてき",
+    "pos": "二类形容词",
+    "meaning": "漂亮；极好",
+    "example": "素敵な服だね。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kjcqy6n",
+    "type": "word",
+    "kanji": "得意",
+    "kana": "とくい",
+    "pos": "二类形容词",
+    "meaning": "擅长",
+    "example": "日本語が得意だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kzntnd0",
+    "type": "word",
+    "kanji": "新鮮",
+    "kana": "しんせん",
+    "pos": "二类形容词",
+    "meaning": "新鲜",
+    "example": "この魚は新鮮だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789444362903,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2ktkygl4",
+    "type": "word",
+    "kanji": "うまく",
+    "kana": "うまく",
+    "pos": "副词",
+    "meaning": "顺利；好好地",
+    "example": "うまくいった。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k4po2tc",
+    "type": "word",
+    "kanji": "どの辺",
+    "kana": "どのへん",
+    "pos": "名词",
+    "meaning": "哪个地方",
+    "example": "どの辺に住んでいますか。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kq6xejl",
+    "type": "word",
+    "kanji": "先",
+    "kana": "さき",
+    "pos": "名词",
+    "meaning": "前方；先",
+    "example": "この先に駅がある。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kjx73wv",
+    "type": "word",
+    "kanji": "年下",
+    "kana": "としした",
+    "pos": "名词",
+    "meaning": "比自己小",
+    "example": "彼は三つ年下だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2khhu1wo",
+    "type": "word",
+    "kanji": "言い方",
+    "kana": "いいかた",
+    "pos": "名词",
+    "meaning": "说法；措辞",
+    "example": "その言い方は失礼だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k3s2xom",
+    "type": "word",
+    "kanji": "考え方",
+    "kana": "かんがえかた",
+    "pos": "名词",
+    "meaning": "想法；思维方式",
+    "example": "人によって考え方が違う。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ku8q17v",
+    "type": "word",
+    "kanji": "付ける",
+    "kana": "つける",
+    "pos": "二类动词",
+    "meaning": "附着；添加",
+    "example": "この料理は味付けがいい。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kkb9zyg",
+    "type": "word",
+    "kanji": "止まる",
+    "kana": "とまる",
+    "pos": "一类动词",
+    "meaning": "停止（自动）",
+    "example": "電車が止まった。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kq934yn",
+    "type": "word",
+    "kanji": "止める",
+    "kana": "とめる",
+    "pos": "二类动词",
+    "meaning": "使停止（他动）",
+    "example": "電車を止めた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k1ty7hk",
+    "type": "word",
+    "kanji": "変わる",
+    "kana": "かわる",
+    "pos": "一类动词",
+    "meaning": "变化",
+    "example": "町が変わった。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ktv0s80",
+    "type": "word",
+    "kanji": "頑張る",
+    "kana": "がんばる",
+    "pos": "一类动词",
+    "meaning": "努力",
+    "example": "試験のために頑張る。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kgu15b1",
+    "type": "word",
+    "kanji": "謝る",
+    "kana": "あやまる",
+    "pos": "一类动词",
+    "meaning": "道歉",
+    "example": "素直に謝りなさい。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789466916888,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2ksw1jca",
+    "type": "word",
+    "kanji": "破る",
+    "kana": "やぶる",
+    "pos": "一类动词",
+    "meaning": "撕破；打破",
+    "example": "記録を破った。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kkxi7mi",
+    "type": "word",
+    "kanji": "守る",
+    "kana": "まもる",
+    "pos": "一类动词",
+    "meaning": "遵守；保护",
+    "example": "約束を守る。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k6uphm2",
+    "type": "word",
+    "kanji": "サボる",
+    "kana": "サボる",
+    "pos": "一类动词",
+    "meaning": "偷懒；逃课",
+    "example": "授業をサボった。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kl41z1w",
+    "type": "word",
+    "kanji": "引く",
+    "kana": "ひく",
+    "pos": "一类动词",
+    "meaning": "拉；查；得（病）",
+    "example": "風邪を引いた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kas440p",
+    "type": "word",
+    "kanji": "答える",
+    "kana": "こたえる",
+    "pos": "二类动词",
+    "meaning": "回答",
+    "example": "質問に答える。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k0f0f3z",
+    "type": "word",
+    "kanji": "覚える",
+    "kana": "おぼえる",
+    "pos": "二类动词",
+    "meaning": "记住",
+    "example": "単語を覚える。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k81j7yj",
+    "type": "word",
+    "kanji": "逃げる",
+    "kana": "にげる",
+    "pos": "二类动词",
+    "meaning": "逃跑",
+    "example": "犬が逃げた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k1mju58",
+    "type": "word",
+    "kanji": "助ける",
+    "kana": "たすける",
+    "pos": "二类动词",
+    "meaning": "帮助；救助",
+    "example": "困っている人を助ける。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k4m2zsd",
+    "type": "word",
+    "kanji": "提出する",
+    "kana": "ていしゅつする",
+    "pos": "三类动词",
+    "meaning": "提交",
+    "example": "レポートを提出する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k0w3v6f",
+    "type": "word",
+    "kanji": "遠慮する",
+    "kana": "えんりょする",
+    "pos": "三类动词",
+    "meaning": "客气；回避",
+    "example": "どうぞご遠慮ください。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kr3x2pf",
+    "type": "word",
+    "kanji": "注意する",
+    "kana": "ちゅういする",
+    "pos": "三类动词",
+    "meaning": "注意；提醒",
+    "example": "足元にご注意ください。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kzylga9",
+    "type": "word",
+    "kanji": "質問",
+    "kana": "しつもん",
+    "pos": "名词",
+    "meaning": "疑问；提问",
+    "example": "質問がありますか。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kdvg6c1",
+    "type": "word",
+    "kanji": "場合",
+    "kana": "ばあい",
+    "pos": "名词",
+    "meaning": "情况；场合",
+    "example": "雨の場合は中止する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ky8n8qz",
+    "type": "word",
+    "kanji": "迷惑",
+    "kana": "めいわく",
+    "pos": "名词",
+    "meaning": "麻烦；打扰",
+    "example": "いろいろな迷惑をかけて、本当に申し訳ございません。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789466916888,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2k6ujlth",
+    "type": "word",
+    "kanji": "フジ",
+    "kana": "フジ",
+    "pos": "名词",
+    "meaning": "藤",
+    "example": "庭にフジの花が咲いた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ku7bc4k",
+    "type": "word",
+    "kanji": "カササギ",
+    "kana": "カササギ",
+    "pos": "名词",
+    "meaning": "喜鹊",
+    "example": "カササギが鳴いている。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kc2dbt3",
+    "type": "word",
+    "kanji": "鳥",
+    "kana": "とり",
+    "pos": "名词",
+    "meaning": "鸟",
+    "example": "鳥が空を飛んでいる。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kbuvjgz",
+    "type": "word",
+    "kanji": "鶏",
+    "kana": "にわとり",
+    "pos": "名词",
+    "meaning": "鸡",
+    "example": "鶏を飼っている。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ke7t6v6",
+    "type": "word",
+    "kanji": "免許証",
+    "kana": "めんきょしょう",
+    "pos": "名词",
+    "meaning": "驾照",
+    "example": "免許証を見せてください。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kesjl7j",
+    "type": "word",
+    "kanji": "企画書",
+    "kana": "きかくしょ",
+    "pos": "名词",
+    "meaning": "企划书",
+    "example": "企画書を書いた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k2r1xnt",
+    "type": "word",
+    "kanji": "書類",
+    "kana": "しょるい",
+    "pos": "名词",
+    "meaning": "文件",
+    "example": "書類を提出する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kjmwg53",
+    "type": "word",
+    "kanji": "テーブル",
+    "kana": "テーブル",
+    "pos": "名词",
+    "meaning": "桌子",
+    "example": "テーブルの上に皿がある。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ktl647t",
+    "type": "word",
+    "kanji": "机",
+    "kana": "つくえ",
+    "pos": "名词",
+    "meaning": "书桌",
+    "example": "机の上に本がある。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kxhjctx",
+    "type": "word",
+    "kanji": "講座",
+    "kana": "こうざ",
+    "pos": "名词",
+    "meaning": "讲座",
+    "example": "日本語の講座を受ける。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kyrgiyt",
+    "type": "word",
+    "kanji": "漢字",
+    "kana": "かんじ",
+    "pos": "名词",
+    "meaning": "汉字",
+    "example": "漢字を覚えるのは大変だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kpu81uh",
+    "type": "word",
+    "kanji": "戦争",
+    "kana": "せんそう",
+    "pos": "名词",
+    "meaning": "战争",
+    "example": "戦争が終わった。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kdoxx29",
+    "type": "word",
+    "kanji": "警察",
+    "kana": "けいさつ",
+    "pos": "名词",
+    "meaning": "警察",
+    "example": "すぐに警察を呼んだ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kcjo2kh",
+    "type": "word",
+    "kanji": "年上",
+    "kana": "としうえ",
+    "pos": "名词",
+    "meaning": "比自己大",
+    "example": "彼は五つ年上だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2krindpd",
+    "type": "word",
+    "kanji": "親しい",
+    "kana": "したしい",
+    "pos": "一类形容词",
+    "meaning": "亲近",
+    "example": "彼とは親しい。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k6o6aag",
+    "type": "word",
+    "kanji": "乱暴",
+    "kana": "らんぼう",
+    "pos": "二类形容词",
+    "meaning": "粗暴",
+    "example": "乱暴な言い方をしないで。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kpa6crg",
+    "type": "word",
+    "kanji": "失礼",
+    "kana": "しつれい",
+    "pos": "二类形容词",
+    "meaning": "失礼",
+    "example": "失礼なことを言った。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789503184461,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2kx02j87",
+    "type": "word",
+    "kanji": "同じ",
+    "kana": "おなじ",
+    "pos": "二类形容词",
+    "meaning": "相同",
+    "example": "同じ本を二冊買った。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kqrwghr",
+    "type": "word",
+    "kanji": "危険",
+    "kana": "きけん",
+    "pos": "二类形容词",
+    "meaning": "危险",
+    "example": "ここは危険だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kv3te9h",
+    "type": "word",
+    "kanji": "安全",
+    "kana": "あんぜん",
+    "pos": "二类形容词",
+    "meaning": "安全",
+    "example": "この道は安全だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kgiamw9",
+    "type": "word",
+    "kanji": "丁寧",
+    "kana": "ていねい",
+    "pos": "二类形容词",
+    "meaning": "礼貌；细心",
+    "example": "丁寧に説明してくれた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kkisjxn",
+    "type": "word",
+    "kanji": "誠",
+    "kana": "まこと",
+    "pos": "名词",
+    "meaning": "诚意",
+    "example": "誠にありがとうございます。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k4h7swj",
+    "type": "word",
+    "kanji": "宅配便",
+    "kana": "たくはいびん",
+    "pos": "名词",
+    "meaning": "快递",
+    "example": "宅配便が届いた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k79idl0",
+    "type": "word",
+    "kanji": "梅雨入り",
+    "kana": "つゆいり",
+    "pos": "名词",
+    "meaning": "入梅",
+    "example": "六月に梅雨入りする。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kbvwp6o",
+    "type": "word",
+    "kanji": "梅雨明け",
+    "kana": "つゆあけ",
+    "pos": "名词",
+    "meaning": "出梅",
+    "example": "梅雨明けが待ち遠しい。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2krigeed",
+    "type": "word",
+    "kanji": "明ける",
+    "kana": "あける",
+    "pos": "二类动词",
+    "meaning": "结束；天亮",
+    "example": "年が明けた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kxlom1z",
+    "type": "word",
+    "kanji": "明け",
+    "kana": "あけ",
+    "pos": "名词",
+    "meaning": "黎明；假期后",
+    "example": "休み明けは眠い。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kb2c291",
+    "type": "word",
+    "kanji": "梅酒",
+    "kana": "うめしゅ",
+    "pos": "名词",
+    "meaning": "梅酒",
+    "example": "梅酒を飲んだことがある。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kqoeimg",
+    "type": "word",
+    "kanji": "ピクニック",
+    "kana": "ピクニック",
+    "pos": "名词",
+    "meaning": "野餐",
+    "example": "公園でピクニックをする。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kgp9jmd",
+    "type": "word",
+    "kanji": "電車",
+    "kana": "でんしゃ",
+    "pos": "名词",
+    "meaning": "电车",
+    "example": "電車で通勤する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kuio8xc",
+    "type": "word",
+    "kanji": "終電",
+    "kana": "しゅうでん",
+    "pos": "名词",
+    "meaning": "末班车",
+    "example": "終電に間に合った。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789503184461,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2kwjdjoi",
+    "type": "word",
+    "kanji": "終了",
+    "kana": "しゅうりょう",
+    "pos": "名词",
+    "meaning": "结束",
+    "example": "会議が終了した。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kdgv981",
+    "type": "word",
+    "kanji": "行楽地",
+    "kana": "こうらくち",
+    "pos": "名词",
+    "meaning": "游览地",
+    "example": "秋は行楽地が混む。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789466916888,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2kqkxj2p",
+    "type": "word",
+    "kanji": "観光地",
+    "kana": "かんこうち",
+    "pos": "名词",
+    "meaning": "观光地",
+    "example": "ここは有名な観光地だ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kr1jaxt",
+    "type": "word",
+    "kanji": "観光スポット",
+    "kana": "かんこうスポット",
+    "pos": "名词",
+    "meaning": "景点",
+    "example": "人気の観光スポットだ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k064onx",
+    "type": "word",
+    "kanji": "待合室",
+    "kana": "まちあいしつ",
+    "pos": "名词",
+    "meaning": "候车室",
+    "example": "待合室で待っている。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2krxlvub",
+    "type": "word",
+    "kanji": "医者",
+    "kana": "いしゃ",
+    "pos": "名词",
+    "meaning": "医生",
+    "example": "医者に行った。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789466590365,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2k8axjxr",
+    "type": "word",
+    "kanji": "患者",
+    "kana": "かんじゃ",
+    "pos": "名词",
+    "meaning": "患者",
+    "example": "患者が増えている。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kfln4ex",
+    "type": "word",
+    "kanji": "歯",
+    "kana": "は",
+    "pos": "名词",
+    "meaning": "牙齿",
+    "example": "歯を磨く。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k1jb6to",
+    "type": "word",
+    "kanji": "灰皿",
+    "kana": "はいざら",
+    "pos": "名词",
+    "meaning": "烟灰缸",
+    "example": "灰皿を置いてある。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kiyh465",
+    "type": "word",
+    "kanji": "皿",
+    "kana": "さら",
+    "pos": "名词",
+    "meaning": "盘子",
+    "example": "皿を洗う。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2km0smkm",
+    "type": "word",
+    "kanji": "取り皿",
+    "kana": "とりざら",
+    "pos": "名词",
+    "meaning": "分餐盘",
+    "example": "取り皿をどうぞ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ky52b4z",
+    "type": "word",
+    "kanji": "吸い殻",
+    "kana": "すいがら",
+    "pos": "名词",
+    "meaning": "烟蒂",
+    "example": "吸い殻を捨てないで。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kvror1b",
+    "type": "word",
+    "kanji": "殻",
+    "kana": "から",
+    "pos": "名词",
+    "meaning": "壳",
+    "example": "卵の殻を捨てる。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ka85vkl",
+    "type": "word",
+    "kanji": "報告書",
+    "kana": "ほうこくしょ",
+    "pos": "名词",
+    "meaning": "报告书",
+    "example": "報告書を書く。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kiqv5pn",
+    "type": "word",
+    "kanji": "報告",
+    "kana": "ほうこく",
+    "pos": "名词",
+    "meaning": "报告",
+    "example": "結果を報告する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kb2ygxg",
+    "type": "word",
+    "kanji": "研究結果",
+    "kana": "けんきゅうけっか",
+    "pos": "名词",
+    "meaning": "研究结果",
+    "example": "研究結果を発表する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k7tml8k",
+    "type": "word",
+    "kanji": "揃う",
+    "kana": "そろう",
+    "pos": "一类动词",
+    "meaning": "齐全；聚齐",
+    "example": "全員揃った。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k61iu2y",
+    "type": "word",
+    "kanji": "寄る",
+    "kana": "よる",
+    "pos": "一类动词",
+    "meaning": "顺便去",
+    "example": "コンビニに寄ってくる。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kbna428",
+    "type": "word",
+    "kanji": "開く",
+    "kana": "あく",
+    "pos": "一类动词",
+    "meaning": "开（自动）",
+    "example": "窓が開いた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ks9wqk0",
+    "type": "word",
+    "kanji": "開ける",
+    "kana": "あける",
+    "pos": "二类动词",
+    "meaning": "打开（他动）",
+    "example": "窓を開ける。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kechjei",
+    "type": "word",
+    "kanji": "開く",
+    "kana": "ひらく",
+    "pos": "一类动词",
+    "meaning": "打开；展开",
+    "example": "店を開く。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kurdbm2",
+    "type": "word",
+    "kanji": "壊れる",
+    "kana": "こわれる",
+    "pos": "二类动词",
+    "meaning": "坏（自动）",
+    "example": "皿が壊れた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789466590365,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2knigeql",
+    "type": "word",
+    "kanji": "壊す",
+    "kana": "こわす",
+    "pos": "一类动词",
+    "meaning": "弄坏（他动）",
+    "example": "皿を壊した。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kmbh9dm",
+    "type": "word",
+    "kanji": "迎える",
+    "kana": "むかえる",
+    "pos": "二类动词",
+    "meaning": "迎接",
+    "example": "駅まで迎えに行く。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k87qkx7",
+    "type": "word",
+    "kanji": "出迎え",
+    "kana": "でむかえ",
+    "pos": "名词",
+    "meaning": "迎接",
+    "example": "空港で出迎えをする。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k4x6dpz",
+    "type": "word",
+    "kanji": "間違える",
+    "kana": "まちがえる",
+    "pos": "二类动词",
+    "meaning": "弄错",
+    "example": "道を間違えた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789444362903,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2khdq7zd",
+    "type": "word",
+    "kanji": "直す",
+    "kana": "なおす",
+    "pos": "一类动词",
+    "meaning": "修正；修理",
+    "example": "間違いを直す。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kns4q3x",
+    "type": "word",
+    "kanji": "出発する",
+    "kana": "しゅっぱつする",
+    "pos": "三类动词",
+    "meaning": "出发",
+    "example": "朝六時に出発する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k451aa7",
+    "type": "word",
+    "kanji": "転職する",
+    "kana": "てんしょくする",
+    "pos": "三类动词",
+    "meaning": "跳槽",
+    "example": "来年転職したい。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ktatdlv",
+    "type": "word",
+    "kanji": "転勤",
+    "kana": "てんきん",
+    "pos": "名词",
+    "meaning": "工作调动",
+    "example": "大阪へ転勤になった。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kwj4av2",
+    "type": "word",
+    "kanji": "出張",
+    "kana": "しゅっちょう",
+    "pos": "名词",
+    "meaning": "出差",
+    "example": "来週出張に行く。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kcm5iqe",
+    "type": "word",
+    "kanji": "パンクする",
+    "kana": "パンクする",
+    "pos": "三类动词",
+    "meaning": "爆胎",
+    "example": "自転車がパンクした。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kg2ga4w",
+    "type": "word",
+    "kanji": "タイヤ",
+    "kana": "タイヤ",
+    "pos": "名词",
+    "meaning": "轮胎",
+    "example": "タイヤを交換する。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kjp5to8",
+    "type": "word",
+    "kanji": "チェーン",
+    "kana": "チェーン",
+    "pos": "名词",
+    "meaning": "链条",
+    "example": "自転車のチェーンが外れた。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k5foaeu",
+    "type": "word",
+    "kanji": "楽しみ",
+    "kana": "たのしみ",
+    "pos": "名词",
+    "meaning": "期待；乐趣",
+    "example": "授業を楽しみにしています。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kfyy2tp",
+    "type": "word",
+    "kanji": "楽しむ",
+    "kana": "たのしむ",
+    "pos": "一类动词",
+    "meaning": "享受",
+    "example": "音楽を楽しむ。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2k7f4mnq",
+    "type": "word",
+    "kanji": "寂しい",
+    "kana": "さびしい",
+    "pos": "一类形容词",
+    "meaning": "寂寞",
+    "example": "これから寂しくなるね。",
+    "createdAt": 1789394858156,
+    "updatedAt": 1789394858156,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2kt4sbe7",
+    "type": "word",
+    "kanji": "特別",
+    "kana": "とくべつ",
+    "pos": "二类形容词",
+    "meaning": "特别",
+    "example": "特別な人。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2l1sxuep",
+    "type": "word",
+    "kanji": "それでは",
+    "kana": "それでは",
+    "pos": "接续词",
+    "meaning": "那么",
+    "example": "それでは、始めましょう。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ldp6xv6",
+    "type": "word",
+    "kanji": "そうか",
+    "kana": "そうか",
+    "pos": "其他",
+    "meaning": "原来如此",
+    "example": "そうか、知らなかった。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789466916888,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2lnuozc0",
+    "type": "word",
+    "kanji": "まあ",
+    "kana": "まあ",
+    "pos": "副词",
+    "meaning": "嘛；还算",
+    "example": "まあ、いいか。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2l306j33",
+    "type": "word",
+    "kanji": "下り",
+    "kana": "くだり",
+    "pos": "名词",
+    "meaning": "下行",
+    "example": "下りの列車に乗る。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2l50upzy",
+    "type": "word",
+    "kanji": "上る",
+    "kana": "のぼる",
+    "pos": "一类动词",
+    "meaning": "上行；上升",
+    "example": "坂を上ると海が見える。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ltse8at",
+    "type": "word",
+    "kanji": "パフューム",
+    "kana": "パフューム",
+    "pos": "名词",
+    "meaning": "香水",
+    "example": "パフュームの匂いがする。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2lw03y5a",
+    "type": "word",
+    "kanji": "動物園",
+    "kana": "どうぶつえん",
+    "pos": "名词",
+    "meaning": "动物园",
+    "example": "子供と動物園へ行った。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2lt7624g",
+    "type": "word",
+    "kanji": "動物",
+    "kana": "どうぶつ",
+    "pos": "名词",
+    "meaning": "动物",
+    "example": "動物が好きだ。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2laqlcdh",
+    "type": "word",
+    "kanji": "仕方ない",
+    "kana": "しかたない",
+    "pos": "一类形容词",
+    "meaning": "没办法",
+    "example": "今更仕方ない。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2lhu31bf",
+    "type": "word",
+    "kanji": "しょうがない",
+    "kana": "しょうがない",
+    "pos": "一类形容词",
+    "meaning": "没办法",
+    "example": "雨だからしょうがない。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2lsciexi",
+    "type": "word",
+    "kanji": "やる",
+    "kana": "やる",
+    "pos": "一类动词",
+    "meaning": "做；干",
+    "example": "宿題をやる。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2lzcf9bs",
+    "type": "word",
+    "kanji": "ほど",
+    "kana": "ほど",
+    "pos": "副词",
+    "meaning": "程度",
+    "example": "思ったほど難しくない。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2la1mss7",
+    "type": "word",
+    "kanji": "きちんと",
+    "kana": "きちんと",
+    "pos": "副词",
+    "meaning": "好好地；整齐",
+    "example": "きちんと片付ける。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2lcmv3yj",
+    "type": "word",
+    "kanji": "以降",
+    "kana": "いこう",
+    "pos": "名词",
+    "meaning": "以后",
+    "example": "十時以降は静かだ。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2lzzwbwa",
+    "type": "word",
+    "kanji": "ボタン",
+    "kana": "ボタン",
+    "pos": "名词",
+    "meaning": "按钮；纽扣",
+    "example": "ボタンを押す。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2laek241",
+    "type": "word",
+    "kanji": "押す",
+    "kana": "おす",
+    "pos": "一类动词",
+    "meaning": "按；推",
+    "example": "このボタンを押すと、電気がつく。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2lhcafd1",
+    "type": "word",
+    "kanji": "押しボタン",
+    "kana": "おしボタン",
+    "pos": "名词",
+    "meaning": "按压式按钮",
+    "example": "押しボタン式の信号だ。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2l51uipq",
+    "type": "word",
+    "kanji": "ブローチ",
+    "kana": "ブローチ",
+    "pos": "名词",
+    "meaning": "胸针",
+    "example": "母にブローチを贈った。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789466590365,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2lrz8z2o",
+    "type": "word",
+    "kanji": "アクセサリー",
+    "kana": "アクセサリー",
+    "pos": "名词",
+    "meaning": "首饰",
+    "example": "アクセサリーを身につける。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2l5kbtio",
+    "type": "word",
+    "kanji": "カーテン",
+    "kana": "カーテン",
+    "pos": "名词",
+    "meaning": "窗帘",
+    "example": "カーテンを開ける。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2lmisczh",
+    "type": "word",
+    "kanji": "サイズ",
+    "kana": "サイズ",
+    "pos": "名词",
+    "meaning": "尺寸",
+    "example": "サイズがぴったり合う。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2l04k4ua",
+    "type": "word",
+    "kanji": "コンクリート",
+    "kana": "コンクリート",
+    "pos": "名词",
+    "meaning": "混凝土",
+    "example": "コンクリートの建物だ。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2l6avl3f",
+    "type": "word",
+    "kanji": "プラスチック",
+    "kana": "プラスチック",
+    "pos": "名词",
+    "meaning": "塑料",
+    "example": "プラスチックの皿だ。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2l58hjwb",
+    "type": "word",
+    "kanji": "サービスセンター",
+    "kana": "サービスセンター",
+    "pos": "名词",
+    "meaning": "服务中心",
+    "example": "サービスセンターに電話する。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2leakq40",
+    "type": "word",
+    "kanji": "会員",
+    "kana": "かいいん",
+    "pos": "名词",
+    "meaning": "会员",
+    "example": "会員になると安くなる。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2l5f31yy",
+    "type": "word",
+    "kanji": "特典",
+    "kana": "とくてん",
+    "pos": "名词",
+    "meaning": "优惠；特权",
+    "example": "会員の特典がある。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2lc8m6wz",
+    "type": "word",
+    "kanji": "そば",
+    "kana": "そば",
+    "pos": "名词",
+    "meaning": "旁边",
+    "example": "駅のそばに住んでいる。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2l8ne12b",
+    "type": "word",
+    "kanji": "蕎麦",
+    "kana": "そば",
+    "pos": "名词",
+    "meaning": "荞麦面",
+    "example": "蕎麦を食べに行こう。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2l41dvwi",
+    "type": "word",
+    "kanji": "お手洗い",
+    "kana": "おてあらい",
+    "pos": "名词",
+    "meaning": "洗手间",
+    "example": "お手洗いはどこですか。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2ldxjmub",
+    "type": "word",
+    "kanji": "トイレ",
+    "kana": "トイレ",
+    "pos": "名词",
+    "meaning": "厕所",
+    "example": "トイレを借りたい。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2lborpxq",
+    "type": "word",
+    "kanji": "洗う",
+    "kana": "あらう",
+    "pos": "一类动词",
+    "meaning": "洗",
+    "example": "手を洗う。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789503184461,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1bhx2ls3n2mu",
+    "type": "word",
+    "kanji": "人間",
+    "kana": "にんげん",
+    "pos": "名词",
+    "meaning": "人类",
+    "example": "人間は考える生き物だ。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1bhx2l0xh0uu",
+    "type": "word",
+    "kanji": "スイカ",
+    "kana": "スイカ",
+    "pos": "名词",
+    "meaning": "西瓜",
+    "example": "夏はスイカが美味しい。",
+    "createdAt": 1789394858157,
+    "updatedAt": 1789394858157,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fi20ies1",
+    "type": "word",
+    "kanji": "卓球台",
+    "kana": "たっきゅうだい",
+    "pos": "名词",
+    "meaning": "乒乓球台",
+    "example": "体育館に卓球台が三台ある。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fix1iizz",
+    "type": "word",
+    "kanji": "湖",
+    "kana": "みずうみ",
+    "pos": "名词",
+    "meaning": "湖",
+    "example": "この湖は日本で一番大きい。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fiamaoum",
+    "type": "word",
+    "kanji": "怒る",
+    "kana": "おこる",
+    "pos": "一类动词",
+    "meaning": "生气，发怒",
+    "example": "父はすぐ怒る。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01finap2pi",
+    "type": "word",
+    "kanji": "腹が立つ",
+    "kana": "はらがたつ",
+    "pos": "其他",
+    "meaning": "生气，恼火（惯用句）",
+    "example": "彼の言い方に腹が立つ。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fi5zdemp",
+    "type": "word",
+    "kanji": "お腹がいっぱいです",
+    "kana": "おなかがいっぱいです",
+    "pos": "其他",
+    "meaning": "肚子饱了",
+    "example": "もうお腹がいっぱいです。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fiy9hxhm",
+    "type": "word",
+    "kanji": "回す",
+    "kana": "まわす",
+    "pos": "一类动词",
+    "meaning": "转动；传递（他动词）",
+    "example": "資料を後ろに回してください。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fivbvlft",
+    "type": "word",
+    "kanji": "動く",
+    "kana": "うごく",
+    "pos": "一类动词",
+    "meaning": "动，运转（自动词）",
+    "example": "パソコンは動かなくなった。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fi5xmvi4",
+    "type": "word",
+    "kanji": "生きる",
+    "kana": "いきる",
+    "pos": "二类动词",
+    "meaning": "活，生存",
+    "example": "祖父は九十歳まで生きた。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01figx0nqa",
+    "type": "word",
+    "kanji": "生き生き",
+    "kana": "いきいき",
+    "pos": "副词",
+    "meaning": "生动，活泼，有生气",
+    "example": "目が生き生きする。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789444362903,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1j01fi6nv0y5",
+    "type": "word",
+    "kanji": "描き出す",
+    "kana": "えがきだす",
+    "pos": "一类动词",
+    "meaning": "描绘出，刻画",
+    "example": "生き生きと描き出す。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fis8xao1",
+    "type": "word",
+    "kanji": "まとめる",
+    "kana": "まとめる",
+    "pos": "二类动词",
+    "meaning": "汇总，整理，归纳",
+    "example": "内容をまとめる。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789503184461,
+    "stats": {
+      "appeared": 2,
+      "correct": 2
+    }
+  },
+  {
+    "id": "mu1j01fif3sitw",
+    "type": "word",
+    "kanji": "下りる",
+    "kana": "おりる",
+    "pos": "二类动词",
+    "meaning": "下（从高处下来）",
+    "example": "階段から下りる。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fimsiztf",
+    "type": "word",
+    "kanji": "降りる",
+    "kana": "おりる",
+    "pos": "二类动词",
+    "meaning": "下（下车、下交通工具时写「降」）",
+    "example": "電車から降りる。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fixfc4df",
+    "type": "word",
+    "kanji": "上がる",
+    "kana": "あがる",
+    "pos": "一类动词",
+    "meaning": "上，上升（物价、气温、数值）",
+    "example": "階段を上がる。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fi9d7kqg",
+    "type": "word",
+    "kanji": "登る",
+    "kana": "のぼる",
+    "pos": "一类动词",
+    "meaning": "攀登，爬",
+    "example": "木に登る。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fi6xlpqw",
+    "type": "word",
+    "kanji": "乗る",
+    "kana": "のる",
+    "pos": "一类动词",
+    "meaning": "乘坐（用「に」）",
+    "example": "電車に乗る。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789503184461,
+    "stats": {
+      "appeared": 1,
+      "correct": 1
+    }
+  },
+  {
+    "id": "mu1j01fi22iaqi",
+    "type": "word",
+    "kanji": "下がる",
+    "kana": "さがる",
+    "pos": "一类动词",
+    "meaning": "下降（物价、气温、数值）",
+    "example": "物価が下がる。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01ficb13du",
+    "type": "word",
+    "kanji": "下る",
+    "kana": "くだる",
+    "pos": "一类动词",
+    "meaning": "下，下行（较正式的说法）",
+    "example": "下り列車に乗る。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fiexre8o",
+    "type": "word",
+    "kanji": "上る",
+    "kana": "のぼる",
+    "pos": "一类动词",
+    "meaning": "上，上行（较正式的说法）",
+    "example": "上り列車に乗る。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fi83k8nf",
+    "type": "word",
+    "kanji": "フリーズする",
+    "kana": "フリーズする",
+    "pos": "三类动词",
+    "meaning": "死机，卡住，僵住",
+    "example": "頭がフリーズする。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fiw6qjxf",
+    "type": "word",
+    "kanji": "故障する",
+    "kana": "こしょうする",
+    "pos": "三类动词",
+    "meaning": "故障，出故障",
+    "example": "パソコンが故障した。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fiyxbfz6",
+    "type": "word",
+    "kanji": "障害",
+    "kana": "しょうがい",
+    "pos": "名词",
+    "meaning": "障碍；故障",
+    "example": "障害を取り除く。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fi630kmx",
+    "type": "word",
+    "kanji": "障害物",
+    "kana": "しょうがいぶつ",
+    "pos": "名词",
+    "meaning": "障碍物",
+    "example": "障害物を避けて走る。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789466590365,
+    "stats": {
+      "appeared": 1,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fi2tnn8w",
+    "type": "word",
+    "kanji": "障害者",
+    "kana": "しょうがいしゃ",
+    "pos": "名词",
+    "meaning": "残障人士",
+    "example": "障害者を支援する。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fiei3p8v",
+    "type": "word",
+    "kanji": "美しい",
+    "kana": "うつくしい",
+    "pos": "一类形容词",
+    "meaning": "美丽的",
+    "example": "美しい花が咲いている。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789466590365,
+    "stats": {
+      "appeared": 1,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fihyobay",
+    "type": "word",
+    "kanji": "きれい",
+    "kana": "きれい",
+    "pos": "二类形容词",
+    "meaning": "漂亮；干净",
+    "example": "部屋をきれいにする。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fiptx79e",
+    "type": "word",
+    "kanji": "詳しい",
+    "kana": "くわしい",
+    "pos": "一类形容词",
+    "meaning": "详细；熟悉（用「に」）",
+    "example": "京都に詳しい。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fiik93kq",
+    "type": "word",
+    "kanji": "うまい",
+    "kana": "うまい",
+    "pos": "一类形容词",
+    "meaning": "好吃；擅长",
+    "example": "彼は説明がうまい。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fiv6hglj",
+    "type": "word",
+    "kanji": "自由",
+    "kana": "じゆう",
+    "pos": "二类形容词",
+    "meaning": "自由",
+    "example": "自由に利用することができる。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fiqq4gw1",
+    "type": "word",
+    "kanji": "丁寧",
+    "kana": "ていねい",
+    "pos": "二类形容词",
+    "meaning": "礼貌；细心，周到",
+    "example": "丁寧な言い方。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fiq2bxb7",
+    "type": "word",
+    "kanji": "きちんと",
+    "kana": "きちんと",
+    "pos": "副词",
+    "meaning": "好好地；整齐；准时",
+    "example": "きちんと片付ける。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fich4sdh",
+    "type": "word",
+    "kanji": "ただし",
+    "kana": "ただし",
+    "pos": "接续词",
+    "meaning": "但是，不过（补充条件）",
+    "example": "入場は無料です。ただし、予約が必要です。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fi8nkmkc",
+    "type": "word",
+    "kanji": "しかし",
+    "kana": "しかし",
+    "pos": "接续词",
+    "meaning": "但是（表转折）",
+    "example": "天気が悪い。しかし、出発する。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fi2k2toj",
+    "type": "word",
+    "kanji": "気持ち悪い",
+    "kana": "きもちわるい",
+    "pos": "一类形容词",
+    "meaning": "恶心；不舒服",
+    "example": "気持ち悪いから、少し休む。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fixbq93q",
+    "type": "word",
+    "kanji": "きもい",
+    "kana": "きもい",
+    "pos": "一类形容词",
+    "meaning": "恶心（「気持ち悪い」的口语缩写）",
+    "example": "あの言い方はきもい。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fia4ggio",
+    "type": "word",
+    "kanji": "メートル",
+    "kana": "メートル",
+    "pos": "名词",
+    "meaning": "米（长度单位）",
+    "example": "この部屋は十メートルある。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fiha2enk",
+    "type": "word",
+    "kanji": "目",
+    "kana": "め",
+    "pos": "名词",
+    "meaning": "眼睛；接尾表序数（第…个）",
+    "example": "目が悪い。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fiaj5ojg",
+    "type": "word",
+    "kanji": "一つ目",
+    "kana": "ひとつめ",
+    "pos": "名词",
+    "meaning": "第一个",
+    "example": "一つ目の問題を答える。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01fidje2v2",
+    "type": "word",
+    "kanji": "三つ目",
+    "kana": "みっつめ",
+    "pos": "名词",
+    "meaning": "第三个",
+    "example": "左から三つ目。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mu1j01firarm8e",
+    "type": "word",
+    "kanji": "三行目",
+    "kana": "さんぎょうめ",
+    "pos": "名词",
+    "meaning": "第三行",
+    "example": "上から三行目。",
+    "createdAt": 1789407460926,
+    "updatedAt": 1789407460926,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960wn0lon",
+    "type": "word",
+    "kanji": "列車",
+    "kana": "れっしゃ",
+    "pos": "名词",
+    "meaning": "列车，火车",
+    "example": "夜行列車で京都へ行く。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960od29an",
+    "type": "word",
+    "kanji": "高速バス",
+    "kana": "こうそくバス",
+    "pos": "名词",
+    "meaning": "高速巴士，长途大巴",
+    "example": "高速バスで大阪まで行った。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960qsjaaz",
+    "type": "word",
+    "kanji": "夜行バス",
+    "kana": "やこうバス",
+    "pos": "名词",
+    "meaning": "夜行巴士，夜班车",
+    "example": "夜行バスで東京へ向かった。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9607xqwvx",
+    "type": "word",
+    "kanji": "出発時刻",
+    "kana": "しゅっぱつじこく",
+    "pos": "名词",
+    "meaning": "出发时刻",
+    "example": "出発時刻は朝八時です。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960fk8gsc",
+    "type": "word",
+    "kanji": "到着",
+    "kana": "とうちゃく",
+    "pos": "名词",
+    "meaning": "到达",
+    "example": "到着は午後三時の予定です。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9606tv7uz",
+    "type": "sentence",
+    "kanji": "窓を開けると、列車の中まで春になった",
+    "kana": "",
+    "pos": "语句",
+    "meaning": "一打开窗户，连列车里都变成了春天",
+    "example": "",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9604zd459",
+    "type": "sentence",
+    "kanji": "この旅が終わると、次の私が始まる",
+    "kana": "",
+    "pos": "语句",
+    "meaning": "这趟旅程结束时，下一个我就开始了",
+    "example": "",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960cod231",
+    "type": "sentence",
+    "kanji": "空気は読むものじゃなく吸い込むものだったと思い出しました。",
+    "kana": "",
+    "pos": "语句",
+    "meaning": "我想起，空气不是用来读的，而是用来吸入的。",
+    "example": "",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9602cp9yp",
+    "type": "sentence",
+    "kanji": "夏休みは、寝坊が一番もったいない",
+    "kana": "",
+    "pos": "语句",
+    "meaning": "暑假里，睡懒觉最浪费",
+    "example": "",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960t0n4m7",
+    "type": "sentence",
+    "kanji": "思わず降りてしまう、という経験をしたことがありますか。",
+    "kana": "",
+    "pos": "语句",
+    "meaning": "你有过不由自主就下车的经历吗？",
+    "example": "",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960zs55j9",
+    "type": "sentence",
+    "kanji": "ああ、ここた、と思う駅がきっとある",
+    "kana": "",
+    "pos": "语句",
+    "meaning": "一定有那么一个车站，会让你觉得「啊，就是这里」",
+    "example": "",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9600xqkxf",
+    "type": "sentence",
+    "kanji": "タンポポみたいに旅に出た",
+    "kana": "",
+    "pos": "语句",
+    "meaning": "像蒲公英一样踏上了旅途",
+    "example": "",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960v24bnb",
+    "type": "sentence",
+    "kanji": "なんでだろう、涙が出た",
+    "kana": "",
+    "pos": "语句",
+    "meaning": "不知为什么，眼泪流了出来",
+    "example": "",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9600v1i7e",
+    "type": "word",
+    "kanji": "旅行予定",
+    "kana": "りょこうよてい",
+    "pos": "名词",
+    "meaning": "旅行计划",
+    "example": "旅行予定を立てる。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960srxftl",
+    "type": "word",
+    "kanji": "旅に出る",
+    "kana": "たびにでる",
+    "pos": "其他",
+    "meaning": "出门旅行（惯用句）",
+    "example": "春になると旅に出たくなる。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960zpl8yj",
+    "type": "word",
+    "kanji": "旅立つ",
+    "kana": "たびだつ",
+    "pos": "一类动词",
+    "meaning": "启程，出发去旅行",
+    "example": "彼は今日、旅立った。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9609p3mc8",
+    "type": "word",
+    "kanji": "情け",
+    "kana": "なさけ",
+    "pos": "名词",
+    "meaning": "同情；仁慈；情义",
+    "example": "情けをかける。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960av5bl8",
+    "type": "sentence",
+    "kanji": "旅は道連れに、せいかい",
+    "kana": "",
+    "pos": "语句",
+    "meaning": "旅行要有伴同行——答对了（「旅は道連れ、世は情け」）",
+    "example": "",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960a6vugd",
+    "type": "word",
+    "kanji": "さらば",
+    "kana": "さらば",
+    "pos": "其他",
+    "meaning": "再见，别了（古风说法）",
+    "example": "さらば、友よ。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960wxvmtd",
+    "type": "word",
+    "kanji": "天気予報",
+    "kana": "てんきよほう",
+    "pos": "名词",
+    "meaning": "天气预报",
+    "example": "天気予報では明日は雨だ。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960zhaz99",
+    "type": "word",
+    "kanji": "予定",
+    "kana": "よてい",
+    "pos": "名词",
+    "meaning": "预定，计划",
+    "example": "週末は予定がある。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9603gfa0s",
+    "type": "word",
+    "kanji": "台風",
+    "kana": "たいふう",
+    "pos": "名词",
+    "meaning": "台风",
+    "example": "台風で電車が止まった。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9606sfh59",
+    "type": "word",
+    "kanji": "地震",
+    "kana": "じしん",
+    "pos": "名词",
+    "meaning": "地震",
+    "example": "昨夜、大きな地震があった。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960cmnh31",
+    "type": "word",
+    "kanji": "津波",
+    "kana": "つなみ",
+    "pos": "名词",
+    "meaning": "海啸",
+    "example": "津波に注意してください。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960g1cah1",
+    "type": "word",
+    "kanji": "火山噴火",
+    "kana": "かざんふんか",
+    "pos": "名词",
+    "meaning": "火山喷发",
+    "example": "火山噴火で空が曇った。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960ooxdj4",
+    "type": "word",
+    "kanji": "新型",
+    "kana": "しんがた",
+    "pos": "名词",
+    "meaning": "新型",
+    "example": "新型の車が発売された。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk96032dnnm",
+    "type": "word",
+    "kanji": "ウイルス",
+    "kana": "ウイルス",
+    "pos": "名词",
+    "meaning": "病毒",
+    "example": "ウイルスが広がっている。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960qitwgm",
+    "type": "word",
+    "kanji": "インフルエンザ",
+    "kana": "インフルエンザ",
+    "pos": "名词",
+    "meaning": "流感",
+    "example": "インフルエンザにかかった。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9607ks25e",
+    "type": "word",
+    "kanji": "番組",
+    "kana": "ばんぐみ",
+    "pos": "名词",
+    "meaning": "（电视、广播）节目",
+    "example": "好きなテレビ番組を見る。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960u4wqf9",
+    "type": "word",
+    "kanji": "噂",
+    "kana": "うわさ",
+    "pos": "名词",
+    "meaning": "传闻，谣言",
+    "example": "そんな噂は信じない。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9601wxa1b",
+    "type": "word",
+    "kanji": "噂をすれば影",
+    "kana": "うわさをすればかげ",
+    "pos": "其他",
+    "meaning": "说曹操曹操到（谚语）",
+    "example": "噂をすれば影、彼が来た。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960vgyuxy",
+    "type": "word",
+    "kanji": "彼",
+    "kana": "かれ",
+    "pos": "名词",
+    "meaning": "他；男朋友",
+    "example": "彼はまだ来ていない。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960sksvyg",
+    "type": "word",
+    "kanji": "元彼",
+    "kana": "もとかれ",
+    "pos": "名词",
+    "meaning": "前男友",
+    "example": "駅で元彼に会った。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9606gpc3d",
+    "type": "word",
+    "kanji": "元カノ",
+    "kana": "もとかの",
+    "pos": "名词",
+    "meaning": "前女友",
+    "example": "元カノの話はしたくない。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960a1muc1",
+    "type": "word",
+    "kanji": "初月休み",
+    "kana": "はつづきやすみ",
+    "pos": "名词",
+    "meaning": "月初的假期（假名待确认）",
+    "example": "初月休みは家でのんびり過ごす。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960tgi40k",
+    "type": "word",
+    "kanji": "冬休み",
+    "kana": "ふゆやすみ",
+    "pos": "名词",
+    "meaning": "寒假",
+    "example": "冬休みに国へ帰る。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960wne5zy",
+    "type": "word",
+    "kanji": "連休",
+    "kana": "れんきゅう",
+    "pos": "名词",
+    "meaning": "连休，连续假期",
+    "example": "連休はどこも混んでいる。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960uhplfb",
+    "type": "word",
+    "kanji": "ボーナス",
+    "kana": "ボーナス",
+    "pos": "名词",
+    "meaning": "奖金",
+    "example": "ボーナスで旅行に行く。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960f1dklw",
+    "type": "word",
+    "kanji": "宣伝",
+    "kana": "せんでん",
+    "pos": "名词",
+    "meaning": "宣传",
+    "example": "新商品を宣伝する。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk96061tizq",
+    "type": "word",
+    "kanji": "餃子",
+    "kana": "ぎょうざ",
+    "pos": "名词",
+    "meaning": "饺子",
+    "example": "餃子を二十個食べた。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960t25w21",
+    "type": "word",
+    "kanji": "チャーハン",
+    "kana": "チャーハン",
+    "pos": "名词",
+    "meaning": "炒饭",
+    "example": "昼はチャーハンを食べた。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960mrw04f",
+    "type": "word",
+    "kanji": "ラーメン",
+    "kana": "ラーメン",
+    "pos": "名词",
+    "meaning": "拉面",
+    "example": "駅の近くにうまいラーメン屋がある。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9602rx1pc",
+    "type": "word",
+    "kanji": "焼く",
+    "kana": "やく",
+    "pos": "一类动词",
+    "meaning": "烤，烧，煎",
+    "example": "魚を焼く。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9600n153c",
+    "type": "word",
+    "kanji": "焼き餃子",
+    "kana": "やきぎょうざ",
+    "pos": "名词",
+    "meaning": "煎饺",
+    "example": "焼き餃子を注文した。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960otfql8",
+    "type": "word",
+    "kanji": "豚骨",
+    "kana": "とんこつ",
+    "pos": "名词",
+    "meaning": "猪骨（汤底）",
+    "example": "豚骨ラーメンが好きだ。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9601hffyp",
+    "type": "word",
+    "kanji": "鳥白湯",
+    "kana": "とりぱいたん",
+    "pos": "名词",
+    "meaning": "鸡白汤（汤底）",
+    "example": "鳥白湯のスープは濃厚だ。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960yr3rel",
+    "type": "word",
+    "kanji": "牛乳",
+    "kana": "ぎゅうにゅう",
+    "pos": "名词",
+    "meaning": "牛奶",
+    "example": "毎朝牛乳を飲む。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960mtxveo",
+    "type": "word",
+    "kanji": "小学校",
+    "kana": "しょうがっこう",
+    "pos": "名词",
+    "meaning": "小学",
+    "example": "息子は小学校に通っている。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960rfcnly",
+    "type": "word",
+    "kanji": "中学校",
+    "kana": "ちゅうがっこう",
+    "pos": "名词",
+    "meaning": "初中",
+    "example": "中学校で英語を習った。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960susges",
+    "type": "word",
+    "kanji": "支店",
+    "kana": "してん",
+    "pos": "名词",
+    "meaning": "分店，支店",
+    "example": "大阪支店に勤めている。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960z05auu",
+    "type": "word",
+    "kanji": "本店",
+    "kana": "ほんてん",
+    "pos": "名词",
+    "meaning": "总店，本店",
+    "example": "本店は東京にある。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9602tnhd5",
+    "type": "word",
+    "kanji": "老舗",
+    "kana": "しにせ",
+    "pos": "名词",
+    "meaning": "老字号，老店",
+    "example": "創業百年の老舗。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960i6yeuy",
+    "type": "word",
+    "kanji": "歴史",
+    "kana": "れきし",
+    "pos": "名词",
+    "meaning": "历史",
+    "example": "長い歴史を持ち",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960jbstf9",
+    "type": "word",
+    "kanji": "行う",
+    "kana": "おこなう",
+    "pos": "一类动词",
+    "meaning": "举行，进行",
+    "example": "結婚式を行う。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960ht816p",
+    "type": "word",
+    "kanji": "上がる",
+    "kana": "あがる",
+    "pos": "一类动词",
+    "meaning": "上升，提高",
+    "example": "温度が上がる。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk96070kztf",
+    "type": "word",
+    "kanji": "人気",
+    "kana": "にんき",
+    "pos": "名词",
+    "meaning": "人气，受欢迎",
+    "example": "人気が上がる。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960sa5jqj",
+    "type": "word",
+    "kanji": "乗り換える",
+    "kana": "のりかえる",
+    "pos": "二类动词",
+    "meaning": "换乘；转换",
+    "example": "新宿で山手線に乗り換える。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960ltpo6e",
+    "type": "sentence",
+    "kanji": "京都駅の地下鉄に乗り換える。",
+    "kana": "",
+    "pos": "语句",
+    "meaning": "在京都站换乘地铁。",
+    "example": "",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9605hzp02",
+    "type": "word",
+    "kanji": "辞める",
+    "kana": "やめる",
+    "pos": "二类动词",
+    "meaning": "辞职；戒掉",
+    "example": "会社をやめる／タバコを辞める。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960xuxw4a",
+    "type": "word",
+    "kanji": "留学する",
+    "kana": "りゅうがくする",
+    "pos": "三类动词",
+    "meaning": "留学",
+    "example": "日本に留学する。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960pbtw3w",
+    "type": "word",
+    "kanji": "入学する",
+    "kana": "にゅうがくする",
+    "pos": "三类动词",
+    "meaning": "入学",
+    "example": "大学に入学する。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960k7et3m",
+    "type": "word",
+    "kanji": "流行する",
+    "kana": "りゅうこうする",
+    "pos": "三类动词",
+    "meaning": "流行，盛行",
+    "example": "この歌は今、流行している。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960oj7xhy",
+    "type": "word",
+    "kanji": "流行る",
+    "kana": "はやる",
+    "pos": "一类动词",
+    "meaning": "流行，时兴",
+    "example": "去年からはやっている歌だ。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960riotvy",
+    "type": "sentence",
+    "kanji": "これ、今めっちゃくちゃはやってるよ",
+    "kana": "",
+    "pos": "语句",
+    "meaning": "这个现在超火的哦",
+    "example": "",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960p0ls51",
+    "type": "word",
+    "kanji": "入院する",
+    "kana": "にゅういんする",
+    "pos": "三类动词",
+    "meaning": "住院",
+    "example": "祖母が入院している。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960poek8c",
+    "type": "word",
+    "kanji": "担当者",
+    "kana": "たんとうしゃ",
+    "pos": "名词",
+    "meaning": "负责人，经办人",
+    "example": "担当者に聞いてください。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960ihkm4p",
+    "type": "word",
+    "kanji": "お邪魔",
+    "kana": "おじゃま",
+    "pos": "名词",
+    "meaning": "打扰，打扰了",
+    "example": "お邪魔します。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960kedzg4",
+    "type": "word",
+    "kanji": "強い",
+    "kana": "つよい",
+    "pos": "一类形容词",
+    "meaning": "强；强烈",
+    "example": "雨が強い／風が強い。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960rwboic",
+    "type": "sentence",
+    "kanji": "なかなか強いですね",
+    "kana": "",
+    "pos": "语句",
+    "meaning": "挺强的呢",
+    "example": "",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk96019sgrl",
+    "type": "word",
+    "kanji": "気さく",
+    "kana": "きさく",
+    "pos": "二类形容词",
+    "meaning": "爽快；平易近人",
+    "example": "彼は気さくな人だ。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk9600o9l1h",
+    "type": "word",
+    "kanji": "いろんな",
+    "kana": "いろんな",
+    "pos": "其他",
+    "meaning": "各种各样的（いろいろな 的口语形）",
+    "example": "いろんな人がいる。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960mw9aha",
+    "type": "word",
+    "kanji": "ずっと",
+    "kana": "ずっと",
+    "pos": "副词",
+    "meaning": "一直；……得多",
+    "example": "ずっと前から知っていた。",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  },
+  {
+    "id": "mubkk960q1a9wj",
+    "type": "sentence",
+    "kanji": "中国は日本よりずっと広いです。",
+    "kana": "",
+    "pos": "语句",
+    "meaning": "中国比日本大得多。",
+    "example": "",
+    "createdAt": 1790014745448,
+    "updatedAt": 1790014745448,
+    "stats": {
+      "appeared": 0,
+      "correct": 0
+    }
+  }
+]

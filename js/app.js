@@ -33,8 +33,16 @@
   /* 语句条目（只输入句子）与普通单词共用同一份数据，靠 type 区分 */
   function isSentence(w) { return !!w && w.type === 'sentence'; }
 
+  /* 动词类分类（一类/二类/三类动词，或自建的「××动词」）才显示「自他」这一列 */
+  function isVerbPos(pos) {
+    return /动词|動詞/.test(String(pos == null ? '' : pos));
+  }
+
   /* ---------- 测验会话状态 ---------- */
-  var quizState = null; // { questions, index, results[] }
+  var quizState = null; // { questions, index, results[] } —— 读音 + 意思（原题型）
+  var sentState = null; // { questions, index, results[] } —— AI 造句练习
+  var quizMode = 'classic'; // 'classic' = 读音+意思；'sentence' = AI 造句
+  var aiInfo = { checked: false, ok: false, message: '未检测', model: '' }; // AI 后端探测结果
   var editId = null;    // 当前正在编辑的单词 id
   var libraryPos = null; // 当前查看的分类名，null 表示分类列表模式
   var searchTerm = '';     // 已提交的检索关键词，空串表示未检索（行内不高亮）
@@ -69,6 +77,21 @@
     }).join('');
   }
 
+  /* 自他下拉：第一项是「未填写」，词条可选填（名词/形容词不填即可） */
+  function renderVtSelect(sel, current) {
+    if (!sel) return;
+    sel.innerHTML = [''].concat(Store.VERB_TYPES).map(function (v) {
+      return '<option value="' + escapeHtml(v) + '">' +
+        (v ? escapeHtml(v) : '— 未填写（可选）—') + '</option>';
+    }).join('');
+    if (current) sel.value = current; // 不在预设里的外来值保持「未填写」
+  }
+
+  function refreshVtSelects() {
+    renderVtSelect($('#f-vt'));
+    renderVtSelect($('#e-vt'));
+  }
+
   /* =========================================================
    * 视图路由
    * ========================================================= */
@@ -100,6 +123,7 @@
       var pos = $('#f-pos').value.trim();
       var meaning = $('#f-meaning').value.trim();
       var example = $('#f-example').value.trim();
+      var verbType = $('#f-vt').value;
       var msg = $('#form-msg');
 
       if (!kana) { setFormMsg('请填写假名', false); return; }
@@ -107,7 +131,7 @@
       if (!meaning) { setFormMsg('请填写意思', false); return; }
 
       try {
-        Store.add({ kanji: kanji, kana: kana, pos: pos, meaning: meaning, example: example });
+        Store.add({ kanji: kanji, kana: kana, pos: pos, meaning: meaning, example: example, verbType: verbType });
       } catch (err) {
         setFormMsg('保存失败：本地存储不可用', false);
         return;
@@ -252,6 +276,9 @@
   function renderGroup(pos, list) {
     var mastered = masteredCount(list);
     var sentencesOnly = allSentences(list);
+    // 「自他」列只对动词类分类有意义；但该分类里已经有自他数据时（例如导入来的）
+    // 也照样显示，免得数据被藏起来看不见
+    var showVt = !sentencesOnly && (isVerbPos(pos) || list.some(function (w) { return !!w.verbType; }));
     // 词性不在当前分类表里（例如导入的数据或分类被改名前的残留）
     var isOrphan = Store.categories().indexOf(pos) < 0;
 
@@ -270,13 +297,14 @@
     section.appendChild(header);
 
     var table = document.createElement('div');
-    table.className = 'word-table';
+    table.className = 'word-table' + (showVt ? ' verb-table' : '');
     // 语句没有假名/统计，整行表头都省掉
     if (!sentencesOnly) {
       table.innerHTML =
         '<div class="word-row word-row-head">' +
           '<span class="c-kanji">汉字</span>' +
           '<span class="c-kana">假名</span>' +
+          (showVt ? '<span class="c-vt">自他</span>' : '') +
           '<span class="c-meaning">意思</span>' +
           '<span class="c-stat">出现</span>' +
           '<span class="c-stat">答对</span>' +
@@ -286,7 +314,7 @@
     }
 
     list.forEach(function (w) {
-      table.appendChild(renderWordRow(w));
+      table.appendChild(renderWordRow(w, showVt));
     });
     section.appendChild(table);
     return section;
@@ -352,7 +380,24 @@
       escapeHtml(s.slice(end));
   }
 
-  function renderWordRow(w) {
+  /* 自他小标签：三种取值配色区分，未填写显示「—」 */
+  function verbTypeTag(vt) {
+    if (!vt) return '<em class="muted">—</em>';
+    var cls = vt === '自动词' ? 'is-auto' : (vt === '他动词' ? 'is-tran' : 'is-both');
+    return '<span class="vt-tag ' + cls + '">' + highlightTerm(vt) + '</span>';
+  }
+
+  /* 词库里的造句成绩：只有做过 AI 造句练习的词才显示这一行 */
+  function sentStatHtml(w) {
+    var s = w.stats || {};
+    var appeared = Number(s.sentAppeared) || 0;
+    if (!appeared) return '';
+    var passed = Number(s.sentPassed) || 0;
+    return '<span class="c-sentstat">✍️ 造句 ' + passed + ' / ' + appeared +
+      ' 通过（' + Math.round(passed / appeared * 100) + '%）</span>';
+  }
+
+  function renderWordRow(w, showVt) {
     var row = document.createElement('div');
     row.dataset.id = w.id; // 检索定位用（id 已限安全字符，可直接进选择器）
 
@@ -378,12 +423,14 @@
     row.innerHTML =
       '<span class="c-kanji">' + (highlightTerm(w.kanji) || '<em class="muted">（无）</em>') + '</span>' +
       '<span class="c-kana">' + highlightTerm(w.kana) + '</span>' +
+      (showVt ? '<span class="c-vt">' + verbTypeTag(w.verbType) + '</span>' : '') +
       '<span class="c-meaning">' + highlightTerm(w.meaning) + '</span>' +
       '<span class="c-stat">' + w.stats.appeared + '</span>' +
       '<span class="c-stat">' + w.stats.correct + '</span>' +
       '<span class="c-stat rate">' + rate + '</span>' +
       '<span class="c-actions">' + actionsHtml + '</span>' +
-      (w.example ? '<span class="c-example">' + highlightTerm(w.example) + '</span>' : '');
+      (w.example ? '<span class="c-example">' + highlightTerm(w.example) + '</span>' : '') +
+      sentStatHtml(w);
     return row;
   }
 
@@ -432,11 +479,11 @@
    * 单词库检索（跳转 + 高亮）
    *   回车 → 跳到第一个匹配条目所在分类，滚动到该行并闪烁；
    *   再按回车 → 在多个匹配之间循环。
-   *   匹配范围：汉字 / 假名 / 意思 / 例句（语句则匹配句子正文与翻译）。
+   *   匹配范围：汉字 / 假名 / 意思 / 例句 / 自他（语句则匹配句子正文与翻译）。
    * ========================================================= */
   function matchesTerm(w, term) {
     var t = term.toLowerCase();
-    return [w.kanji, w.kana, w.meaning, w.example].some(function (f) {
+    return [w.kanji, w.kana, w.meaning, w.example, w.verbType].some(function (f) {
       return String(f == null ? '' : f).toLowerCase().indexOf(t) >= 0;
     });
   }
@@ -518,6 +565,7 @@
     $('#e-kanji').value = w.kanji;
     $('#e-kana').value = w.kana;
     renderPosSelect($('#e-pos'), w.pos);
+    renderVtSelect($('#e-vt'), w.verbType || '');
     $('#e-meaning').value = w.meaning;
     $('#e-example').value = w.example || '';
     $('#edit-modal').hidden = false;
@@ -543,7 +591,8 @@
           kana: kana,
           pos: pos,
           meaning: meaning,
-          example: $('#e-example').value
+          example: $('#e-example').value,
+          verbType: $('#e-vt').value
         });
       } catch (err) {
         alert('保存失败：本地存储不可用或空间不足。');
@@ -737,11 +786,31 @@
    * 测验流程
    * ========================================================= */
   function renderQuizView() {
+    if (sentState) { renderSentenceQuestion(); return; }
     if (quizState && quizState.index < quizState.questions.length) {
       renderQuestion();
+    } else if (quizMode === 'sentence') {
+      renderSentenceStart();
     } else {
       renderQuizStart();
     }
+  }
+
+  /* 两种练习模式的切换条 */
+  function quizModeSwitchHtml(active) {
+    return '<div class="mode-toggle quiz-mode-toggle">' +
+      '<button type="button" class="mode-btn' + (active === 'classic' ? ' is-active' : '') + '" data-qmode="classic">📖 读音 + 意思</button>' +
+      '<button type="button" class="mode-btn' + (active === 'sentence' ? ' is-active' : '') + '" data-qmode="sentence">✍️ AI 造句</button>' +
+    '</div>';
+  }
+
+  function wireQuizMode() {
+    $$('#view-quiz [data-qmode]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        quizMode = b.dataset.qmode === 'sentence' ? 'sentence' : 'classic';
+        renderQuizView();
+      });
+    });
   }
 
   function renderQuizStart() {
@@ -763,6 +832,7 @@
 
     container.innerHTML =
       '<div class="card quiz-start">' +
+        quizModeSwitchHtml('classic') +
         '<h2>🎯 开始练习</h2>' +
         '<p class="quiz-desc">每次练习 <strong>' + n + '</strong> 个单词，先看汉字写假名，再选正确意思：</p>' +
         '<ul class="quiz-rules">' +
@@ -775,9 +845,63 @@
           '<span>已掌握 <strong>' + mastered + '</strong> 个</span>' +
         '</div>' +
         '<button class="btn btn-primary btn-lg" id="quiz-start-btn">开始练习</button>' +
+        '<p class="quiz-note">想自己写句子让 AI 批改？切到上面的「✍️ AI 造句」' +
+          (AI.isLocalFile() ? '（需要先把网站部署到 Cloudflare Pages）。' : '。') + '</p>' +
       '</div>';
 
     $('#quiz-start-btn').addEventListener('click', startQuiz);
+    wireQuizMode();
+  }
+
+  /* ---------- AI 造句练习：开始页 ---------- */
+  function renderSentenceStart() {
+    var words = Store.all().filter(function (w) { return !isSentence(w); });
+    var container = $('#view-quiz');
+
+    if (words.length === 0) {
+      container.innerHTML = '<div class="empty">' +
+        '词库里还没有可造句的单词，请先到「添加单词」录入单词。</div>';
+      return;
+    }
+
+    var n = Math.min(Quiz.SENTENCE_SIZE, words.length);
+
+    container.innerHTML =
+      '<div class="card quiz-start">' +
+        quizModeSwitchHtml('sentence') +
+        '<h2>✍️ AI 造句练习</h2>' +
+        '<p class="quiz-desc">每次 <strong>' + n + '</strong> 个词：给出中文意思和目标词，你写一句日语，交给 AI 老师批改。</p>' +
+        '<ul class="quiz-rules">' +
+          '<li>① 句子要真的用上目标词（词形可以变形，汉字 / 假名写法都算）</li>' +
+          '<li>② 批改会指出助词、时态、活用、自他动词的问题，并给出更自然的说法</li>' +
+          '<li>③ 判定分三档：✅ 正确 / ⚠️ 基本正确 / ❌ 需要修改</li>' +
+        '</ul>' +
+        '<label class="ai-record"><input type="checkbox" id="ai-record"' +
+          (AI.getRecord() ? ' checked' : '') + '> 把判定结果计入统计（单词库里显示「✍️ 造句 通过/次数」）</label>' +
+        '<div class="quiz-start-meta">' +
+          '<span>可造句的词 <strong>' + words.length + '</strong> 个</span>' +
+          '<span id="ai-start-status">' + escapeHtml(aiStatusText()) + '</span>' +
+        '</div>' +
+        '<button class="btn btn-primary btn-lg" id="sent-start-btn">开始造句</button>' +
+      '</div>';
+
+    $('#ai-record').addEventListener('change', function () { AI.setRecord(this.checked); });
+    $('#sent-start-btn').addEventListener('click', startSentenceSession);
+    wireQuizMode();
+
+    // 第一次进来顺手探一次；失败只提示，不挡着开始
+    if (!aiInfo.checked && !AI.isLocalFile() && AI.accessKey()) probeAi(true);
+  }
+
+  function startSentenceSession() {
+    var questions = Quiz.makeSentenceSession(Store.all());
+    if (!questions.length) { renderSentenceStart(); return; }
+    sentState = {
+      questions: questions,
+      index: 0,
+      results: new Array(questions.length).fill(null)
+    };
+    renderSentenceQuestion();
   }
 
   function startQuiz() {
@@ -1025,8 +1149,213 @@
   }
 
   /* =========================================================
-   * 导入 / 导出
+   * AI 造句练习：答题 / 批改 / 结果
    * ========================================================= */
+  function sentProgressHtml(no, total) {
+    return '<div class="quiz-progress">' +
+      '<span>第 ' + no + ' / ' + total + ' 题</span>' +
+      '<div class="progress-track"><div class="progress-fill" style="width:' + (no / total * 100) + '%"></div></div>' +
+    '</div>';
+  }
+
+  /* 题干：中文意思 + 目标词 + 词性/自他。故意不给例句——答题时给出来等于送答案 */
+  function sentPromptHtml(q) {
+    return '<div class="sent-prompt">' +
+      '<div class="sent-meaning">' + escapeHtml(q.meaning) + '</div>' +
+      '<div class="sent-word">' + escapeHtml(q.kanji || q.kana) +
+        (q.kanji ? '<small>' + escapeHtml(q.kana) + '</small>' : '') + '</div>' +
+      '<div class="sent-badges">' +
+        '<span class="pos-badge">' + escapeHtml(q.pos || '未分类') + '</span>' +
+        (q.verbType ? verbTypeTag(q.verbType) : '') +
+      '</div>' +
+      '<div class="sent-tip">用这个词写一句日语</div>' +
+    '</div>';
+  }
+
+  function sentError(text) {
+    var el = $('#sent-error');
+    if (!el) return;
+    el.textContent = text || '';
+    el.className = 'form-msg is-error';
+  }
+
+  function renderSentenceQuestion() {
+    var st = sentState;
+    var container = $('#view-quiz');
+    var q = st.questions[st.index];
+    var res = st.results[st.index];
+
+    if (res && res.status === 'done') { renderSentenceFeedback(q, res); return; }
+
+    container.innerHTML =
+      '<div class="card quiz-question">' +
+        sentProgressHtml(st.index + 1, st.questions.length) +
+        sentPromptHtml(q) +
+        '<textarea id="sent-input" class="sent-input" rows="3" placeholder="在这里写一句日语…" ' +
+          'autocomplete="off" spellcheck="false"></textarea>' +
+        '<div id="sent-error" class="form-msg"></div>' +
+        '<button class="btn btn-primary btn-lg" id="sent-submit" style="width:100%">提交给 AI 批改</button>' +
+        '<p class="quiz-note">写好后点按钮，或按 Ctrl / Cmd + Enter 提交。</p>' +
+      '</div>';
+
+    var ta = $('#sent-input');
+    if (res && res.input) ta.value = res.input;
+    if (res && res.status === 'error') sentError(res.error || '提交失败，请重试');
+
+    ta.addEventListener('keydown', function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); submitSentence(); }
+    });
+    $('#sent-submit').addEventListener('click', submitSentence);
+    ta.focus();
+  }
+
+  function submitSentence() {
+    if (!sentState) return;
+    var idx = sentState.index;
+    var q = sentState.questions[idx];
+    var input = $('#sent-input').value.trim();
+    if (!input) { sentError('先写一句日语再提交'); $('#sent-input').focus(); return; }
+
+    sentState.results[idx] = { input: input, status: 'pending' };
+    var btn = $('#sent-submit');
+    btn.disabled = true;
+    btn.textContent = 'AI 正在批改…';
+    sentError('');
+
+    AI.judge(q, input).then(function (r) {
+      if (!sentState || sentState.index !== idx) return; // 期间已经翻页/退出
+      sentState.results[idx] = { input: input, status: 'done', result: r };
+      renderSentenceFeedback(q, sentState.results[idx]);
+    }).catch(function (err) {
+      if (!sentState || sentState.index !== idx) return;
+      // 失败就留在答题界面，把答案保留着，让用户能重试
+      sentState.results[idx] = { input: input, status: 'error', error: (err && err.message) || '批改失败' };
+      renderSentenceQuestion();
+    });
+  }
+
+  function renderSentenceFeedback(q, res) {
+    var st = sentState;
+    var container = $('#view-quiz');
+    var r = res.result || {};
+    var verdict = r.verdict || 'unknown';
+    var cls = verdict === 'correct' ? 'is-correct'
+      : (verdict === 'almost' ? 'is-almost' : (verdict === 'wrong' ? 'is-wrong' : 'is-unknown'));
+    var icon = verdict === 'correct' ? '✅' : (verdict === 'almost' ? '⚠️' : (verdict === 'wrong' ? '❌' : '🤖'));
+    var isLast = st.index + 1 >= st.questions.length;
+
+    var corrections = (r.corrections || []).map(function (c) {
+      return '<div class="sent-fix">' +
+        (c.before ? '<span class="fix-before">' + escapeHtml(c.before) + '</span>' : '') +
+        (c.after ? '<span class="fix-arrow">→</span><span class="fix-after">' + escapeHtml(c.after) + '</span>' : '') +
+        (c.why ? '<span class="fix-why">' + escapeHtml(c.why) + '</span>' : '') +
+      '</div>';
+    }).join('');
+
+    container.innerHTML =
+      '<div class="card quiz-question">' +
+        sentProgressHtml(st.index + 1, st.questions.length) +
+        sentPromptHtml(q) +
+        '<div class="quiz-feedback ' + cls + '">' +
+          '<div class="fb-title">' + icon + ' ' + escapeHtml(AI.verdictLabel(verdict)) +
+            (typeof r.score === 'number' ? '<span class="sent-score">' + r.score + ' 分</span>' : '') + '</div>' +
+          '<div class="fb-word">你的句子：' + escapeHtml(res.input) + '</div>' +
+          (r.usedTarget === false
+            ? '<div class="sent-warn">⚠️ 好像没有用上目标词「' + escapeHtml(q.kanji || q.kana) + '」</div>' : '') +
+          (corrections ? '<div class="sent-fixes">' + corrections + '</div>' : '') +
+          (r.better ? '<div class="fb-extra">更自然的说法：' + escapeHtml(r.better) + '</div>' : '') +
+          (r.comment ? '<div class="sent-comment">' + escapeHtml(r.comment) + '</div>' : '') +
+          (r.raw ? '<pre class="sent-raw">' + escapeHtml(r.raw) + '</pre>' : '') +
+          (q.example ? '<div class="fb-extra">参考例句（词库里填的）：' + escapeHtml(q.example) + '</div>' : '') +
+        '</div>' +
+        '<button class="btn btn-primary btn-lg" id="sent-next" style="width:100%">' +
+          (isLast ? '查看结果' : '下一题') + '</button>' +
+      '</div>';
+
+    $('#sent-next').addEventListener('click', function () {
+      if (st.index + 1 < st.questions.length) {
+        st.index++;
+        renderSentenceQuestion();
+      } else {
+        finishSentenceSession();
+      }
+    });
+  }
+
+  function finishSentenceSession() {
+    var st = sentState;
+    var total = st.questions.length;
+    var counts = { correct: 0, almost: 0, wrong: 0, unknown: 0 };
+
+    st.results.forEach(function (r) {
+      var v = (r && r.result && r.result.verdict) || 'unknown';
+      if (!Object.prototype.hasOwnProperty.call(counts, v)) v = 'unknown';
+      counts[v]++;
+    });
+
+    var pct = total ? Math.round((counts.correct + counts.almost * 0.5) / total * 100) : 0;
+
+    // 只有勾了「计入统计」才记录；单独记在 sentAppeared / sentPassed，
+    // 不碰读音题/意思题的 appeared/correct（那道正确率和「已掌握」不该被 AI 判定影响）
+    var recorded = 0;
+    if (AI.getRecord()) {
+      var ids = [];
+      var pass = [];
+      st.questions.forEach(function (q, i) {
+        var r = st.results[i];
+        if (!r || !r.result) return;
+        ids.push(q.wordId);
+        pass.push(AI.isPass(r.result.verdict));
+      });
+      try { recorded = Store.recordSentences(ids, pass); } catch (e) { recorded = 0; }
+    }
+
+    var rows = st.questions.map(function (q, i) {
+      var r = st.results[i] || {};
+      var res = r.result || {};
+      var v = res.verdict || 'unknown';
+      var cls = v === 'correct' ? 'is-correct' : (v === 'almost' ? 'is-almost' : 'is-wrong');
+      var icon = v === 'correct' ? '✅' : (v === 'almost' ? '⚠️' : (v === 'wrong' ? '❌' : '🤖'));
+      return '<div class="result-row ' + cls + '">' +
+        '<span class="r-icon">' + icon + '</span>' +
+        '<span class="r-word">' + escapeHtml(q.kanji || q.kana) + ' <small>' + escapeHtml(q.kana) + '</small></span>' +
+        '<span class="r-meaning">' + escapeHtml(r.input || '（未作答）') + '</span>' +
+        '<span class="r-detail">' + escapeHtml(AI.verdictLabel(v)) +
+          (typeof res.score === 'number' ? ' ' + res.score + '分' : '') + '</span>' +
+      '</div>';
+    }).join('');
+
+    var container = $('#view-quiz');
+    container.innerHTML =
+      '<div class="card quiz-result">' +
+        '<h2>造句练习完成</h2>' +
+        '<div class="result-score">' +
+          '<div class="score-number">' + counts.correct + '<span class="score-total"> / ' + total + '</span></div>' +
+          '<div class="score-pct">得分率 ' + pct + '%（基本正确算半分）</div>' +
+        '</div>' +
+        '<div class="sent-summary">✅ 正确 ' + counts.correct +
+          '　⚠️ 基本正确 ' + counts.almost +
+          '　❌ 需要修改 ' + counts.wrong +
+          (counts.unknown ? '　🤖 无法判定 ' + counts.unknown : '') + '</div>' +
+        '<div class="result-list">' + rows + '</div>' +
+        '<p class="quiz-note">' + (AI.getRecord()
+          ? '已把这 ' + recorded + ' 个词的造句结果记入统计（单词库里显示「✍️ 造句 通过 / 次数」）。'
+          : '这次没有记录统计（开始前取消勾选了「计入统计」）。') + '</p>' +
+        '<div class="result-actions">' +
+          '<button class="btn btn-primary" id="sent-again">再来一次</button>' +
+          '<button class="btn btn-ghost" id="sent-back">返回单词库</button>' +
+        '</div>' +
+      '</div>';
+
+    $('#sent-again').addEventListener('click', function () {
+      sentState = null;
+      renderSentenceStart();
+    });
+    $('#sent-back').addEventListener('click', function () { showView('library'); });
+
+    sentState = null;
+    updateSidebarStats();
+  }
   function initImportExport() {
     $('#btn-export').addEventListener('click', function () {
       var data = Store.exportData();
@@ -1149,6 +1478,75 @@
   }
 
   /* =========================================================
+   * AI 造句判题面板（侧边栏）
+   * ========================================================= */
+  function shortModel(id) {
+    var s = String(id || '').replace(/^@cf\//, '');
+    return s.length > 22 ? s.slice(0, 21) + '…' : s;
+  }
+
+  function aiStatusText() {
+    if (AI.isLocalFile()) return '本机文件打开：AI 不可用';
+    if (!AI.accessKey()) return '先在下面设置同步码';
+    if (!aiInfo.checked) return '待检测';
+    return aiInfo.ok ? ('可用：' + shortModel(aiInfo.model)) : (aiInfo.message || '不可用');
+  }
+
+  function renderAiStatus() {
+    var text = aiStatusText();
+    var el = $('#ai-status');
+    if (el) {
+      el.textContent = text;
+      el.className = 'sync-status ' + (aiInfo.ok ? 'is-ok' : (aiInfo.checked ? 'is-error' : ''));
+      el.title = aiInfo.message || text;
+    }
+    var startEl = $('#ai-start-status');
+    if (startEl) startEl.textContent = text;
+  }
+
+  function fillAiModelList(ids) {
+    var list = $('#ai-model-list');
+    if (!list) return;
+    list.innerHTML = ids.map(function (id) {
+      var known = AI.MODELS.filter(function (m) { return m.id === id; })[0];
+      return '<option value="' + escapeHtml(id) + '">' + escapeHtml(known ? known.label : id) + '</option>';
+    }).join('');
+  }
+
+  function probeAi(silent) {
+    var el = $('#ai-status');
+    if (el) el.textContent = '检测中…';
+    return AI.probe().then(function (info) {
+      aiInfo = { checked: true, ok: true, message: '可用', model: info.model || AI.getModel() };
+      if (info.models && info.models.length) fillAiModelList(info.models);
+      renderAiStatus();
+      return info;
+    }).catch(function (err) {
+      aiInfo = { checked: true, ok: false, message: (err && err.message) || '不可用', model: AI.getModel() };
+      renderAiStatus();
+      if (!silent) alert('AI 检测失败：' + aiInfo.message);
+      return null;
+    });
+  }
+
+  function initAiPanel() {
+    var input = $('#ai-model');
+    if (!input) return;
+    fillAiModelList(AI.MODELS.map(function (m) { return m.id; }));
+    input.value = AI.getModel();
+    input.addEventListener('change', function () {
+      AI.setModel(this.value);
+      this.value = AI.getModel();
+      aiInfo.checked = false; // 换了模型要重新检测
+      renderAiStatus();
+    });
+    $('#ai-check').addEventListener('click', function () { probeAi(false); });
+    renderAiStatus();
+    // 已经填过同步码就静默探一次，让状态栏一进来就是准的
+    if (!AI.isLocalFile() && AI.accessKey()) probeAi(true);
+  }
+
+  /* =========================================================
    * 初始化
    * ========================================================= */
   function init() {
@@ -1161,6 +1559,7 @@
     initCategories();
     initSearch();
     refreshPosSelects();
+    refreshVtSelects();
 
     $$('.nav-btn').forEach(function (btn) {
       btn.addEventListener('click', function () { showView(btn.dataset.view); });
@@ -1170,6 +1569,7 @@
 
     updateSidebarStats();
     initSync();
+    initAiPanel();
     $('#f-kanji').focus();
   }
 

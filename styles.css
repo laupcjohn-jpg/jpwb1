@@ -469,6 +469,10 @@ mark {
 #cat-msg { margin: 10px 0 0; min-height: 18px; }
 
 .word-table { padding: 0; }
+/* 动词类分类的词表多一列「自他」 */
+.verb-table .word-row {
+  grid-template-columns: 1.2fr 1.2fr .8fr 1.6fr .55fr .55fr .7fr auto;
+}
 .word-row {
   display: grid;
   grid-template-columns: 1.2fr 1.2fr 1.6fr .55fr .55fr .7fr auto;
@@ -501,6 +505,21 @@ mark {
 .c-stat.rate { font-weight: 600; }
 .muted { color: var(--muted); font-style: normal; }
 
+/* 自他属性小标签：自动词 / 他动词 / 自他动词 各一种配色 */
+.c-vt { display: flex; align-items: center; }
+.vt-tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1.7;
+  white-space: nowrap;
+}
+.vt-tag.is-auto { color: #1c7a8c; background: #e6f4f7; border-color: #cfe8ee; }
+.vt-tag.is-tran { color: #a9661a; background: #fdf2e4; border-color: #f2dfc6; }
+.vt-tag.is-both { color: #6a4fa3; background: #f1ecfb; border-color: #e2d8f5; }
+
 /* 例句：独占一行，显示在该词条数据下方 */
 .c-example {
   grid-column: 1 / -1;
@@ -516,6 +535,16 @@ mark {
   margin-right: 2px;
   color: var(--muted);
   font-weight: 600;
+}
+
+/* AI 造句成绩：同样独占一行，只有做过造句练习的词才有 */
+.c-sentstat {
+  grid-column: 1 / -1;
+  margin-top: 6px;
+  padding-top: 7px;
+  border-top: 1px dashed var(--border);
+  font-size: 13px;
+  color: #6b7180;
 }
 
 /* 语句行：整句独占主列，中文翻译另起一行，右侧只留操作按钮 */
@@ -665,6 +694,15 @@ mark {
   color: var(--muted);
   font-weight: 600;
 }
+/* 造句反馈里的补充行（更自然的说法 / 参考例句）：同样的分隔样式，但不带「例：」前缀 */
+.fb-extra {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(0, 0, 0, .12);
+  font-size: 13px;
+  line-height: 1.6;
+  color: #5c6472;
+}
 
 /* ===================== 测验结果 ===================== */
 .quiz-result { max-width: 620px; text-align: center; padding: 36px 32px; }
@@ -694,6 +732,90 @@ mark {
 .r-detail { font-size: 12px; color: var(--muted); }
 
 .result-actions { display: flex; gap: 12px; justify-content: center; }
+
+/* ===================== AI 造句练习 ===================== */
+.quiz-mode-toggle { margin-bottom: 14px; }
+.ai-record {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 4px;
+  font-size: 13px;
+  color: #4a4f5c;
+  cursor: pointer;
+}
+.ai-record input { width: auto; margin: 0; }
+
+.sent-prompt {
+  margin: 14px 0 14px;
+  padding: 16px;
+  border-radius: 10px;
+  background: #f6faf8;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+.sent-meaning { font-size: 20px; font-weight: 700; }
+.sent-word { margin-top: 6px; font-size: 26px; font-weight: 700; letter-spacing: .02em; }
+.sent-word small { margin-left: 8px; font-size: 14px; font-weight: 400; color: var(--muted); }
+.sent-badges {
+  margin-top: 8px;
+  display: flex; gap: 6px; justify-content: center; align-items: center; flex-wrap: wrap;
+}
+.sent-tip { margin-top: 8px; font-size: 12px; color: var(--muted); }
+.sent-input {
+  width: 100%;
+  min-height: 84px;
+  padding: 11px 13px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  line-height: 1.7;
+  resize: vertical;
+  background: #fbfdfc;
+}
+.sent-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  background: #fff;
+}
+
+/* 造句判定的三档配色 */
+.quiz-feedback.is-almost { background: #fdf6e8; border: 1px solid #f0dcb8; }
+.quiz-feedback.is-unknown { background: #f4f6f8; border: 1px solid #dde3e8; }
+.sent-score { margin-left: 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.sent-warn { margin-top: 8px; font-size: 13px; color: #a9661a; }
+.sent-fixes { margin-top: 10px; display: grid; gap: 6px; }
+.sent-fix { font-size: 13px; line-height: 1.7; }
+.fix-before { color: var(--bad); text-decoration: line-through; }
+.fix-arrow { margin: 0 6px; color: var(--muted); }
+.fix-after { color: var(--good); font-weight: 600; }
+.fix-why { display: block; font-size: 12px; color: var(--muted); }
+.sent-comment {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(0, 0, 0, .12);
+  font-size: 13px;
+  line-height: 1.7;
+  color: #4a4f5c;
+}
+.sent-raw {
+  margin: 10px 0 0;
+  padding: 10px;
+  max-height: 220px;
+  overflow: auto;
+  background: #fff;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.sent-summary { margin: 6px 0 14px; text-align: center; font-size: 14px; color: #4a4f5c; }
+.result-row.is-almost { background: #fdf6e8; }
+.ai-panel { margin-top: 12px; }
+.ai-panel .sync-key-row input { min-width: 0; }
 
 /* ===================== 弹窗 ===================== */
 .modal-overlay {
@@ -741,9 +863,15 @@ mark {
   .sync-panel .hint { display: none; }
   .main { padding: 20px 16px; }
   .word-row { grid-template-columns: 1.1fr 1.1fr 1.5fr auto; }
+  /* 动词表在手机上多留一列「自他」 */
+  .verb-table .word-row { grid-template-columns: 1.1fr 1.1fr .8fr 1.5fr auto; }
   .c-stat { display: none; }
   /* 语句行不受上面的多列布局影响 */
   .sentence-row { grid-template-columns: 1fr auto; }
   .library-search { flex-wrap: wrap; gap: 8px; }
   .library-search input { max-width: none; }
+  /* 造句练习：模式切换条铺满，题干字号收一点 */
+  .quiz-mode-toggle { display: flex; width: 100%; }
+  .quiz-mode-toggle .mode-btn { flex: 1; }
+  .sent-word { font-size: 21px; }
 }

@@ -10,9 +10,13 @@
  *     pos: string,         // 词性（单词必填，用于分类与干扰项抽取）；语句固定为「语句」
  *     meaning: string,     // 意思（单词必填）；语句存中文翻译（可为空）
  *     example: string,     // 例句（可为空）
+ *     verbType: string,    // 自他属性：'自动词' | '他动词' | '自他动词'（可为空，仅动词有意义）
  *     createdAt: number,   // 创建时间戳
  *     updatedAt: number,   // 最后修改时间戳（多端同步时用来判断谁更新）
- *     stats: { appeared: number, correct: number }  // correct <= appeared
+ *     stats: {
+ *       appeared: number, correct: number,         // 读音题 + 意思题（correct <= appeared）
+ *       sentAppeared: number, sentPassed: number   // AI 造句题（sentPassed <= sentAppeared）
+ *     }
  *   }
  *
  * 语句（type='sentence'）是「只输入句子」的轻量条目：不参与测验、不记统计，
@@ -31,6 +35,8 @@ window.Store = (function () {
   var CAT_KEY = 'jpStudy.cats.v1';
   var DEL_KEY = 'jpStudy.deleted.v1';
   var SENTENCE_POS = '语句';  // 语句专用分类（保留名，普通单词不应占用）
+  // 自他属性：只有动词类词条才需要填，留空表示未填写（名词/形容词/语句都不用）
+  var VERB_TYPES = ['自动词', '他动词', '自他动词'];
   var DEFAULT_CATS = ['一类动词', '二类动词', '三类动词', '一类形容词', '二类形容词', '名词', SENTENCE_POS];
   var words = [];
   var cats = [];
@@ -51,7 +57,13 @@ window.Store = (function () {
 
   /* 内容指纹，用于导入去重。带上 type，避免同文的单词与语句被判成重复 */
   function contentKey(w) {
-    return [w.type || 'word', w.kanji, w.kana, w.pos, w.meaning].join('');
+    return [w.type || 'word', w.kanji, w.kana, w.pos, w.meaning, w.verbType || ''].join('');
+  }
+
+  /* 自他属性（自动词/他动词/自他动词）：只认预设值，其余（含旧数据缺字段）视为未填写 */
+  function normalizeVerbType(v) {
+    var s = String(v == null ? '' : v).trim();
+    return VERB_TYPES.indexOf(s) >= 0 ? s : '';
   }
 
   /* 归一化单个条目；非法（非对象 / 全空）返回 null */
@@ -64,7 +76,9 @@ window.Store = (function () {
     var pos = String(item.pos == null ? '' : item.pos).trim();
     var meaning = String(item.meaning == null ? '' : item.meaning).trim();
     var example = String(item.example == null ? '' : item.example).trim();
-    if (!kana && !kanji && !pos && !meaning && !example) return null;
+    var verbType = normalizeVerbType(item.verbType);
+    if (type === 'sentence') verbType = ''; // 语句没有自他属性，外来数据里带了也丢掉
+    if (!kana && !kanji && !pos && !meaning && !example && !verbType) return null;
 
     // id 仅接受安全字符，否则重新生成（从源头阻断 HTML 注入）
     var id = (typeof item.id === 'string' && item.id && /^[A-Za-z0-9._-]+$/.test(item.id))
@@ -72,6 +86,9 @@ window.Store = (function () {
 
     var appeared = toInt(item.stats && item.stats.appeared);
     var correct = toInt(item.stats && item.stats.correct, appeared); // 钳制 correct <= appeared
+    // AI 造句题单独计数：判定是「模糊」的，不能混进读音/意思题的正确率里
+    var sentAppeared = toInt(item.stats && item.stats.sentAppeared);
+    var sentPassed = toInt(item.stats && item.stats.sentPassed, sentAppeared);
 
     // createdAt 缺省取当前时间；updatedAt 缺省回落到 createdAt。
     // 关键：旧数据缺 updatedAt 时不能赋「当前时间」，否则每次加载都会让本地
@@ -87,9 +104,13 @@ window.Store = (function () {
       pos: pos,
       meaning: meaning,
       example: example,
+      verbType: verbType,
       createdAt: createdAt,
       updatedAt: updatedAt,
-      stats: { appeared: appeared, correct: correct }
+      stats: {
+        appeared: appeared, correct: correct,
+        sentAppeared: sentAppeared, sentPassed: sentPassed
+      }
     };
   }
 
@@ -242,7 +263,7 @@ window.Store = (function () {
       return {
         id: w.id, type: w.type || 'word',
         kanji: w.kanji, kana: w.kana, pos: newName,
-        meaning: w.meaning, example: w.example,
+        meaning: w.meaning, example: w.example, verbType: w.verbType || '',
         createdAt: w.createdAt, updatedAt: now, stats: w.stats
       };
     });
@@ -274,7 +295,7 @@ window.Store = (function () {
   function add(word) {
     var w = normalizeWord({
       kanji: word.kanji, kana: word.kana, pos: word.pos,
-      meaning: word.meaning, example: word.example
+      meaning: word.meaning, example: word.example, verbType: word.verbType
     });
     if (!w || !w.kana || !w.pos || !w.meaning) {
       throw new Error('缺少必填字段（假名/词性/意思）');
@@ -328,6 +349,7 @@ window.Store = (function () {
         pos: patch.pos !== undefined ? String(patch.pos).trim() : x.pos,
         meaning: patch.meaning !== undefined ? String(patch.meaning).trim() : x.meaning,
         example: patch.example !== undefined ? String(patch.example).trim() : (x.example || ''),
+        verbType: patch.verbType !== undefined ? normalizeVerbType(patch.verbType) : (x.verbType || ''),
         createdAt: x.createdAt,
         updatedAt: now,
         stats: x.stats
@@ -375,11 +397,49 @@ window.Store = (function () {
       return {
         id: w.id, type: w.type || 'word',
         kanji: w.kanji, kana: w.kana, pos: w.pos,
-        meaning: w.meaning, example: w.example,
+        meaning: w.meaning, example: w.example, verbType: w.verbType || '',
         createdAt: w.createdAt, updatedAt: now,
         stats: {
           appeared: w.stats.appeared + 1,
-          correct: w.stats.correct + (flags[w.id] ? 1 : 0)
+          correct: w.stats.correct + (flags[w.id] ? 1 : 0),
+          sentAppeared: toInt(w.stats.sentAppeared),
+          sentPassed: toInt(w.stats.sentPassed)
+        }
+      };
+    });
+
+    if (!updated) return 0;
+    persistWords(next);
+    words = next;
+    emitChange();
+    return updated;
+  }
+
+  /**
+   * 批量记录一次 AI 造句练习：造句出现次数 +1，判定为「正确」时通过次数 +1。
+   *
+   * 刻意与 recordResults 分开计数：AI 判定是模糊的，混进 appeared/correct 会让
+   * 「正确率」和「已掌握」算法失真（掌握度只该由读音题和四选一决定）。
+   */
+  function recordSentences(ids, passFlags) {
+    var now = Date.now();
+    var flags = {};
+    for (var i = 0; i < ids.length; i++) flags[ids[i]] = !!passFlags[i];
+
+    var updated = 0;
+    var next = words.map(function (w) {
+      if (!Object.prototype.hasOwnProperty.call(flags, w.id)) return w;
+      updated++;
+      return {
+        id: w.id, type: w.type || 'word',
+        kanji: w.kanji, kana: w.kana, pos: w.pos,
+        meaning: w.meaning, example: w.example, verbType: w.verbType || '',
+        createdAt: w.createdAt, updatedAt: now,
+        stats: {
+          appeared: toInt(w.stats.appeared),
+          correct: toInt(w.stats.correct),
+          sentAppeared: toInt(w.stats.sentAppeared) + 1,
+          sentPassed: toInt(w.stats.sentPassed) + (flags[w.id] ? 1 : 0)
         }
       };
     });
@@ -478,9 +538,11 @@ window.Store = (function () {
     add: add,
     addSentence: addSentence,
     SENTENCE_POS: SENTENCE_POS,
+    VERB_TYPES: VERB_TYPES,
     update: update,
     remove: remove,
     recordResults: recordResults,
+    recordSentences: recordSentences,
     exportData: exportData,
     importData: importData,
     save: save,
