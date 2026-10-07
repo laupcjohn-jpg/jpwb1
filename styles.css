@@ -850,6 +850,8 @@ mark {
   line-height: 1.7;
   color: #4a4f5c;
 }
+.sent-found { margin-top: 6px; font-size: 13px; color: var(--good); }
+.sent-actions { margin-top: 10px; text-align: right; }
 .sent-meta { margin: 10px 0 14px; text-align: center; font-size: 12px; color: var(--muted); }
 .ai-diag { margin-top: 10px; font-size: 12px; }
 .ai-diag summary { cursor: pointer; color: var(--muted); }

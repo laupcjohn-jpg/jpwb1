@@ -1358,11 +1358,36 @@
       parts.push('本地缓存结果（没再花额度）');
     } else {
       if (typeof r.ms === 'number' && r.ms > 0) parts.push('AI 用时 ' + (r.ms / 1000).toFixed(1) + 's');
-      if (typeof r.msTotal === 'number' && r.msTotal > 0) parts.push('总共 ' + (r.msTotal / 1000).toFixed(1) + 's');
+      if (typeof r.msTotal === 'number') parts.push('总共 ' + (r.msTotal / 1000).toFixed(1) + 's');
     }
     if (r.attempts > 1) parts.push('自动重试 ' + (r.attempts - 1) + ' 次');
     if (r.error) parts.push('诊断：' + (r.error === 'bad-model-output' ? '回答不是 JSON' : r.error));
     return '🤖 ' + parts.join(' · ');
+  }
+
+  /* 判定不对时重新批改：noCache 绕过本地缓存，重新问一次 AI */
+  function reJudgeSentence() {
+    if (!sentState) return;
+    var idx = sentState.index;
+    var q = sentState.questions[idx];
+    var res = sentState.results[idx];
+    var btn = $('#sent-retry');
+    if (!res || !res.input || !btn) return;
+
+    var t0 = Date.now();
+    btn.disabled = true;
+    btn.textContent = '↻ 重新批改…';
+    AI.judge(q, res.input, { noCache: true }).then(function (r) {
+      if (!sentState || sentState.index !== idx) return;
+      r.msTotal = Date.now() - t0;
+      sentState.results[idx] = { input: res.input, status: 'done', result: r };
+      renderSentenceFeedback(q, sentState.results[idx]);
+    }).catch(function (err) {
+      if (!sentState || sentState.index !== idx) return;
+      btn.disabled = false;
+      btn.textContent = '↻ 重新批改';
+      alert('重新批改失败：' + ((err && err.message) || '未知错误'));
+    });
   }
 
   function renderSentenceFeedback(q, res) {
@@ -1391,7 +1416,11 @@
           '<div class="fb-title">' + icon + ' ' + escapeHtml(AI.verdictLabel(verdict)) +
             (typeof r.score === 'number' ? '<span class="sent-score">' + r.score + ' 分</span>' : '') + '</div>' +
           '<div class="fb-word">你的句子：' + escapeHtml(res.input) + '</div>' +
-          (r.usedTarget === false
+          (r.foundForm
+            ? '<div class="sent-found">✓ 用上了目标词的活用形：<b>' + escapeHtml(r.foundForm) +
+              '</b>（换形态不算错）</div>'
+            : '') +
+          (r.usedTarget === false && !r.foundForm
             ? '<div class="sent-warn">⚠️ 好像没有用上目标词「' + escapeHtml(q.kanji || q.kana) + '」</div>' : '') +
           (r.reason ? '<div class="sent-think">🧠 批改思路：' + escapeHtml(r.reason) + '</div>' : '') +
           (corrections ? '<div class="sent-fixes">' + corrections + '</div>' : '') +
@@ -1400,11 +1429,16 @@
           (q.example ? '<div class="fb-extra">参考例句（词库里填的）：' + escapeHtml(q.example) + '</div>' : '') +
           aiDiagHtml(r) +
         '</div>' +
+        '<div class="sent-actions">' +
+          '<button type="button" class="btn btn-ghost btn-sm" id="sent-retry" ' +
+            'title="判定不对就再批改一次：会绕过缓存重新问 AI（换活用形本来就不算错）">↻ 重新批改</button>' +
+        '</div>' +
         '<div class="sent-meta">' + escapeHtml(aiMetaText(r)) + '</div>' +
         '<button class="btn btn-primary btn-lg" id="sent-next" style="width:100%">' +
           (isLast ? '查看结果' : '下一题') + '</button>' +
       '</div>';
 
+    $('#sent-retry').addEventListener('click', reJudgeSentence);
     $('#sent-next').addEventListener('click', function () {
       if (st.index + 1 < st.questions.length) {
         st.index++;

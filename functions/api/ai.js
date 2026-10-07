@@ -61,11 +61,19 @@ var THINKING_MODEL_RE = /qwen3|qwq|glm-4\.7|glm-5/i;
 
 var SYSTEM_PROMPT = [
   '你是日语老师，批改中国学生的日语造句。只用中文说明，日语句子才用日语。',
-  '检查：① 助词、时态、活用（词形）是否正确；② 自他动词用法是否正确；',
-  '③ 是否用上指定单词（变形、汉字/假名写法差异不算错）；④ 意思是否对、句子是否自然。',
+  '【最高优先级规则】只要句子里用上了指定单词的任意一种活用形，就算「用上了」，必须判为用上：',
+  'ます形／た形／て形／ない形／辞書形／可能形／受身形／使役形／意向形／命令形／条件形，',
+  '以及 〜ている・〜ておく・〜てしまう・〜たい・〜たがる・〜ながら 等复合形式，',
+  '还有汉字／假名写法差异，全部算用上——绝不能因为「形态和词典形不一样」而判错、扣分或判成没用上。',
+  '例如目标词是 食べる，学生写「毎朝パンを食べます」「食べた」「食べたい」「食べられる」都算用上了，',
+  '只能去挑助词、时态配合、意思是否通顺这些真正的问题。',
+  '唯一例外：自他动词对是两个不同的词（開く/開ける、決まる/決める、始まる/始める、止まる/止める…），',
+  '用错了要判错，并在 corrections 的 why 里说明自他动词的区别。',
+  '检查：① 助词、时态、活用是否用对；② 自他动词用法；③ 是否用上指定单词；④ 意思是否自然。',
   '语法正确、意思通顺就算对，不要因为和参考答案不同判错；只指出真正的错误，最多 3 条。',
   '只输出一个 JSON 对象，不要 markdown 代码块、不要任何解释文字。格式：',
-  '{"verdict":"correct|almost|wrong","score":0到100的整数,"usedTarget":true或false,' +
+  '{"verdict":"correct|almost|wrong","score":0到100的整数,' +
+  '"foundForm":"学生在句子里实际用的那个词形，例如 食べます；完全没用到才填空字符串",' +
   '"reason":"一句话中文，说明你检查了什么、为什么这么判",' +
   '"corrections":[{"before":"学生原句里出错的片段","after":"改正后的片段","why":"中文说明"}],' +
   '"better":"更自然的一句日语","comment":"给学生的一句中文提醒"}'
@@ -73,7 +81,9 @@ var SYSTEM_PROMPT = [
 
 var RETRY_SYSTEM_PROMPT = [
   '你是日语批改程序。只输出一行 JSON，不要 markdown、不要解释、不要多余文字。',
-  '格式：{"verdict":"correct|almost|wrong","score":0-100,"usedTarget":true|false,' +
+  '记住：指定单词的活用形（食べる→食べます/食べた/食べたい）一律算用上，不算错。',
+  '格式：{"verdict":"correct|almost|wrong","score":0-100,' +
+  '"foundForm":"句子里实际用的词形，没用到填空字符串",' +
   '"reason":"中文","corrections":[{"before":"","after":"","why":""}],' +
   '"better":"日语","comment":"中文"}'
 ].join('\n');
@@ -177,6 +187,16 @@ function parseJudge(text) {
   }
   if (typeof used !== 'boolean') used = null;
 
+  // 让模型交出「它实际看到的词形」（foundForm），以它为准判定有没有用上：
+  // 报了词形 → 一定算用上（活用形、汉字/假名差异都不会再被判成没用上）；
+  // 明确报了「空」→ 确实没用上。这比信任 usedTarget 布尔值可靠得多。
+  var formKeys = ['foundForm', 'found_form', 'found', 'form', '使用的词形', '词形'];
+  var hasFormField = formKeys.some(function (k) { return obj[k] !== undefined && obj[k] !== null; });
+  var foundForm = clip(pick(obj, formKeys), 60);
+  if (/^(无|没有|没用到|none|null|n\/a|-|空)$/i.test(foundForm)) foundForm = '';
+  if (hasFormField) used = !!foundForm;
+  else if (foundForm) used = true;
+
   var corrections = [];
   var rawCorr = pick(obj, ['corrections', 'fixes', '修改', 'correction']);
   if (typeof rawCorr === 'string') {
@@ -202,6 +222,7 @@ function parseJudge(text) {
     verdict: verdict,
     score: score,
     usedTarget: used,
+    foundForm: foundForm,
     reason: clip(pick(obj, ['reason', 'analysis', 'explanation', '思路', '分析']), 300),
     corrections: corrections,
     better: clip(pick(obj, ['better', 'improved', 'suggestion', 'natural', '更好的说法']), 300),
@@ -441,6 +462,7 @@ export async function onRequestPost(context) {
       verdict: judged.verdict,
       score: judged.score,
       usedTarget: judged.usedTarget,
+      foundForm: judged.foundForm,
       reason: judged.reason,
       corrections: judged.corrections,
       better: judged.better,
