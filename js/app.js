@@ -813,6 +813,94 @@
     });
   }
 
+  /* ---------- 限定分类（可多选）：把出题范围缩到某几个分类 ---------- */
+  var LS_QUIZ_CATS = 'jpStudy.quiz.cats';
+
+  function quizCatCounts() {
+    var counts = {};
+    Store.all().forEach(function (w) {
+      if (isSentence(w)) return;
+      counts[w.pos] = (counts[w.pos] || 0) + 1;
+    });
+    return counts;
+  }
+
+  /* 分类顺序：先按分类表，未登记的排后面 */
+  function quizCatNames(counts) {
+    var known = Store.categories().filter(function (c) { return counts[c]; });
+    var orphans = Object.keys(counts).filter(function (c) { return known.indexOf(c) < 0; });
+    return known.concat(orphans.sort());
+  }
+
+  /* 存的是「勾选了哪些分类」；从没存过 = 全选（null） */
+  function loadQuizCats() {
+    var raw = null;
+    try { raw = localStorage.getItem(LS_QUIZ_CATS); } catch (e) { raw = null; }
+    if (raw === null) return null;
+    return String(raw).split(',').filter(function (x) { return x; });
+  }
+
+  function saveQuizCats(arr) {
+    try { localStorage.setItem(LS_QUIZ_CATS, arr.join(',')); } catch (e) { /* 存不下也不影响本次 */ }
+  }
+
+  /* 当前生效的分类（已被删掉的自动忽略） */
+  function selectedQuizCats() {
+    var all = quizCatNames(quizCatCounts());
+    var stored = loadQuizCats();
+    if (stored === null) return all;
+    return stored.filter(function (c) { return all.indexOf(c) >= 0; });
+  }
+
+  /* 出题池：只包含勾选分类里的单词 */
+  function quizPool() {
+    var sel = selectedQuizCats();
+    return Store.all().filter(function (w) { return !isSentence(w) && sel.indexOf(w.pos) >= 0; });
+  }
+
+  function renderQuizFilterHtml() {
+    var counts = quizCatCounts();
+    var cats = quizCatNames(counts);
+    if (cats.length <= 1) return '';   // 只有一个分类时没必要筛
+    var sel = selectedQuizCats();
+    return '<div class="qf" id="qf">' +
+      '<div class="qf-head"><span>限定分类（可多选）</span>' +
+        '<button type="button" class="qf-btn" id="qf-all">全选</button>' +
+        '<button type="button" class="qf-btn" id="qf-none">清空</button>' +
+      '</div>' +
+      '<div class="qf-list">' +
+        cats.map(function (c) {
+          return '<label class="qf-item">' +
+            '<input type="checkbox" class="qf-cat" value="' + escapeHtml(c) + '"' +
+              (sel.indexOf(c) >= 0 ? ' checked' : '') + '>' +
+            '<span class="qf-name">' + escapeHtml(c) + '</span>' +
+            '<span class="qf-count">' + counts[c] + '</span>' +
+          '</label>';
+        }).join('') +
+      '</div>' +
+    '</div>';
+  }
+
+  function wireQuizFilter() {
+    var box = $('#qf');
+    if (!box) return;
+    $$('.qf-cat', box).forEach(function (cb) {
+      cb.addEventListener('change', function () {
+        saveQuizCats($$('.qf-cat', box).filter(function (x) { return x.checked; })
+          .map(function (x) { return x.value; }));
+        renderQuizStart();   // 立刻刷新「本次可抽 N 个单词」和按钮状态
+      });
+    });
+    $('#qf-all').addEventListener('click', function () {
+      saveQuizCats(quizCatNames(quizCatCounts()));
+      renderQuizStart();
+    });
+    $('#qf-none').addEventListener('click', function () {
+      saveQuizCats([]);      // 空数组 = 一个都不选（与「没存过 = 全选」区分开）
+      renderQuizStart();
+    });
+  }
+
   function renderQuizStart() {
     // 语句不参与测验，页面上显示的词库规模也只算单词
     var words = Store.all().filter(function (w) { return !isSentence(w); });
@@ -827,8 +915,9 @@
       return;
     }
 
-    var n = Math.min(Quiz.QUIZ_SIZE, words.length);
-    var mastered = words.filter(function (w) { return Quiz.isMastered(w); }).length;
+    var pool = quizPool();   // 受上面的「限定分类」影响
+    var n = Math.min(Quiz.QUIZ_SIZE, pool.length);
+    var mastered = pool.filter(function (w) { return Quiz.isMastered(w); }).length;
 
     container.innerHTML =
       '<div class="card quiz-start">' +
@@ -839,18 +928,22 @@
           '<li>① 看汉字写假名（纯假名词跳过此题）</li>' +
           '<li>② 从同词性单词抽出的意思中选出正确的一个（最多 4 个选项）</li>' +
         '</ul>' +
+        renderQuizFilterHtml() +
         '<p class="quiz-note">两问都答对才计 1 分；任意一问答错不计分。已掌握（出现 &gt; 5 次且正确率 &gt; 80%）的单词会降低出现概率。</p>' +
         '<div class="quiz-start-meta">' +
-          '<span>词库共 <strong>' + words.length + '</strong> 个单词</span>' +
+          '<span>本次可抽 <strong>' + pool.length + '</strong> 个单词（词库共 ' + words.length + ' 个）</span>' +
           '<span>已掌握 <strong>' + mastered + '</strong> 个</span>' +
         '</div>' +
-        '<button class="btn btn-primary btn-lg" id="quiz-start-btn">开始练习</button>' +
+        (pool.length
+          ? '<button class="btn btn-primary btn-lg" id="quiz-start-btn">开始练习</button>'
+          : '<div class="qf-warn">上面至少勾选一个分类才能开始练习。</div>') +
         '<p class="quiz-note">想自己写句子让 AI 批改？切到上面的「✍️ AI 造句」' +
           (AI.isLocalFile() ? '（需要先把网站部署到 Cloudflare Pages）。' : '。') + '</p>' +
       '</div>';
 
-    $('#quiz-start-btn').addEventListener('click', startQuiz);
+    if (pool.length) $('#quiz-start-btn').addEventListener('click', startQuiz);
     wireQuizMode();
+    wireQuizFilter();
   }
 
   /* ---------- AI 造句练习：开始页 ---------- */
@@ -905,7 +998,7 @@
   }
 
   function startQuiz() {
-    var words = Store.all();
+    var words = quizPool();   // 只从勾选的分类里抽题
     var questions = Quiz.makeSession(words);
     if (!questions.length) { renderQuizStart(); return; }
     quizState = {
@@ -1218,20 +1311,58 @@
 
     sentState.results[idx] = { input: input, status: 'pending' };
     var btn = $('#sent-submit');
+    var t0 = Date.now();
     btn.disabled = true;
-    btn.textContent = 'AI 正在批改…';
+    // 带秒数的等待提示：AI 慢的时候能看出「还在动」，不会以为卡死
+    var tick = setInterval(function () {
+      btn.textContent = 'AI 正在批改… ' + Math.round((Date.now() - t0) / 1000) + 's';
+    }, 400);
+    btn.textContent = 'AI 正在批改… 0s';
     sentError('');
 
     AI.judge(q, input).then(function (r) {
+      clearInterval(tick);
       if (!sentState || sentState.index !== idx) return; // 期间已经翻页/退出
+      r.msTotal = Date.now() - t0;
       sentState.results[idx] = { input: input, status: 'done', result: r };
       renderSentenceFeedback(q, sentState.results[idx]);
     }).catch(function (err) {
+      clearInterval(tick);
       if (!sentState || sentState.index !== idx) return;
       // 失败就留在答题界面，把答案保留着，让用户能重试
       sentState.results[idx] = { input: input, status: 'error', error: (err && err.message) || '批改失败' };
       renderSentenceQuestion();
     });
+  }
+
+  /* 「无法判定」时自动展开，让用户直接看到模型到底说了什么 */
+  function aiDiagHtml(r) {
+    var hasRaw = !!(r.raw || r.thinking || r.message);
+    if (!hasRaw) return '';
+    var open = (r.verdict === 'unknown' || r.error) ? ' open' : '';
+    return '<details class="ai-diag"' + open + '>' +
+      '<summary>查看 AI 原始输出 / 思考过程</summary>' +
+      (r.message ? '<div class="ai-diag-msg">' + escapeHtml(r.message) + '</div>' : '') +
+      (r.thinking ? '<div class="ai-diag-label">模型的思考内容：</div>' +
+        '<pre class="sent-raw">' + escapeHtml(r.thinking) + '</pre>' : '') +
+      (r.raw ? '<div class="ai-diag-label">模型的原始输出：</div>' +
+        '<pre class="sent-raw">' + escapeHtml(r.raw) + '</pre>'
+        : '<div class="ai-diag-msg">（模型这次没有输出任何内容）</div>') +
+    '</details>';
+  }
+
+  /* 底部诊断行：模型 / 用时 / 是否自动重试 / 是否命中缓存 */
+  function aiMetaText(r) {
+    var parts = ['模型 ' + shortModel(r.model || AI.getModel())];
+    if (r.cached) {
+      parts.push('本地缓存结果（没再花额度）');
+    } else {
+      if (typeof r.ms === 'number' && r.ms > 0) parts.push('AI 用时 ' + (r.ms / 1000).toFixed(1) + 's');
+      if (typeof r.msTotal === 'number' && r.msTotal > 0) parts.push('总共 ' + (r.msTotal / 1000).toFixed(1) + 's');
+    }
+    if (r.attempts > 1) parts.push('自动重试 ' + (r.attempts - 1) + ' 次');
+    if (r.error) parts.push('诊断：' + (r.error === 'bad-model-output' ? '回答不是 JSON' : r.error));
+    return '🤖 ' + parts.join(' · ');
   }
 
   function renderSentenceFeedback(q, res) {
@@ -1262,12 +1393,14 @@
           '<div class="fb-word">你的句子：' + escapeHtml(res.input) + '</div>' +
           (r.usedTarget === false
             ? '<div class="sent-warn">⚠️ 好像没有用上目标词「' + escapeHtml(q.kanji || q.kana) + '」</div>' : '') +
+          (r.reason ? '<div class="sent-think">🧠 批改思路：' + escapeHtml(r.reason) + '</div>' : '') +
           (corrections ? '<div class="sent-fixes">' + corrections + '</div>' : '') +
           (r.better ? '<div class="fb-extra">更自然的说法：' + escapeHtml(r.better) + '</div>' : '') +
           (r.comment ? '<div class="sent-comment">' + escapeHtml(r.comment) + '</div>' : '') +
-          (r.raw ? '<pre class="sent-raw">' + escapeHtml(r.raw) + '</pre>' : '') +
           (q.example ? '<div class="fb-extra">参考例句（词库里填的）：' + escapeHtml(q.example) + '</div>' : '') +
+          aiDiagHtml(r) +
         '</div>' +
+        '<div class="sent-meta">' + escapeHtml(aiMetaText(r)) + '</div>' +
         '<button class="btn btn-primary btn-lg" id="sent-next" style="width:100%">' +
           (isLast ? '查看结果' : '下一题') + '</button>' +
       '</div>';

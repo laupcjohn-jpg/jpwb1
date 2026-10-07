@@ -4,7 +4,8 @@
  * 真正的模型调用在服务端（functions/api/ai.js），这里只负责：
  *   - 记住用户选的模型 / 是否把判定计入统计
  *   - 带上同步码当访问凭证，POST /api/ai
- *   - 把各种失败翻译成中文提示，并把超时、断网、未部署区分开
+ *   - 相同句子 + 相同模型的结果做本地缓存（重试、复练不再花钱、不再等）
+ *   - 把各种失败翻译成中文提示，并把「思考过程 / 原始输出」透传给界面
  *
  * 安全：浏览器里没有、也不需要任何 AI 密钥；密钥只在 Cloudflare 环境变量里。
  * ========================================================= */
@@ -13,16 +14,20 @@ window.AI = (function () {
 
   var LS_MODEL = 'jpStudy.ai.model';
   var LS_RECORD = 'jpStudy.ai.record';
-  var DEFAULT_MODEL = '@cf/zai-org/glm-4.7-flash';
-  var TIMEOUT_MS = 45000;
+  var LS_CACHE = 'jpStudy.ai.cache';
+  var DEFAULT_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
+  var TIMEOUT_MS = 60000;   // 服务端已经有 450 token 上限，正常 2~6 秒
+  var CACHE_MAX = 150;      // 本地缓存条数上限
 
-  /* 免费计划可用、多语言（含日语）表现较好的候选；也能手填别的模型 ID */
+  /* 候选模型：按实测速度排序（数据见 functions/api/ai.js 顶部注释） */
   var MODELS = [
-    { id: '@cf/zai-org/glm-4.7-flash', label: 'GLM-4.7-Flash（推荐：多语言强、快）' },
-    { id: '@cf/google/gemma-4-26b-a4b-it', label: 'Gemma 4 26B（Google，多语言）' },
-    { id: '@cf/qwen/qwen3-30b-a3b-fp8', label: 'Qwen3 30B（中文/日语好）' },
-    { id: '@cf/meta/llama-3.3-70b-instruct-fp8-fast', label: 'Llama 3.3 70B（稳）' },
-    { id: '@cf/mistralai/mistral-small-3.1-24b-instruct', label: 'Mistral Small 3.1 24B' }
+    { id: '@cf/meta/llama-3.3-70b-instruct-fp8-fast', label: 'Llama 3.3 70B（推荐：实测 1.8s，判得最准）' },
+    { id: '@cf/mistralai/mistral-small-3.1-24b-instruct', label: 'Mistral Small 3.1 24B（约 2s）' },
+    { id: '@cf/qwen/qwen3-30b-a3b-fp8', label: 'Qwen3 30B（约 2.5s，偶尔用日语回答）' },
+    { id: '@cf/meta/llama-3.1-8b-instruct-fp8', label: 'Llama 3.1 8B（约 3s，判得较粗）' },
+    { id: '@cf/meta/llama-3.2-3b-instruct', label: 'Llama 3.2 3B（最快约 1s，质量一般）' },
+    { id: '@cf/google/gemma-4-26b-a4b-it', label: 'Gemma 4 26B（约 14s，偏慢）' },
+    { id: '@cf/zai-org/glm-4.7-flash', label: 'GLM-4.7-Flash（很慢 24s+，容易空回答）' }
   ];
 
   function lsGet(k) {
@@ -39,6 +44,11 @@ window.AI = (function () {
     id = String(id == null ? '' : id).trim();
     lsSet(LS_MODEL, id || null);
     return getModel();
+  }
+
+  function modelLabel(id) {
+    var hit = MODELS.filter(function (m) { return m.id === id; })[0];
+    return hit ? hit.label : (id || DEFAULT_MODEL);
   }
 
   /* 是否把 AI 判定计入统计：默认记（用户可随时取消勾选） */
@@ -64,6 +74,41 @@ window.AI = (function () {
     var e = new Error(message);
     e.code = code;
     return e;
+  }
+
+  /* ---------- 结果缓存：同一句 + 同一模型，不重复花额度 ---------- */
+  function cacheKey(word, sentence) {
+    var w = word || {};
+    return getModel() + '|' + (w.kanji || '') + '|' + (w.kana || '') + '|' + String(sentence || '').trim();
+  }
+
+  function cacheRead() {
+    try {
+      var m = JSON.parse(lsGet(LS_CACHE) || '{}');
+      return (m && typeof m === 'object' && !Array.isArray(m)) ? m : {};
+    } catch (e) { return {}; }
+  }
+
+  function cacheGet(key) {
+    var m = cacheRead();
+    var hit = m[key];
+    if (!hit || !hit.r) return null;
+    return hit.r;
+  }
+
+  function cacheSet(key, result) {
+    var m = cacheRead();
+    m[key] = { t: Date.now(), r: result };
+    var keys = Object.keys(m);
+    if (keys.length > CACHE_MAX) {
+      keys.sort(function (a, b) { return (m[a].t || 0) - (m[b].t || 0); });
+      keys.slice(0, keys.length - CACHE_MAX).forEach(function (k) { delete m[k]; });
+    }
+    try { lsSet(LS_CACHE, JSON.stringify(m)); } catch (e) {}
+  }
+
+  function clearCache() {
+    lsSet(LS_CACHE, null);
   }
 
   /* 服务器/网络的错误 → 中文提示 + 可操作的下一步 */
@@ -122,7 +167,7 @@ window.AI = (function () {
     }).catch(function (err) {
       if (err && err.code) throw err;
       if (err && err.name === 'AbortError') {
-        throw makeError('timeout', 'AI 响应超时了（' + Math.round(TIMEOUT_MS / 1000) + ' 秒），稍后再试');
+        throw makeError('timeout', 'AI 响应超时了（' + Math.round(TIMEOUT_MS / 1000) + ' 秒），换个模型或稍后再试');
       }
       throw makeError('network', '连不上 AI 后端：' + ((err && err.message) || '网络错误'));
     }).then(function (data) {
@@ -156,13 +201,25 @@ window.AI = (function () {
   /**
    * 判一个句子。
    * word: { kanji, kana, pos, verbType, meaning }
-   * 返回 { verdict:'correct'|'almost'|'wrong'|'unknown', score, corrections[], better, comment, raw? }
+   * 返回 { verdict, score, usedTarget, reason, corrections[], better, comment,
+   *        raw, thinking, attempts, ms, cached? }
+   * opts.noCache = true 时跳过缓存（强制重新批改）
    */
-  function judge(word, sentence) {
+  function judge(word, sentence, opts) {
     sentence = String(sentence == null ? '' : sentence).trim();
     if (!sentence) {
       return Promise.reject(makeError('empty', '先写一个句子再提交'));
     }
+    opts = opts || {};
+
+    var ck = cacheKey(word, sentence);
+    if (!opts.noCache) {
+      var hit = cacheGet(ck);
+      if (hit) {
+        return Promise.resolve(Object.assign({}, hit, { cached: true, ms: 0 }));
+      }
+    }
+
     var w = word || {};
     return request('/api/ai', {
       method: 'POST',
@@ -179,6 +236,12 @@ window.AI = (function () {
           example: w.example || ''
         }
       })
+    }).then(function (data) {
+      // 只有拿到明确判定才缓存，免得把一次失败的回答固化下来
+      if (data && data.ok && data.verdict && data.verdict !== 'unknown') {
+        cacheSet(ck, data);
+      }
+      return data;
     });
   }
 
@@ -197,14 +260,17 @@ window.AI = (function () {
   return {
     MODELS: MODELS,
     DEFAULT_MODEL: DEFAULT_MODEL,
+    TIMEOUT_MS: TIMEOUT_MS,
     getModel: getModel,
     setModel: setModel,
+    modelLabel: modelLabel,
     getRecord: getRecord,
     setRecord: setRecord,
     isLocalFile: isLocalFile,
     accessKey: accessKey,
     probe: probe,
     judge: judge,
+    clearCache: clearCache,
     verdictLabel: verdictLabel,
     isPass: isPass
   };

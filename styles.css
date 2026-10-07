@@ -817,6 +817,46 @@ mark {
 .ai-panel { margin-top: 12px; }
 .ai-panel .sync-key-row input { min-width: 0; }
 
+/* ---------- 限定分类（读音 + 意思的出题范围） ---------- */
+.qf { margin: 14px 0 10px; text-align: left; }
+.qf-head {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; color: var(--text);
+  margin-bottom: 8px;
+}
+.qf-btn {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 999px;
+  font-size: 12px;
+  padding: 2px 10px;
+  cursor: pointer;
+  color: var(--muted);
+}
+.qf-btn:hover { background: var(--accent-soft); color: var(--accent-dark); }
+.qf-list { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.qf-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #4a4f5c; cursor: pointer; }
+.qf-item input { width: auto; margin: 0; }
+.qf-count { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.qf-warn { margin-top: 10px; font-size: 13px; color: #a9661a; }
+
+/* ---------- 造句反馈：思路 / 诊断信息 ---------- */
+.sent-think {
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, .7);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #4a4f5c;
+}
+.sent-meta { margin: 10px 0 14px; text-align: center; font-size: 12px; color: var(--muted); }
+.ai-diag { margin-top: 10px; font-size: 12px; }
+.ai-diag summary { cursor: pointer; color: var(--muted); }
+.ai-diag summary:hover { color: var(--accent-dark); }
+.ai-diag-label { margin-top: 6px; color: var(--muted); }
+.ai-diag-msg { margin-top: 6px; color: #a9661a; }
+
 /* ===================== 弹窗 ===================== */
 .modal-overlay {
   position: fixed;
