@@ -901,6 +901,19 @@
     });
   }
 
+  /* 「自他判断」题开关：默认开。只有出题范围里存在「填了自他的动词」时才显示这个选项 */
+  var LS_QUIZ_VT = 'jpStudy.quiz.verbType';
+
+  function quizVtEnabled() {
+    var raw = null;
+    try { raw = localStorage.getItem(LS_QUIZ_VT); } catch (e) { raw = null; }
+    return raw === null ? true : raw === '1';
+  }
+
+  function setQuizVt(on) {
+    try { localStorage.setItem(LS_QUIZ_VT, on ? '1' : '0'); } catch (e) { /* 存不下也不影响本次 */ }
+  }
+
   function renderQuizStart() {
     // 语句不参与测验，页面上显示的词库规模也只算单词
     var words = Store.all().filter(function (w) { return !isSentence(w); });
@@ -919,6 +932,10 @@
     var n = Math.min(Quiz.QUIZ_SIZE, pool.length);
     var mastered = pool.filter(function (w) { return Quiz.isMastered(w); }).length;
 
+    // 「自他判断」这一问只在出题范围里有动词、而且这些动词填了自他时才提供
+    var vtPool = pool.filter(function (w) { return !!w.verbType; });
+    var vtOn = vtPool.length > 0 && quizVtEnabled();
+
     container.innerHTML =
       '<div class="card quiz-start">' +
         quizModeSwitchHtml('classic') +
@@ -927,9 +944,17 @@
         '<ul class="quiz-rules">' +
           '<li>① 看汉字写假名（纯假名词跳过此题）</li>' +
           '<li>② 从同词性单词抽出的意思中选出正确的一个（最多 4 个选项）</li>' +
+          (vtOn ? '<li>③ 判断动词的自他性（自动词 / 他动词 / 自他动词）</li>' : '') +
         '</ul>' +
         renderQuizFilterHtml() +
-        '<p class="quiz-note">两问都答对才计 1 分；任意一问答错不计分。已掌握（出现 &gt; 5 次且正确率 &gt; 80%）的单词会降低出现概率。</p>' +
+        (vtPool.length
+          ? '<label class="qf-item vt-toggle">' +
+              '<input type="checkbox" id="qf-vt"' + (vtOn ? ' checked' : '') + '>' +
+              '<span class="qf-name">加一道「自他判断」题</span>' +
+              '<span class="qf-count">可出题 ' + vtPool.length + ' 个动词</span>' +
+            '</label>'
+          : '') +
+        '<p class="quiz-note">' + (vtOn ? '三问' : '两问') + '都答对才计 1 分；任意一问答错不计分。已掌握（出现 &gt; 5 次且正确率 &gt; 80%）的单词会降低出现概率。</p>' +
         '<div class="quiz-start-meta">' +
           '<span>本次可抽 <strong>' + pool.length + '</strong> 个单词（词库共 ' + words.length + ' 个）</span>' +
           '<span>已掌握 <strong>' + mastered + '</strong> 个</span>' +
@@ -942,6 +967,10 @@
       '</div>';
 
     if (pool.length) $('#quiz-start-btn').addEventListener('click', startQuiz);
+    var vtBox = $('#qf-vt');
+    if (vtBox) {
+      vtBox.addEventListener('change', function () { setQuizVt(this.checked); renderQuizStart(); });
+    }
     wireQuizMode();
     wireQuizFilter();
   }
@@ -999,7 +1028,7 @@
 
   function startQuiz() {
     var words = quizPool();   // 只从勾选的分类里抽题
-    var questions = Quiz.makeSession(words);
+    var questions = Quiz.makeSession(words, { withVerbType: quizVtEnabled() });
     if (!questions.length) { renderQuizStart(); return; }
     quizState = {
       questions: questions,
@@ -1030,6 +1059,7 @@
     var rp = q.readPart;
     var meaningNo = rp ? '②' : '①';
     var meaningLabel = meaningNo + (rp ? ' 选择正确的中文意思' : ' 选择这个词正确的中文意思');
+    var vtNo = rp ? '③' : '②';
 
     var optionsHtml = q.meaningOptions.map(function (o, i) {
       return '<button type="button" class="meaning-option" data-id="' + escapeHtml(o.id) + '">' +
@@ -1037,6 +1067,19 @@
         '<span>' + escapeHtml(o.meaning) + '</span>' +
       '</button>';
     }).join('');
+
+    // 自他判断题（只有动词、且填了自他才会有）
+    var vtHtml = q.verbPart
+      ? '<div class="quiz-part">' +
+          '<div class="part-label">' + vtNo + ' ' + escapeHtml(q.verbPart.label) + '</div>' +
+          '<div class="meaning-options vt-group">' +
+            q.verbPart.options.map(function (v) {
+              return '<button type="button" class="meaning-option" data-vt="' + escapeHtml(v) + '">' +
+                '<span>' + escapeHtml(v) + '</span></button>';
+            }).join('') +
+          '</div>' +
+        '</div>'
+      : '';
 
     // 纯假名词没有读音题（没汉字可考），但题干不能省：否则用户只看到四个选项，
     // 根本不知道在考哪个词。这里把词本身作为题干显示出来。
@@ -1060,17 +1103,20 @@
         readHtml +
         '<div class="quiz-part">' +
           '<div class="part-label">' + meaningLabel + '</div>' +
-          '<div class="meaning-options">' + optionsHtml + '</div>' +
+          '<div class="meaning-options meaning-group">' + optionsHtml + '</div>' +
         '</div>' +
+        vtHtml +
         '<div id="quiz-feedback" class="quiz-feedback" hidden></div>' +
         '<button class="btn btn-primary btn-lg" id="quiz-confirm" style="width:100%">确认答案</button>' +
       '</div>';
 
-    // 选项选中高亮
-    $$('.meaning-option', container).forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        $$('.meaning-option', container).forEach(function (b) { b.classList.remove('selected'); });
-        btn.classList.add('selected');
+    // 选项选中高亮：每个选项组各自独立（意思题选一个不能把自他题的选择清掉）
+    $$('.meaning-options', container).forEach(function (group) {
+      $$('.meaning-option', group).forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          $$('.meaning-option', group).forEach(function (b) { b.classList.remove('selected'); });
+          btn.classList.add('selected');
+        });
       });
     });
 
@@ -1088,10 +1134,12 @@
   function confirmAnswer(q) {
     var container = $('#view-quiz');
     var readInput = $('#read-input');
-    var selected = $('.meaning-option.selected', container);
+    var selected = $('.meaning-group .meaning-option.selected', container);
+    var vtSel = q.verbPart ? $('.vt-group .meaning-option.selected', container) : null;
 
     if (readInput && !readInput.value.trim()) { readInput.focus(); flashRequire('请先输入假名'); return; }
     if (!selected) { flashRequire('请先选择一个意思'); return; }
+    if (q.verbPart && !vtSel) { flashRequire('请先选择自他性'); return; }
 
     var readCorrect = true;
     var readValue = '';
@@ -1100,13 +1148,17 @@
       readCorrect = Quiz.checkRead(q, readValue);
     }
     var meaningCorrect = selected.dataset.id === q.wordId;
+    var vtId = vtSel ? (vtSel.dataset.vt || '') : '';
+    var vtCorrect = q.verbPart ? (vtId === q.verbPart.answer) : true;
 
     quizState.results[quizState.index] = {
       readInput: readValue,
       meaningId: selected.dataset.id,
       readCorrect: readCorrect,
       meaningCorrect: meaningCorrect,
-      allCorrect: readCorrect && meaningCorrect
+      vtId: vtId,
+      vtCorrect: vtCorrect,
+      allCorrect: readCorrect && meaningCorrect && vtCorrect
     };
 
     renderFeedback(q, quizState.results[quizState.index]);
@@ -1132,6 +1184,7 @@
     var meaningNo = rp ? '②' : '①';
     var meaningLabel = meaningNo + (rp ? ' 选择正确的中文意思' : ' 选择这个词正确的中文意思');
     var isLast = quizState.index + 1 >= total;
+    var vtNo = rp ? '③' : '②';
 
     // 选项着色：正确项绿色，选错项红色，并保留字母序号
     var optionsHtml = q.meaningOptions.map(function (o, i) {
@@ -1144,6 +1197,25 @@
         '<span>' + escapeHtml(o.meaning) + '</span>' +
       '</div>';
     }).join('');
+
+    // 自他判断题的着色反馈
+    var vtHtml = '';
+    if (q.verbPart) {
+      var vtOptions = q.verbPart.options.map(function (v, i) {
+        var cls = 'meaning-option';
+        var mark = String.fromCharCode(65 + i);
+        if (v === q.verbPart.answer) { cls += ' is-correct'; mark = '✓'; }
+        else if (v === result.vtId && !result.vtCorrect) { cls += ' is-wrong'; mark = '✗'; }
+        return '<div class="' + cls + '" style="cursor:default">' +
+          '<span class="opt-key">' + mark + '</span>' +
+          '<span>' + escapeHtml(v) + '</span>' +
+        '</div>';
+      }).join('');
+      vtHtml = '<div class="quiz-part">' +
+        '<div class="part-label">' + vtNo + ' ' + escapeHtml(q.verbPart.label) + '</div>' +
+        '<div class="meaning-options vt-group">' + vtOptions + '</div>' +
+      '</div>';
+    }
 
     // 无读音题时同样保留题干（词本身），否则答完题后页面会「空一块」
     var readHtml = rp
@@ -1169,8 +1241,9 @@
         readHtml +
         '<div class="quiz-part">' +
           '<div class="part-label">' + meaningLabel + '</div>' +
-          '<div class="meaning-options">' + optionsHtml + '</div>' +
+          '<div class="meaning-options meaning-group">' + optionsHtml + '</div>' +
         '</div>' +
+        vtHtml +
         '<div class="quiz-feedback ' + (ok ? 'is-correct' : 'is-wrong') + '">' +
           '<div class="fb-title">' + (ok ? '✅ 回答正确！' : '❌ 回答错误') + '</div>' +
           '<div class="fb-word">' + escapeHtml(q.kanji || q.kana) + ' 「' + escapeHtml(q.kana) + '」 — ' + escapeHtml(q.meaning) + '</div>' +
@@ -1211,7 +1284,11 @@
         '<span class="r-icon">' + (r.allCorrect ? '✅' : '❌') + '</span>' +
         '<span class="r-word">' + escapeHtml(q.kanji || q.kana) + ' <small>' + escapeHtml(q.kana) + '</small></span>' +
         '<span class="r-meaning">' + escapeHtml(q.meaning) + '</span>' +
-        '<span class="r-detail">' + (q.readPart ? ('读音' + (r.readCorrect ? '✓' : '✗') + ' ') : '') + '意思' + (r.meaningCorrect ? '✓' : '✗') + '</span>' +
+        '<span class="r-detail">' +
+          (q.readPart ? ('读音' + (r.readCorrect ? '✓' : '✗') + ' ') : '') +
+          '意思' + (r.meaningCorrect ? '✓' : '✗') +
+          (q.verbPart ? ' 自他' + (r.vtCorrect ? '✓' : '✗') : '') +
+        '</span>' +
       '</div>';
     }).join('');
 
@@ -1556,6 +1633,7 @@
         try {
           var res = Store.importData(json);
           var msg = '导入成功：新增 ' + res.added + ' 个单词';
+          if (res.updated > 0) msg += '，补充了 ' + res.updated + ' 个已有词条的空字段（例如自他标注）';
           if (res.ignored > 0) msg += '，忽略 ' + res.ignored + ' 条无效或重复条目';
           if (res.newCategories && res.newCategories.length) {
             msg += '。自动新增分类：' + res.newCategories.join('、');

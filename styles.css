@@ -840,6 +840,12 @@ mark {
 .qf-count { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
 .qf-warn { margin-top: 10px; font-size: 13px; color: #a9661a; }
 
+/* 「自他判断」题：三个短选项横排；开始页的开关 */
+.vt-toggle { margin: 10px 0 2px; }
+.vt-toggle input { width: auto; margin: 0; }
+.vt-group { display: flex; gap: 10px; }
+.vt-group .meaning-option { flex: 1; justify-content: center; }
+
 /* ---------- 造句反馈：思路 / 诊断信息 ---------- */
 .sent-think {
   margin-top: 10px;

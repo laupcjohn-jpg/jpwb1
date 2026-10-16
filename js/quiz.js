@@ -18,6 +18,8 @@ window.Quiz = (function () {
   var MASTER_RATE = 0.8;           // 正确率阈值（严格大于）
   var MASTER_WEIGHT = 0.2;         // 已掌握单词的抽取权重（降低出现概率）
   var NORMAL_WEIGHT = 1.0;
+  /* 「自他判断」题的固定选项（顺序固定，免得靠位置猜答案） */
+  var VERB_TYPE_OPTIONS = ['自动词', '他动词', '自他动词'];
   var SENTENCE_SIZE = 5;           // 一次 AI 造句练习的题数（每句都要手打，比选择题少一些）
 
   /* ---------- 掌握判定 ---------- */
@@ -99,7 +101,7 @@ window.Quiz = (function () {
   }
 
   /* ---------- 生成单个单词的题目 ---------- */
-  function buildQuestion(w, allWords) {
+  function buildQuestion(w, allWords, withVerbType) {
     // 只保留「看汉字写假名」：有汉字才考读音；纯假名词（无汉字）跳过读音题，得分由意思题决定
     var readPart = hasKanji(w.kanji)
       ? { mode: 'read', prompt: w.kanji, target: w.kana, label: '请写出假名（读音）' }
@@ -109,6 +111,12 @@ window.Quiz = (function () {
     var options = shuffle([{ id: w.id, meaning: w.meaning }]
       .concat(distractors.map(function (x) { return { id: x.id, meaning: x.meaning }; })));
 
+    // 自他判断题：只有「开始页勾了这个选项」且「这个词填了自他」才出。
+    // 名词、形容词、以及没标注自他的动词都不会出这一问。
+    var verbPart = (withVerbType && w.verbType)
+      ? { label: '判断这个动词的自他性', answer: w.verbType, options: VERB_TYPE_OPTIONS.slice() }
+      : null;
+
     return {
       wordId: w.id,
       kanji: w.kanji,
@@ -117,18 +125,20 @@ window.Quiz = (function () {
       meaning: w.meaning,
       example: w.example || '',
       readPart: readPart,
-      meaningOptions: options
+      meaningOptions: options,
+      verbPart: verbPart
     };
   }
 
   /* ---------- 生成一次练习的题目集 ---------- */
-  function makeSession(allWords) {
+  function makeSession(allWords, opts) {
+    opts = opts || {};
     // 语句（type='sentence'）不参与测验：既没有读音题，翻译也不适合当四选一
     var pool = (allWords || []).filter(function (w) { return w.type !== 'sentence'; });
     if (pool.length === 0) return [];
     var n = Math.min(QUIZ_SIZE, pool.length);
     var selected = pickWeighted(pool, n);
-    return selected.map(function (w) { return buildQuestion(w, pool); });
+    return selected.map(function (w) { return buildQuestion(w, pool, !!opts.withVerbType); });
   }
 
   /* ---------- 造句题：只出题，判分由 AI 负责 ---------- */

@@ -455,23 +455,36 @@ window.Store = (function () {
     return JSON.stringify(words, null, 2);
   }
 
+  /* 导入时允许「补空」的字段：只往空字段里填，绝不覆盖已有内容 */
+  var IMPORT_FILL_FIELDS = ['kanji', 'kana', 'meaning', 'example', 'verbType', 'pos'];
+
+  /* 「同一个词」的宽松指纹：不看例句、不看自他，用来把补标注的文件对到已有词条 */
+  function looseKey(w) {
+    return [w.type || 'word', w.kanji, w.kana, w.pos, w.meaning].join('||');
+  }
+
   /**
    * 导入 JSON 备份。采用「合并」策略：
-   *  - 相同 id 的跳过；相同内容（汉字+假名+词性+意思）的也跳过；
-   *  - 缺少必填字段（假名/词性/意思）或非法的条目被忽略并计数。
-   * 返回 { added, ignored }。
+   *  - 同一个 id 已经存在：**不覆盖已有内容**，只把「原来是空」的字段补上
+   *    （典型用途：给词库里的旧词条补「自他」标注），计入 updated；
+   *  - 新 id 且内容没重复过的：新增；
+   *  - 相同内容（type+汉字+假名+词性+意思+自他）、缺必填字段、非法的：忽略并计数。
+   * 返回 { added, updated, ignored, newCategories }。
    */
   function importData(json) {
     if (!Array.isArray(json)) throw new Error('bad-format');
 
     var existingIds = {};
     var existingContent = {};
+    var byWord = {};    // 「同一个词」索引：type+汉字+假名+词性+意思 → id
     words.forEach(function (w) {
       existingIds[w.id] = true;
       existingContent[contentKey(w)] = true;
+      byWord[looseKey(w)] = w.id;
     });
 
     var toAdd = [];
+    var patches = {};   // id -> { 字段: 新值 }，只装「原来是空」的字段
     var ignored = 0;
 
     json.forEach(function (item) {
@@ -486,7 +499,32 @@ window.Store = (function () {
         ignored++;
         return;
       }
-      if (existingIds[w.id]) { ignored++; return; }  // 相同 id，跳过
+
+      // 「同一个词」判定：先按 id 找，找不到再按 汉字+假名+词性+意思 找。
+      // 后者是为了：即使词条 id 变了（换了设备、重新导入过），补标注的文件
+      // 也能对上已有词条，而不是又添一个重复词条。
+      var targetId = null;
+      if (existingIds[w.id]) targetId = w.id;
+      else if (byWord[looseKey(w)]) targetId = byWord[looseKey(w)];
+
+      if (targetId) {
+        var old = get(targetId);
+        if (old) {
+          var patch = {};
+          IMPORT_FILL_FIELDS.forEach(function (f) {
+            var cur = String(old[f] == null ? '' : old[f]).trim();
+            var nv = String(w[f] == null ? '' : w[f]).trim();
+            if (!cur && nv) patch[f] = nv;
+          });
+          if (Object.keys(patch).length) {
+            patches[targetId] = Object.assign({}, patches[targetId] || {}, patch);
+            return;   // 有东西可补 → 算「更新」，不算忽略
+          }
+        }
+        ignored++;    // 同一个词又没东西可补 → 忽略
+        return;
+      }
+
       var ck = contentKey(w);
       if (existingContent[ck]) { ignored++; return; } // 相同内容，跳过（防重复导入）
       existingIds[w.id] = true;
@@ -494,18 +532,32 @@ window.Store = (function () {
       toAdd.push(w);
     });
 
-    var newCats = [];
-    if (toAdd.length) {
-      // 导入的条目一律标成「刚更新」。备份里的旧时间戳会让它们在同步时
-      // 输给云端旧版本，导致刚导入的内容推不上去。
-      var now = Date.now();
-      toAdd.forEach(function (w) { w.updatedAt = now; });
+    // 导入的条目一律标成「刚更新」。备份里的旧时间戳会让它们在同步时
+    // 输给云端旧版本，导致刚导入的内容推不上去。补过字段的词条同理。
+    var now = Date.now();
+    toAdd.forEach(function (w) { w.updatedAt = now; });
 
-      var next = words.concat(toAdd);
-      // 导入数据里出现的新词性自动登记到分类表，避免产生「未登记分类」
-      toAdd.forEach(function (w) {
-        if (cats.indexOf(w.pos) < 0 && newCats.indexOf(w.pos) < 0) newCats.push(w.pos);
-      });
+    var next = words.map(function (w) {
+      var p = patches[w.id];
+      if (!p) return w;
+      var merged = {
+        id: w.id, type: w.type || 'word',
+        kanji: w.kanji, kana: w.kana, pos: w.pos,
+        meaning: w.meaning, example: w.example, verbType: w.verbType || '',
+        createdAt: w.createdAt, updatedAt: now,
+        stats: w.stats
+      };
+      Object.keys(p).forEach(function (f) { merged[f] = p[f]; });
+      return merged;
+    }).concat(toAdd);
+
+    var updated = Object.keys(patches).length;
+    var newCats = [];
+    toAdd.forEach(function (w) {
+      if (cats.indexOf(w.pos) < 0 && newCats.indexOf(w.pos) < 0) newCats.push(w.pos);
+    });
+
+    if (toAdd.length || updated) {
       if (newCats.length) {
         saveBoth(next, cats.concat(newCats));
       } else {
@@ -514,7 +566,7 @@ window.Store = (function () {
         emitChange();
       }
     }
-    return { added: toAdd.length, ignored: ignored, newCategories: newCats };
+    return { added: toAdd.length, updated: updated, ignored: ignored, newCategories: newCats };
   }
 
   /**
