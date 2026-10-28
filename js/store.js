@@ -11,6 +11,7 @@
  *     meaning: string,     // 意思（单词必填）；语句存中文翻译（可为空）
  *     example: string,     // 例句（可为空）
  *     verbType: string,    // 自他属性：'自动词' | '他动词' | '自他动词'（可为空，仅动词有意义）
+ *     fav: boolean,        // 是否收进「收藏夹」（错题复习用，默认 false）
  *     createdAt: number,   // 创建时间戳
  *     updatedAt: number,   // 最后修改时间戳（多端同步时用来判断谁更新）
  *     stats: {
@@ -78,6 +79,7 @@ window.Store = (function () {
     var example = String(item.example == null ? '' : item.example).trim();
     var verbType = normalizeVerbType(item.verbType);
     if (type === 'sentence') verbType = ''; // 语句没有自他属性，外来数据里带了也丢掉
+    var fav = item.fav === true;            // 只有明确的 true 才算收藏，其余一律否
     if (!kana && !kanji && !pos && !meaning && !example && !verbType) return null;
 
     // id 仅接受安全字符，否则重新生成（从源头阻断 HTML 注入）
@@ -105,6 +107,7 @@ window.Store = (function () {
       meaning: meaning,
       example: example,
       verbType: verbType,
+      fav: fav,
       createdAt: createdAt,
       updatedAt: updatedAt,
       stats: {
@@ -264,6 +267,7 @@ window.Store = (function () {
         id: w.id, type: w.type || 'word',
         kanji: w.kanji, kana: w.kana, pos: newName,
         meaning: w.meaning, example: w.example, verbType: w.verbType || '',
+        fav: !!w.fav,
         createdAt: w.createdAt, updatedAt: now, stats: w.stats
       };
     });
@@ -350,6 +354,7 @@ window.Store = (function () {
         meaning: patch.meaning !== undefined ? String(patch.meaning).trim() : x.meaning,
         example: patch.example !== undefined ? String(patch.example).trim() : (x.example || ''),
         verbType: patch.verbType !== undefined ? normalizeVerbType(patch.verbType) : (x.verbType || ''),
+        fav: patch.fav !== undefined ? !!patch.fav : !!x.fav,
         createdAt: x.createdAt,
         updatedAt: now,
         stats: x.stats
@@ -398,6 +403,7 @@ window.Store = (function () {
         id: w.id, type: w.type || 'word',
         kanji: w.kanji, kana: w.kana, pos: w.pos,
         meaning: w.meaning, example: w.example, verbType: w.verbType || '',
+        fav: !!w.fav,
         createdAt: w.createdAt, updatedAt: now,
         stats: {
           appeared: w.stats.appeared + 1,
@@ -434,6 +440,7 @@ window.Store = (function () {
         id: w.id, type: w.type || 'word',
         kanji: w.kanji, kana: w.kana, pos: w.pos,
         meaning: w.meaning, example: w.example, verbType: w.verbType || '',
+        fav: !!w.fav,
         createdAt: w.createdAt, updatedAt: now,
         stats: {
           appeared: toInt(w.stats.appeared),
@@ -453,6 +460,37 @@ window.Store = (function () {
 
   function exportData() {
     return JSON.stringify(words, null, 2);
+  }
+
+  /**
+   * 收藏 / 取消收藏（错题复习用）。
+   * 收藏状态跟着词条一起走，所以同样刷新 updatedAt，让多端同步能收到这次改动。
+   * 返回新的收藏状态；词条不存在时返回 false。
+   */
+  function setFav(id, on) {
+    var w = get(id);
+    if (!w) return false;
+    var next = !!on;
+    if (!!w.fav === next) return next;
+    var now = Date.now();
+    var list = words.map(function (x) {
+      if (x.id !== id) return x;
+      return {
+        id: x.id, type: x.type || 'word',
+        kanji: x.kanji, kana: x.kana, pos: x.pos,
+        meaning: x.meaning, example: x.example, verbType: x.verbType || '',
+        fav: next,
+        createdAt: x.createdAt, updatedAt: now, stats: x.stats
+      };
+    });
+    persistWords(list);
+    words = list;
+    emitChange();
+    return next;
+  }
+
+  function favCount() {
+    return words.filter(function (w) { return w.fav; }).length;
   }
 
   /* 导入时允许「补空」的字段：只往空字段里填，绝不覆盖已有内容 */
@@ -516,6 +554,9 @@ window.Store = (function () {
             var nv = String(w[f] == null ? '' : w[f]).trim();
             if (!cur && nv) patch[f] = nv;
           });
+          // 收藏状态只做「单向补上」：备份里是收藏的，导入后也收藏；
+          // 绝不因为在别处没收藏就把你本地的收藏取消掉。
+          if (w.fav && !old.fav) patch.fav = true;
           if (Object.keys(patch).length) {
             patches[targetId] = Object.assign({}, patches[targetId] || {}, patch);
             return;   // 有东西可补 → 算「更新」，不算忽略
@@ -544,6 +585,7 @@ window.Store = (function () {
         id: w.id, type: w.type || 'word',
         kanji: w.kanji, kana: w.kana, pos: w.pos,
         meaning: w.meaning, example: w.example, verbType: w.verbType || '',
+        fav: !!w.fav,
         createdAt: w.createdAt, updatedAt: now,
         stats: w.stats
       };
@@ -595,6 +637,8 @@ window.Store = (function () {
     remove: remove,
     recordResults: recordResults,
     recordSentences: recordSentences,
+    setFav: setFav,
+    favCount: favCount,
     exportData: exportData,
     importData: importData,
     save: save,

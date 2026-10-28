@@ -359,6 +359,15 @@ mark {
   padding: 2px 9px;
   border-radius: 999px;
 }
+/* 整个分类在测验里的合计正确率 */
+.group-stat {
+  font-size: 12px;
+  color: #5c6e66;
+  background: #eef4f1;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
 .group-orphan {
   font-size: 12px;
   color: #8a6d3b;
@@ -398,6 +407,12 @@ mark {
 .cat-card-name { font-size: 16px; font-weight: 700; color: var(--text); }
 .cat-card-meta { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
 .cat-card-mastered { color: var(--good); }
+/* 分类卡片上的测验合计（出现次数 / 答对 / 正确率） */
+.cat-card-stat { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+/* 收藏夹卡片：单独一张，放最前面 */
+.cat-card.is-fav { border-color: #f0cf8a; background: #fffdf6; }
+.cat-card.is-fav .cat-card-name { color: #a9661a; }
+.cat-card.is-fav:hover { border-color: #e0b45f; box-shadow: 0 6px 20px rgba(169, 102, 26, .12); }
 .cat-card-arrow {
   position: absolute;
   right: 16px;
@@ -408,7 +423,8 @@ mark {
   color: var(--muted);
 }
 
-.detail-bar { margin-bottom: 14px; }
+.detail-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.detail-title { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* ===================== 分类管理 ===================== */
 .cat-panel { margin-bottom: 20px; padding: 0; overflow: hidden; }
@@ -547,6 +563,9 @@ mark {
   color: #6b7180;
 }
 
+/* 手机版专用统计行：窄屏隐藏「出现/答对/正确率」三列后，用这一行补上 */
+.c-statline { display: none; }
+
 /* 语句行：整句独占主列，中文翻译另起一行，右侧只留操作按钮 */
 .sentence-row { grid-template-columns: 1fr auto; }
 .c-sentence { font-size: 15px; line-height: 1.7; }
@@ -569,6 +588,10 @@ mark {
 }
 .icon-btn:hover { background: var(--accent-soft); }
 .icon-btn.danger:hover { background: var(--bad-soft); }
+/* 收藏星标：未收藏是空心灰，收藏后是实心金 */
+.icon-btn.fav { color: #b9c2bd; }
+.icon-btn.fav:hover { background: #fff8e8; color: #d9a441; }
+.icon-btn.fav.is-on { color: #d9a441; }
 
 /* ===================== 测验 ===================== */
 .quiz-start { max-width: 620px; text-align: center; padding: 40px 32px; }
@@ -600,12 +623,76 @@ mark {
 }
 .quiz-start-meta strong { color: var(--accent); }
 
+/* 出题方式切换：随机 10 题 / 分类连做 */
+.quiz-style {
+  display: flex;
+  width: fit-content;
+  gap: 4px;
+  padding: 4px;
+  margin: 0 auto 18px;
+  background: #f0f4f2;
+  border-radius: 10px;
+}
+.quiz-style .mode-btn { padding: 7px 16px; font-size: 13px; }
+.drill-config {
+  display: grid;
+  gap: 8px;
+  max-width: 400px;
+  margin: 6px auto 14px;
+  text-align: left;
+}
+.drill-row { display: flex; align-items: center; gap: 10px; }
+.drill-label { flex: none; width: 40px; font-size: 13px; color: var(--muted); }
+.drill-select {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 14px;
+}
+.drill-order { margin: 0; background: #f0f4f2; }
+.drill-autofav { justify-content: center; margin: 4px 0 14px; }
+
+/* 连做时题目头部多一行：分类 / 顺序 / 本轮进度 */
+.drill-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: -6px 0 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.quiz-stop-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+}
+.quiz-stop-hint { font-size: 12px; color: var(--muted); }
+.quiz-fb-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.quiz-fb-hint { font-size: 12px; color: #a9661a; }
+.fav-toggle.is-on { color: #a9661a; border-color: #f0cf8a; background: #fff8e8; }
+
 .quiz-question { max-width: 620px; }
 .quiz-progress { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; font-size: 13px; color: var(--muted); }
 .progress-track { flex: 1; height: 7px; background: var(--border); border-radius: 999px; overflow: hidden; }
 .progress-fill { height: 100%; background: var(--accent); border-radius: 999px; transition: width .25s; }
 
 .quiz-word-meta { margin-bottom: 14px; }
+/* 题头小字：本题有哪几问（① 读音 · ② 意思 · ③ 自他） */
+.quiz-parts { margin: -8px 0 14px; font-size: 12px; color: var(--muted); }
 
 .quiz-part { margin-bottom: 22px; }
 .part-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
@@ -731,7 +818,11 @@ mark {
 .r-meaning { color: #4a4f5c; }
 .r-detail { font-size: 12px; color: var(--muted); }
 
-.result-actions { display: flex; gap: 12px; justify-content: center; }
+.result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+/* 成绩页：收藏错题等工具按钮 */
+.result-tools { display: flex; justify-content: center; margin: -10px 0 18px; }
+.wrong-head { text-align: left; font-size: 13px; font-weight: 600; color: var(--bad); margin: 0 0 8px; }
+.drill-result-meta { margin: -8px 0 14px; font-size: 13px; color: var(--muted); }
 
 /* ===================== AI 造句练习 ===================== */
 .quiz-mode-toggle { margin-bottom: 14px; }
@@ -922,4 +1013,21 @@ mark {
   .quiz-mode-toggle { display: flex; width: 100%; }
   .quiz-mode-toggle .mode-btn { flex: 1; }
   .sent-word { font-size: 21px; }
+
+  /* 出题方式 / 顺序切换条在窄屏铺满 */
+  .quiz-style { width: 100%; }
+  .quiz-style .mode-btn { flex: 1; padding: 7px 8px; }
+  .drill-row { flex-wrap: wrap; }
+  .drill-row .drill-select { flex: 1 1 100%; }
+  .drill-order { width: 100%; }
+
+  /* 窄屏隐藏三列统计后，用独占一行的统计行补上 */
+  .c-statline {
+    display: block;
+    grid-column: 1 / -1;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #5c6e66;
+    font-variant-numeric: tabular-nums;
+  }
 }

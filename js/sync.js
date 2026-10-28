@@ -127,6 +127,7 @@ window.Sync = (function () {
     var s = w.stats || {};
     return [
       w.type || 'word', w.kanji, w.kana, w.pos, w.meaning, w.example,
+      w.verbType || '', w.fav ? 1 : 0,
       s.appeared || 0, s.correct || 0, w.createdAt || 0
     ].join('');
   }

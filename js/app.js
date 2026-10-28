@@ -42,12 +42,66 @@
   var quizState = null; // { questions, index, results[] } —— 读音 + 意思（原题型）
   var sentState = null; // { questions, index, results[] } —— AI 造句练习
   var quizMode = 'classic'; // 'classic' = 读音+意思；'sentence' = AI 造句
+  /* 上一次做完的成绩。留着它，同步/重渲染时才不会把结果页顶掉；
+     离开测验界面（或点「再来一次」）才清掉。 */
+  var lastRun = null;
+  /* 分类连做点「停止做题」时把会话存在这里：点「继续做这个分类」能接着刚才的位置，
+     而不是从头再来。 */
+  var pausedDrill = null;
   var aiInfo = { checked: false, ok: false, message: '未检测', model: '' }; // AI 后端探测结果
   var editId = null;    // 当前正在编辑的单词 id
   var libraryPos = null; // 当前查看的分类名，null 表示分类列表模式
+  var libraryFav = false; // 单词库里正在看「收藏夹」
   var searchTerm = '';     // 已提交的检索关键词，空串表示未检索（行内不高亮）
   var searchMatches = [];  // 命中条目的 id，按词库顺序
   var searchCursor = -1;   // 最近一次跳转落在 searchMatches 的下标，回车时循环前进
+
+  /* ---------- 收藏夹 / 出题方式（都存 localStorage） ---------- */
+  var FAV_KEY = '__fav__';        // 收藏夹在出题范围里的内部标识（不会和分类名撞）
+  var FAV_LABEL = '⭐ 收藏夹';
+  var LS_QUIZ_STYLE = 'jpStudy.quiz.style';
+  var LS_QUIZ_DRILL = 'jpStudy.quiz.drillCat';
+  var LS_QUIZ_ORDER = 'jpStudy.quiz.order';
+  var LS_QUIZ_AUTOFAV = 'jpStudy.quiz.autoFav';
+
+  function lsGet(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function lsSet(key, val) {
+    try { localStorage.setItem(key, val); } catch (e) { /* 存不下也不影响本次 */ }
+  }
+
+  /* 出题方式：random = 随机抽 10 题；drill = 分类连做（一直做下去） */
+  function quizStyle() { return lsGet(LS_QUIZ_STYLE) === 'drill' ? 'drill' : 'random'; }
+  function setQuizStyle(s) { lsSet(LS_QUIZ_STYLE, s === 'drill' ? 'drill' : 'random'); }
+
+  /* 分类连做：按词库顺序 / 乱序 */
+  function drillOrder() { return lsGet(LS_QUIZ_ORDER) === 'shuffle' ? 'shuffle' : 'seq'; }
+  function setDrillOrder(o) { lsSet(LS_QUIZ_ORDER, o === 'shuffle' ? 'shuffle' : 'seq'); }
+
+  /* 答错自动加入收藏夹（默认开） */
+  function autoFavOn() { return lsGet(LS_QUIZ_AUTOFAV) !== '0'; }
+  function setAutoFav(on) { lsSet(LS_QUIZ_AUTOFAV, on ? '1' : '0'); }
+
+  function favWords() {
+    return Store.all().filter(function (w) { return !isSentence(w) && w.fav; });
+  }
+
+  function drillCat() { return lsGet(LS_QUIZ_DRILL) || ''; }
+  function setDrillCat(c) { lsSet(LS_QUIZ_DRILL, c || ''); }
+
+  /* 收藏夹 / 分类里的词都可能很少，意思选项要能从整个词库里凑 */
+  function wordLibrary() {
+    return Store.all().filter(function (w) { return !isSentence(w); });
+  }
+
+  /* 某个分类的出题池；FAV_KEY 代表收藏夹（可以跨分类） */
+  function drillPool(cat) {
+    if (!cat) return [];
+    if (cat === FAV_KEY) return favWords();
+    return Store.all().filter(function (w) { return !isSentence(w) && w.pos === cat; });
+  }
+
 
   /* ---------- 词性展示顺序：按分类表顺序，未登记的排最后 ---------- */
   function orderPosKeys(posKeys) {
@@ -96,6 +150,8 @@
    * 视图路由
    * ========================================================= */
   function showView(name) {
+    // 离开测验界面就把上次成绩收起来，下次进来是开始页
+    if (name !== 'quiz') { lastRun = null; pausedDrill = null; }
     $$('.view').forEach(function (v) {
       v.classList.toggle('is-active', v.id === 'view-' + name);
     });
@@ -239,9 +295,20 @@
       groups.innerHTML = '';
       panel.style.display = 'none';
       libraryPos = null;
+      libraryFav = false;
       return;
     }
     empty.style.display = 'none';
+
+    if (libraryFav) {
+      // 收藏夹：跨分类把收藏过的词列在一起
+      panel.style.display = 'none';
+      groups.innerHTML = '';
+      groups.appendChild(renderFavDetail(words.filter(function (w) {
+        return !isSentence(w) && w.fav;
+      })));
+      return;
+    }
 
     if (libraryPos) {
       // 详情模式：只显示被点开分类的单词
@@ -273,8 +340,24 @@
     return list.filter(function (w) { return !isSentence(w) && Quiz.isMastered(w); }).length;
   }
 
+  /* 一组词在测验里的合计：出现次数 / 答对次数 / 正确率 */
+  function groupStats(list) {
+    var appeared = 0, correct = 0;
+    list.forEach(function (w) {
+      if (isSentence(w)) return;
+      appeared += Number(w.stats.appeared) || 0;
+      correct += Number(w.stats.correct) || 0;
+    });
+    return {
+      appeared: appeared,
+      correct: correct,
+      rate: appeared ? Math.round(correct / appeared * 100) : 0
+    };
+  }
+
   function renderGroup(pos, list) {
     var mastered = masteredCount(list);
+    var stat = groupStats(list);
     var sentencesOnly = allSentences(list);
     // 「自他」列只对动词类分类有意义；但该分类里已经有自他数据时（例如导入来的）
     // 也照样显示，免得数据被藏起来看不见
@@ -293,6 +376,10 @@
         (isOrphan ? '<span class="group-orphan" title="该词性不在当前分类表中，可在上方「分类管理」里添加同名分类">未登记分类</span>' : '') +
         '<span class="group-count">' + list.length + (sentencesOnly ? ' 条语句' : ' 个单词') + '</span>' +
         (mastered ? '<span class="group-mastered">已掌握 ' + mastered + '</span>' : '') +
+        (stat.appeared
+          ? '<span class="group-stat" title="这个分类在测验里的合计：出现次数 / 答对次数 / 正确率">测验 ' +
+              stat.appeared + ' 次 · 答对 ' + stat.correct + ' · ' + stat.rate + '%</span>'
+          : '') +
       '</div>';
     section.appendChild(header);
 
@@ -306,9 +393,9 @@
           '<span class="c-kana">假名</span>' +
           (showVt ? '<span class="c-vt">自他</span>' : '') +
           '<span class="c-meaning">意思</span>' +
-          '<span class="c-stat">出现</span>' +
-          '<span class="c-stat">答对</span>' +
-          '<span class="c-stat">正确率</span>' +
+          '<span class="c-stat" title="这个单词在测验中被考到的次数">出现</span>' +
+          '<span class="c-stat" title="测验中答对的次数（正确次数）">答对</span>' +
+          '<span class="c-stat" title="答对次数 ÷ 出现次数">正确率</span>' +
           '<span class="c-actions"></span>' +
         '</div>';
     }
@@ -330,36 +417,79 @@
     var grid = document.createElement('div');
     grid.className = 'cat-grid';
 
-    posKeys.forEach(function (pos) {
-      var list = words.filter(function (w) { return w.pos === pos; });
+    function makeCard(name, list, opts) {
+      opts = opts || {};
       var mastered = masteredCount(list);
-      var isOrphan = cats.indexOf(pos) < 0;
-
+      var stat = groupStats(list);
       var card = document.createElement('button');
       card.type = 'button';
-      card.className = 'cat-card';
-      card.dataset.pos = pos;
+      card.className = 'cat-card' + (opts.fav ? ' is-fav' : '');
+      if (opts.fav) card.dataset.fav = '1';
+      else card.dataset.pos = name;
       card.innerHTML =
         '<div class="cat-card-top">' +
-          '<span class="cat-card-name">' + escapeHtml(pos) + '</span>' +
-          (isOrphan ? '<span class="group-orphan">未登记</span>' : '') +
+          '<span class="cat-card-name">' + escapeHtml(name) + '</span>' +
+          (opts.orphan ? '<span class="group-orphan">未登记</span>' : '') +
         '</div>' +
         '<div class="cat-card-meta">' +
           '<span>' + list.length + (allSentences(list) ? ' 条语句' : ' 个单词') + '</span>' +
           (mastered ? '<span class="cat-card-mastered">已掌握 ' + mastered + '</span>' : '') +
         '</div>' +
+        (stat.appeared
+          ? '<div class="cat-card-stat">测验 ' + stat.appeared + ' 次 · 答对 ' + stat.correct +
+              ' · 正确率 ' + stat.rate + '%</div>'
+          : '') +
         '<span class="cat-card-arrow">›</span>';
-      grid.appendChild(card);
+      return card;
+    }
+
+    // 收藏夹单独一张卡：错题复习的入口（跨分类）
+    var favs = favWords();
+    if (favs.length) grid.appendChild(makeCard(FAV_LABEL, favs, { fav: true }));
+
+    posKeys.forEach(function (pos) {
+      var list = words.filter(function (w) { return w.pos === pos; });
+      grid.appendChild(makeCard(pos, list, { orphan: cats.indexOf(pos) < 0 }));
     });
 
     return grid;
   }
 
-  function renderDetail(pos, list) {
+  /* 收藏夹详情：按词性分组显示（收藏的词可能来自不同分类） */
+  function renderFavDetail(list) {
     var wrap = document.createElement('div');
     var bar = document.createElement('div');
     bar.className = 'detail-bar';
-    bar.innerHTML = '<button type="button" class="btn btn-ghost btn-sm" id="lib-back">← 返回分类列表</button>';
+    bar.innerHTML = '<button type="button" class="btn btn-ghost btn-sm" id="lib-back">← 返回分类列表</button>' +
+      '<span class="detail-title">' + escapeHtml(FAV_LABEL) + ' · ' + list.length + ' 个词</span>';
+    wrap.appendChild(bar);
+
+    if (!list.length) {
+      var empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.textContent = '收藏夹还是空的：在单词库里点 ☆ 收藏，或者做「分类连做」时把答错的题自动收进来。';
+      wrap.appendChild(empty);
+      return wrap;
+    }
+
+    var byPos = {};
+    list.forEach(function (w) { (byPos[w.pos] = byPos[w.pos] || []).push(w); });
+    orderPosKeys(Object.keys(byPos)).forEach(function (pos) {
+      wrap.appendChild(renderGroup(pos, byPos[pos]));
+    });
+    return wrap;
+  }
+
+  function renderDetail(pos, list) {
+    var wrap = document.createElement('div');
+    var stat = groupStats(list);
+    var bar = document.createElement('div');
+    bar.className = 'detail-bar';
+    bar.innerHTML = '<button type="button" class="btn btn-ghost btn-sm" id="lib-back">← 返回分类列表</button>' +
+      (stat.appeared
+        ? '<span class="detail-title">测验 ' + stat.appeared + ' 次 · 答对 ' + stat.correct +
+            ' · 正确率 ' + stat.rate + '%</span>'
+        : '');
     wrap.appendChild(bar);
     wrap.appendChild(renderGroup(pos, list));
     return wrap;
@@ -401,7 +531,12 @@
     var row = document.createElement('div');
     row.dataset.id = w.id; // 检索定位用（id 已限安全字符，可直接进选择器）
 
+    var fav = !!(w && w.fav);
+    var favBtn = '<button class="icon-btn fav' + (fav ? ' is-on' : '') + '" data-action="fav" ' +
+      'data-id="' + escapeHtml(w.id) + '" title="' + (fav ? '取消收藏' : '加入收藏夹') + '">' +
+      (fav ? '★' : '☆') + '</button>';
     var actionsHtml =
+      favBtn +
       '<button class="icon-btn" data-action="edit" data-id="' + escapeHtml(w.id) + '" title="编辑">✎</button>' +
       '<button class="icon-btn danger" data-action="delete" data-id="' + escapeHtml(w.id) + '" title="删除">🗑</button>';
 
@@ -429,29 +564,47 @@
       '<span class="c-stat">' + w.stats.correct + '</span>' +
       '<span class="c-stat rate">' + rate + '</span>' +
       '<span class="c-actions">' + actionsHtml + '</span>' +
+      // 手机上三个统计列会隐藏，这一行保证「出现 / 答对 / 正确率」还能看到
+      '<span class="c-statline">出现 ' + w.stats.appeared + ' 次 · 答对 ' + w.stats.correct +
+        ' 次 · 正确率 ' + rate + '</span>' +
       (w.example ? '<span class="c-example">' + highlightTerm(w.example) + '</span>' : '') +
       sentStatHtml(w);
     return row;
   }
 
   function onLibraryClick(e) {
-    // 分类卡片 → 进入该分类
+    // 分类卡片 → 进入该分类（收藏夹卡片进收藏夹）
     var card = e.target.closest('.cat-card');
     if (card) {
-      libraryPos = card.dataset.pos;
+      if (card.dataset.fav) { libraryFav = true; libraryPos = null; }
+      else { libraryFav = false; libraryPos = card.dataset.pos; }
       renderLibrary();
       return;
     }
     // 返回按钮 → 回到分类列表
     if (e.target.closest('#lib-back')) {
       libraryPos = null;
+      libraryFav = false;
       renderLibrary();
       return;
     }
-    // 编辑 / 删除
+    // 收藏 / 编辑 / 删除
     var btn = e.target.closest('button[data-action]');
     if (!btn) return;
     var id = btn.dataset.id;
+    if (btn.dataset.action === 'fav') {
+      var w = Store.get(id);
+      if (!w) return;
+      try {
+        Store.setFav(id, !w.fav);
+      } catch (err) {
+        alert('收藏失败：本地存储不可用或空间不足。');
+        return;
+      }
+      renderLibrary();
+      updateSidebarStats();
+      return;
+    }
     if (btn.dataset.action === 'edit') openEdit(id);
     if (btn.dataset.action === 'delete') deleteWord(id);
   }
@@ -787,13 +940,28 @@
    * ========================================================= */
   function renderQuizView() {
     if (sentState) { renderSentenceQuestion(); return; }
-    if (quizState && quizState.index < quizState.questions.length) {
-      renderQuestion();
-    } else if (quizMode === 'sentence') {
+    if (quizState) {
+      if (quizState.kind === 'drill') ensureDrillQuestions();
+      if (quizState.index < quizState.questions.length) { renderQuestion(); return; }
+      if (quizState.kind === 'drill') { stopDrill(); return; } // 极端情况：分类被删空
+    }
+    if (lastRun) { renderLastRun(); return; }
+    if (quizMode === 'sentence') {
       renderSentenceStart();
     } else {
       renderQuizStart();
     }
+  }
+
+  /**
+   * 上次的成绩页。只要 lastRun 还在（没离开测验界面、没点「再来一次」），
+   * 无论同步还是重渲染，看到的都是这一页——这就是结果页不会自动跳走的原因。
+   */
+  function renderLastRun() {
+    if (!lastRun) { renderQuizStart(); return; }
+    if (lastRun.kind === 'sentence') renderSentenceResult(lastRun);
+    else if (lastRun.kind === 'drill') renderDrillResult(lastRun);
+    else renderQuizResult(lastRun);
   }
 
   /* 两种练习模式的切换条 */
@@ -844,24 +1012,31 @@
     try { localStorage.setItem(LS_QUIZ_CATS, arr.join(',')); } catch (e) { /* 存不下也不影响本次 */ }
   }
 
-  /* 当前生效的分类（已被删掉的自动忽略） */
+  /* 当前生效的分类（已被删掉的自动忽略）。收藏夹用 FAV_KEY 表示，和分类名互不影响。 */
   function selectedQuizCats() {
     var all = quizCatNames(quizCatCounts());
     var stored = loadQuizCats();
-    if (stored === null) return all;
-    return stored.filter(function (c) { return all.indexOf(c) >= 0; });
+    if (stored === null) return all; // 没存过 = 全选（收藏夹默认不勾）
+    return stored.filter(function (c) {
+      return c === FAV_KEY || all.indexOf(c) >= 0;
+    });
   }
 
-  /* 出题池：只包含勾选分类里的单词 */
+  /* 出题池：勾选的分类，加上（勾了收藏夹时）所有收藏过的词 */
   function quizPool() {
     var sel = selectedQuizCats();
-    return Store.all().filter(function (w) { return !isSentence(w) && sel.indexOf(w.pos) >= 0; });
+    var favOn = sel.indexOf(FAV_KEY) >= 0;
+    return Store.all().filter(function (w) {
+      if (isSentence(w)) return false;
+      return sel.indexOf(w.pos) >= 0 || (favOn && !!w.fav);
+    });
   }
 
   function renderQuizFilterHtml() {
     var counts = quizCatCounts();
     var cats = quizCatNames(counts);
-    if (cats.length <= 1) return '';   // 只有一个分类时没必要筛
+    var favN = favWords().length;
+    if (cats.length <= 1 && !favN) return '';   // 只有一个分类、也没有收藏时没必要筛
     var sel = selectedQuizCats();
     return '<div class="qf" id="qf">' +
       '<div class="qf-head"><span>限定分类（可多选）</span>' +
@@ -869,6 +1044,14 @@
         '<button type="button" class="qf-btn" id="qf-none">清空</button>' +
       '</div>' +
       '<div class="qf-list">' +
+        (favN
+          ? '<label class="qf-item qf-fav-item">' +
+              '<input type="checkbox" class="qf-fav" value="' + FAV_KEY + '"' +
+                (sel.indexOf(FAV_KEY) >= 0 ? ' checked' : '') + '>' +
+              '<span class="qf-name">' + FAV_LABEL + '</span>' +
+              '<span class="qf-count">' + favN + '</span>' +
+            '</label>'
+          : '') +
         cats.map(function (c) {
           return '<label class="qf-item">' +
             '<input type="checkbox" class="qf-cat" value="' + escapeHtml(c) + '"' +
@@ -884,14 +1067,16 @@
   function wireQuizFilter() {
     var box = $('#qf');
     if (!box) return;
-    $$('.qf-cat', box).forEach(function (cb) {
+    function allBoxes() { return $$('.qf-cat, .qf-fav', box); }
+    allBoxes().forEach(function (cb) {
       cb.addEventListener('change', function () {
-        saveQuizCats($$('.qf-cat', box).filter(function (x) { return x.checked; })
+        saveQuizCats(allBoxes().filter(function (x) { return x.checked; })
           .map(function (x) { return x.value; }));
         renderQuizStart();   // 立刻刷新「本次可抽 N 个单词」和按钮状态
       });
     });
     $('#qf-all').addEventListener('click', function () {
+      // 收藏夹不是分类，不参与「全选」
       saveQuizCats(quizCatNames(quizCatCounts()));
       renderQuizStart();
     });
@@ -914,6 +1099,87 @@
     try { localStorage.setItem(LS_QUIZ_VT, on ? '1' : '0'); } catch (e) { /* 存不下也不影响本次 */ }
   }
 
+  /* 分类连做单独记一个开关：就算之前在「随机」里把自他题关了，
+     连做默认还是带自他判断（很多人是练名词时关的，不该连带影响动词连做）。 */
+  var LS_QUIZ_DRILL_VT = 'jpStudy.quiz.drillVt';
+
+  function drillVtEnabled() {
+    var raw = null;
+    try { raw = localStorage.getItem(LS_QUIZ_DRILL_VT); } catch (e) { raw = null; }
+    return raw === null ? true : raw === '1';
+  }
+
+  function setDrillVt(on) {
+    try { localStorage.setItem(LS_QUIZ_DRILL_VT, on ? '1' : '0'); } catch (e) { /* 存不下也不影响本次 */ }
+  }
+
+  /* ---------- 开始页：出题方式（随机 10 题 / 分类连做） ---------- */
+  function quizStyleHtml() {
+    return '<div class="quiz-style" role="group" aria-label="出题方式">' +
+      '<button type="button" class="mode-btn' + (quizStyle() === 'random' ? ' is-active' : '') +
+        '" data-qstyle="random">🎲 随机抽 ' + Quiz.QUIZ_SIZE + ' 题</button>' +
+      '<button type="button" class="mode-btn' + (quizStyle() === 'drill' ? ' is-active' : '') +
+        '" data-qstyle="drill">🔁 分类连做</button>' +
+    '</div>';
+  }
+
+  function drillOrderHtml() {
+    return '<div class="quiz-style drill-order" role="group" aria-label="出题顺序">' +
+      '<button type="button" class="mode-btn' + (drillOrder() === 'seq' ? ' is-active' : '') +
+        '" data-qorder="seq">按词库顺序</button>' +
+      '<button type="button" class="mode-btn' + (drillOrder() === 'shuffle' ? ' is-active' : '') +
+        '" data-qorder="shuffle">乱序</button>' +
+    '</div>';
+  }
+
+  /* 连做时可选的「分类」：所有有词的分类在前，收藏夹放最后 */
+  function drillCatOptions() {
+    var counts = quizCatCounts();
+    var cats = quizCatNames(counts);
+    var opts = [];
+    cats.forEach(function (c) { opts.push({ value: c, label: c, n: counts[c] }); });
+    var favN = favWords().length;
+    if (favN) opts.push({ value: FAV_KEY, label: FAV_LABEL, n: favN });
+    return opts;
+  }
+
+  function currentDrillCat(opts) {
+    var cur = drillCat();
+    var found = opts.filter(function (o) { return o.value === cur; })[0];
+    return found ? cur : (opts.length ? opts[0].value : '');
+  }
+
+  /* 「自他判断」开关（两种出题方式共用） */
+  function vtToggleHtml(pool, vtOn) {
+    var vtPool = pool.filter(function (w) { return !!w.verbType; });
+    if (!vtPool.length) return '';
+    return '<label class="qf-item vt-toggle">' +
+      '<input type="checkbox" id="qf-vt"' + (vtOn ? ' checked' : '') + '>' +
+      '<span class="qf-name">加一道「自他判断」题</span>' +
+      '<span class="qf-count">可出题 ' + vtPool.length + ' 个动词</span>' +
+    '</label>';
+  }
+
+  function wireVtToggle() {
+    var vtBox = $('#qf-vt');
+    if (!vtBox) return;
+    vtBox.addEventListener('change', function () {
+      // 两种出题方式各记各的：连做默认带自他题，不受「随机」里关掉的影响
+      if (quizStyle() === 'drill') setDrillVt(this.checked);
+      else setQuizVt(this.checked);
+      renderQuizStart();
+    });
+  }
+
+  function wireQuizStyle() {
+    $$('#view-quiz [data-qstyle]').forEach(function (b) {
+      b.addEventListener('click', function () { setQuizStyle(b.dataset.qstyle); renderQuizStart(); });
+    });
+    $$('#view-quiz [data-qorder]').forEach(function (b) {
+      b.addEventListener('click', function () { setDrillOrder(b.dataset.qorder); renderQuizStart(); });
+    });
+  }
+
   function renderQuizStart() {
     // 语句不参与测验，页面上显示的词库规模也只算单词
     var words = Store.all().filter(function (w) { return !isSentence(w); });
@@ -928,6 +1194,8 @@
       return;
     }
 
+    if (quizStyle() === 'drill') { renderDrillStart(words, container); return; }
+
     var pool = quizPool();   // 受上面的「限定分类」影响
     var n = Math.min(Quiz.QUIZ_SIZE, pool.length);
     var mastered = pool.filter(function (w) { return Quiz.isMastered(w); }).length;
@@ -939,6 +1207,7 @@
     container.innerHTML =
       '<div class="card quiz-start">' +
         quizModeSwitchHtml('classic') +
+        quizStyleHtml() +
         '<h2>🎯 开始练习</h2>' +
         '<p class="quiz-desc">每次练习 <strong>' + n + '</strong> 个单词，先看汉字写假名，再选正确意思：</p>' +
         '<ul class="quiz-rules">' +
@@ -947,14 +1216,8 @@
           (vtOn ? '<li>③ 判断动词的自他性（自动词 / 他动词 / 自他动词）</li>' : '') +
         '</ul>' +
         renderQuizFilterHtml() +
-        (vtPool.length
-          ? '<label class="qf-item vt-toggle">' +
-              '<input type="checkbox" id="qf-vt"' + (vtOn ? ' checked' : '') + '>' +
-              '<span class="qf-name">加一道「自他判断」题</span>' +
-              '<span class="qf-count">可出题 ' + vtPool.length + ' 个动词</span>' +
-            '</label>'
-          : '') +
-        '<p class="quiz-note">' + (vtOn ? '三问' : '两问') + '都答对才计 1 分；任意一问答错不计分。已掌握（出现 &gt; 5 次且正确率 &gt; 80%）的单词会降低出现概率。</p>' +
+        vtToggleHtml(pool, vtOn) +
+        '<p class="quiz-note">' + (vtOn ? '三问' : '两问') + '都答对才计 1 分；任意一问答错不计分。刚做过的词会被记住，下一轮先抽没做过的。已掌握（出现 &gt; 5 次且正确率 &gt; 80%）的单词会降低出现概率。</p>' +
         '<div class="quiz-start-meta">' +
           '<span>本次可抽 <strong>' + pool.length + '</strong> 个单词（词库共 ' + words.length + ' 个）</span>' +
           '<span>已掌握 <strong>' + mastered + '</strong> 个</span>' +
@@ -967,12 +1230,75 @@
       '</div>';
 
     if (pool.length) $('#quiz-start-btn').addEventListener('click', startQuiz);
-    var vtBox = $('#qf-vt');
-    if (vtBox) {
-      vtBox.addEventListener('change', function () { setQuizVt(this.checked); renderQuizStart(); });
-    }
+    wireQuizStyle();
+    wireVtToggle();
     wireQuizMode();
     wireQuizFilter();
+  }
+
+  /* ---------- 分类连做：开始页 ---------- */
+  function renderDrillStart(words, container) {
+    var opts = drillCatOptions();
+    var cat = currentDrillCat(opts);
+    var pool = drillPool(cat);
+    var mastered = pool.filter(function (w) { return Quiz.isMastered(w); }).length;
+    var vtOn = pool.some(function (w) { return !!w.verbType; }) && drillVtEnabled();
+    var catLabel = cat === FAV_KEY ? FAV_LABEL : cat;
+
+    container.innerHTML =
+      '<div class="card quiz-start">' +
+        quizModeSwitchHtml('classic') +
+        quizStyleHtml() +
+        '<h2>🔁 分类连做</h2>' +
+        '<p class="quiz-desc">选定一个分类，把里面的词一直做下去（做完一轮自动从头再来），不限制题数；随时点「停止做题」看成绩。</p>' +
+        '<ul class="quiz-rules">' +
+          '<li>① 看汉字写假名（纯假名词跳过此题）</li>' +
+          '<li>② 从同词性单词抽出的意思中选出正确的一个（最多 4 个选项）</li>' +
+          (vtOn ? '<li>③ 判断动词的自他性（自动词 / 他动词 / 自他动词）</li>' : '') +
+        '</ul>' +
+        '<div class="drill-config">' +
+          '<label class="drill-row"><span class="drill-label">分类</span>' +
+            '<select id="drill-cat" class="drill-select">' +
+              opts.map(function (o) {
+                return '<option value="' + escapeHtml(o.value) + '"' +
+                  (o.value === cat ? ' selected' : '') + '>' +
+                  escapeHtml(o.label) + '（' + o.n + '）</option>';
+              }).join('') +
+            '</select>' +
+          '</label>' +
+          '<div class="drill-row"><span class="drill-label">顺序</span>' + drillOrderHtml() + '</div>' +
+        '</div>' +
+        vtToggleHtml(pool, vtOn) +
+        (pool.some(function (w) { return isVerbPos(w.pos); }) &&
+         !pool.some(function (w) { return !!w.verbType; })
+          ? '<div class="qf-warn">这个分类的动词还没填「自他」标注，所以出不了自他判断题；' +
+            '在单词库里给它们补上，下次就会自动出现。</div>'
+          : '') +
+        '<label class="qf-item ai-record drill-autofav">' +
+          '<input type="checkbox" id="drill-autofav"' + (autoFavOn() ? ' checked' : '') + '>' +
+          '<span class="qf-name">答错的题自动加入收藏夹</span>' +
+        '</label>' +
+        '<div class="quiz-start-meta">' +
+          '<span><strong>' + escapeHtml(catLabel) + '</strong> 有 ' + pool.length +
+            ' 个词（词库共 ' + words.length + ' 个）</span>' +
+          '<span>已掌握 <strong>' + mastered + '</strong> 个</span>' +
+        '</div>' +
+        (pool.length
+          ? '<button class="btn btn-primary btn-lg" id="quiz-start-btn">开始连做</button>'
+          : '<div class="qf-warn">这个分类里还没有单词，换一个再开始。</div>') +
+        '<p class="quiz-note">做过的题会立刻记进单词库的正确率；答错的词收在「' +
+          FAV_LABEL + '」里，下次可以直接只练错题。</p>' +
+      '</div>';
+
+    if (pool.length) {
+      $('#quiz-start-btn').addEventListener('click', function () { startDrill(cat); });
+    }
+    $('#drill-cat').addEventListener('change', function () { setDrillCat(this.value); renderQuizStart(); });
+    var af = $('#drill-autofav');
+    if (af) af.addEventListener('change', function () { setAutoFav(this.checked); });
+    wireQuizStyle();
+    wireVtToggle();
+    wireQuizMode();
   }
 
   /* ---------- AI 造句练习：开始页 ---------- */
@@ -1018,6 +1344,8 @@
   function startSentenceSession() {
     var questions = Quiz.makeSentenceSession(Store.all());
     if (!questions.length) { renderSentenceStart(); return; }
+    lastRun = null;
+    pausedDrill = null;
     sentState = {
       questions: questions,
       index: 0,
@@ -1028,14 +1356,66 @@
 
   function startQuiz() {
     var words = quizPool();   // 只从勾选的分类里抽题
-    var questions = Quiz.makeSession(words, { withVerbType: quizVtEnabled() });
+    var questions = Quiz.makeSession(words, {
+      withVerbType: quizVtEnabled(),
+      distractors: wordLibrary()
+    });
     if (!questions.length) { renderQuizStart(); return; }
+    lastRun = null;
+    pausedDrill = null;
     quizState = {
+      kind: 'random',
       questions: questions,
       index: 0,
       results: new Array(questions.length).fill(null)
     };
     renderQuestion();
+  }
+
+  /* ---------- 分类连做：开始 / 续题 ---------- */
+  function startDrill(catOpt) {
+    var cat = catOpt || currentDrillCat(drillCatOptions());
+    setDrillCat(cat);
+    var pool = drillPool(cat);
+    if (!pool.length) { renderQuizStart(); return; }
+    lastRun = null;
+    pausedDrill = null;
+    quizState = {
+      kind: 'drill',
+      cat: cat,
+      order: drillOrder(),
+      autoFav: autoFavOn(),
+      withVerbType: drillVtEnabled(),
+      questions: [],
+      results: [],
+      index: 0,
+      cycleStart: 0,
+      cycleLen: 0
+    };
+    ensureDrillQuestions();
+    renderQuestion();
+  }
+
+  /* 题目用完就接着生成下一轮（同一个分类，做到用户点「停止做题」为止） */
+  function ensureDrillQuestions() {
+    var st = quizState;
+    if (!st || st.kind !== 'drill') return;
+    while (st.index >= st.questions.length) {
+      var pool = drillPool(st.cat);
+      if (!pool.length) return;
+      var lastId = st.questions.length ? st.questions[st.questions.length - 1].wordId : '';
+      var cycle = Quiz.makeDrillCycle(pool, {
+        shuffle: st.order === 'shuffle',
+        withVerbType: st.withVerbType,
+        lastId: lastId,
+        distractors: wordLibrary()
+      });
+      if (!cycle.length) return;
+      st.cycleStart = st.questions.length;
+      st.cycleLen = cycle.length;
+      st.questions = st.questions.concat(cycle);
+      st.results = st.results.concat(new Array(cycle.length).fill(null));
+    }
   }
 
   function renderQuestion() {
@@ -1050,6 +1430,86 @@
     } else {
       renderAnswer(q, idx);
     }
+  }
+
+  /* ---------- 答题 / 反馈共用的头部与按钮 ---------- */
+  function quizProgressHtml(st, no, total) {
+    var width = total ? (no / total * 100) : 0;
+    var text = '第 ' + no + ' / ' + total + ' 题';
+    if (st.kind === 'drill') {
+      var inCycle = st.index - st.cycleStart + 1;
+      width = st.cycleLen ? (inCycle / st.cycleLen * 100) : 0;
+      var answered = st.results.filter(function (r) { return !!r; }).length;
+      var correct = st.results.filter(function (r) { return r && r.allCorrect; }).length;
+      text = '第 ' + no + ' 题 · 已答 ' + answered + ' · 正确 ' + correct;
+    }
+    return '<div class="quiz-progress">' +
+      '<span>' + text + '</span>' +
+      '<div class="progress-track"><div class="progress-fill" style="width:' + width + '%"></div></div>' +
+    '</div>';
+  }
+
+  /* 连做模式多一行：分类 / 顺序 / 本轮进度 */
+  function drillMetaHtml(st) {
+    if (!st || st.kind !== 'drill') return '';
+    var inCycle = st.index - st.cycleStart + 1;
+    return '<div class="drill-meta">' +
+      '<span class="pos-badge">' + escapeHtml(st.cat === FAV_KEY ? FAV_LABEL : st.cat) + '</span>' +
+      '<span>' + (st.order === 'shuffle' ? '乱序' : '按词库顺序') + '</span>' +
+      '<span>本轮 ' + inCycle + ' / ' + st.cycleLen + '</span>' +
+    '</div>';
+  }
+
+  /* 题头小字：这道题有几问，一眼能看到自他判断在不在（手机上也省得往下翻才发现） */
+  function quizPartsHint(q) {
+    var parts = [];
+    if (q.readPart) parts.push('① 读音');
+    parts.push((q.readPart ? '②' : '①') + ' 意思');
+    // 纯假名词没有读音题，自他就是第②问
+    if (q.verbPart) parts.push((q.readPart ? '③' : '②') + ' 自他');
+    return '<div class="quiz-parts">本题：' + parts.join(' · ') + '</div>';
+  }
+
+  /* 词性标签：连做某个分类时，分类已经在上面显示过了，不再重复一个一样的徽章；
+     练「收藏夹」时词来自不同分类，这里仍然显示词性 */
+  function wordMetaHtml(q, st) {
+    if (st && st.kind === 'drill' && st.cat !== FAV_KEY) return '';
+    return '<div class="quiz-word-meta"><span class="pos-badge">' + escapeHtml(q.pos) + '</span></div>';
+  }
+
+  /* 停止做题：只有「分类连做」才有 */
+  function quizStopRowHtml() {
+    return '<div class="quiz-stop-row">' +
+      '<button type="button" class="btn btn-ghost btn-sm" id="quiz-stop">■ 停止做题</button>' +
+      '<span class="quiz-stop-hint">停下后会显示本次成绩和错题</span>' +
+    '</div>';
+  }
+
+  function wireQuizStop() {
+    var btn = $('#quiz-stop');
+    if (btn) btn.addEventListener('click', stopDrill);
+  }
+
+  /* 收藏按钮：错题复习的快捷入口 */
+  function favButtonHtml(q) {
+    var w = Store.get(q.wordId);
+    var on = !!(w && w.fav);
+    return '<button type="button" class="btn btn-ghost btn-sm fav-toggle' + (on ? ' is-on' : '') +
+      '" id="quiz-fav" data-id="' + escapeHtml(q.wordId) + '">' +
+      (on ? '★ 已收藏' : '☆ 收藏') + '</button>';
+  }
+
+  function wireFavButton() {
+    var btn = $('#quiz-fav');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var w = Store.get(btn.dataset.id);
+      if (!w) return;
+      var on;
+      try { on = Store.setFav(w.id, !w.fav); } catch (e) { return; }
+      btn.classList.toggle('is-on', on);
+      btn.textContent = on ? '★ 已收藏' : '☆ 收藏';
+    });
   }
 
   function renderAnswer(q, idx) {
@@ -1095,11 +1555,10 @@
 
     container.innerHTML =
       '<div class="card quiz-question">' +
-        '<div class="quiz-progress">' +
-          '<span>第 ' + no + ' / ' + total + ' 题</span>' +
-          '<div class="progress-track"><div class="progress-fill" style="width:' + (no / total * 100) + '%"></div></div>' +
-        '</div>' +
-        '<div class="quiz-word-meta"><span class="pos-badge">' + escapeHtml(q.pos) + '</span></div>' +
+        quizProgressHtml(quizState, no, total) +
+        drillMetaHtml(quizState) +
+        wordMetaHtml(q, quizState) +
+        quizPartsHint(q) +
         readHtml +
         '<div class="quiz-part">' +
           '<div class="part-label">' + meaningLabel + '</div>' +
@@ -1108,6 +1567,7 @@
         vtHtml +
         '<div id="quiz-feedback" class="quiz-feedback" hidden></div>' +
         '<button class="btn btn-primary btn-lg" id="quiz-confirm" style="width:100%">确认答案</button>' +
+        (quizState.kind === 'drill' ? quizStopRowHtml() : '') +
       '</div>';
 
     // 选项选中高亮：每个选项组各自独立（意思题选一个不能把自他题的选择清掉）
@@ -1129,6 +1589,7 @@
     }
 
     $('#quiz-confirm').addEventListener('click', function () { confirmAnswer(q); });
+    wireQuizStop();
   }
 
   function confirmAnswer(q) {
@@ -1150,6 +1611,7 @@
     var meaningCorrect = selected.dataset.id === q.wordId;
     var vtId = vtSel ? (vtSel.dataset.vt || '') : '';
     var vtCorrect = q.verbPart ? (vtId === q.verbPart.answer) : true;
+    var allCorrect = readCorrect && meaningCorrect && vtCorrect;
 
     quizState.results[quizState.index] = {
       readInput: readValue,
@@ -1158,8 +1620,24 @@
       meaningCorrect: meaningCorrect,
       vtId: vtId,
       vtCorrect: vtCorrect,
-      allCorrect: readCorrect && meaningCorrect && vtCorrect
+      allCorrect: allCorrect,
+      autoFaved: false
     };
+
+    // 每答一题立刻落库：单词库里的「出现 / 答对 / 正确率」当场更新，
+    // 中途点「停止做题」或直接关页面也不会白做一遍。
+    try { Store.recordResults([q.wordId], [allCorrect]); } catch (e) { /* 统计失败不影响继续答题 */ }
+
+    // 连做模式下答错自动收进收藏夹（开始页可以关掉）
+    if (!allCorrect && quizState.kind === 'drill' && quizState.autoFav) {
+      try {
+        var w = Store.get(q.wordId);
+        if (w && !w.fav) {
+          Store.setFav(q.wordId, true);
+          quizState.results[quizState.index].autoFaved = true;
+        }
+      } catch (e) { /* 收藏失败不影响答题 */ }
+    }
 
     renderFeedback(q, quizState.results[quizState.index]);
   }
@@ -1231,13 +1709,13 @@
         '</div>';
 
     var ok = result.allCorrect;
+    var isDrill = quizState.kind === 'drill';
     container.innerHTML =
       '<div class="card quiz-question">' +
-        '<div class="quiz-progress">' +
-          '<span>第 ' + no + ' / ' + total + ' 题</span>' +
-          '<div class="progress-track"><div class="progress-fill" style="width:' + (no / total * 100) + '%"></div></div>' +
-        '</div>' +
-        '<div class="quiz-word-meta"><span class="pos-badge">' + escapeHtml(q.pos) + '</span></div>' +
+        quizProgressHtml(quizState, no, total) +
+        drillMetaHtml(quizState) +
+        wordMetaHtml(q, quizState) +
+        quizPartsHint(q) +
         readHtml +
         '<div class="quiz-part">' +
           '<div class="part-label">' + meaningLabel + '</div>' +
@@ -1249,12 +1727,23 @@
           '<div class="fb-word">' + escapeHtml(q.kanji || q.kana) + ' 「' + escapeHtml(q.kana) + '」 — ' + escapeHtml(q.meaning) + '</div>' +
           (q.example ? '<div class="fb-example">' + escapeHtml(q.example) + '</div>' : '') +
         '</div>' +
+        '<div class="quiz-fb-bar">' + favButtonHtml(q) +
+          (result.autoFaved ? '<span class="quiz-fb-hint">答错，已自动加入收藏夹</span>' : '') +
+        '</div>' +
         '<button class="btn btn-primary btn-lg" id="quiz-next" style="width:100%">' +
-          (isLast ? '查看结果' : '下一题') + '</button>' +
+          (isDrill || !isLast ? '下一题' : '查看结果') + '</button>' +
+        (isDrill ? quizStopRowHtml() : '') +
       '</div>';
 
+    wireFavButton();
+    wireQuizStop();
     $('#quiz-next').addEventListener('click', function () {
       quizState.index++;
+      if (quizState.kind === 'drill') {
+        ensureDrillQuestions();
+        renderQuestion();
+        return;
+      }
       if (quizState.index < total) {
         renderQuestion();
       } else {
@@ -1265,21 +1754,25 @@
 
   function finishQuiz() {
     var st = quizState;
-    var total = st.questions.length;
-    var score = st.results.filter(function (r) { return r && r.allCorrect; }).length;
+    if (!st) return;
+    // 统计已在 confirmAnswer 里逐题落库，这里只负责出成绩页
+    lastRun = {
+      kind: 'random',
+      questions: st.questions.slice(),
+      results: st.results.slice()
+    };
+    quizState = null;
+    renderQuizResult(lastRun);
+    updateSidebarStats();
+  }
 
-    // 记录出现次数与答对次数（走 Store.recordResults，以便刷新 updatedAt 供同步使用）
-    var ids = [];
-    var flags = [];
-    st.results.forEach(function (r, i) {
-      if (!r) return;
-      ids.push(st.questions[i].wordId);
-      flags.push(r.allCorrect);
-    });
-    try { Store.recordResults(ids, flags); } catch (e) { /* 忽略，不影响展示 */ }
+  /* ---------- 随机练习：成绩页 ---------- */
+  function renderQuizResult(run) {
+    var total = run.questions.length;
+    var score = run.results.filter(function (r) { return r && r.allCorrect; }).length;
 
-    var rows = st.questions.map(function (q, i) {
-      var r = st.results[i];
+    var rows = run.questions.map(function (q, i) {
+      var r = run.results[i];
       return '<div class="result-row ' + (r.allCorrect ? 'is-correct' : 'is-wrong') + '">' +
         '<span class="r-icon">' + (r.allCorrect ? '✅' : '❌') + '</span>' +
         '<span class="r-word">' + escapeHtml(q.kanji || q.kana) + ' <small>' + escapeHtml(q.kana) + '</small></span>' +
@@ -1292,6 +1785,14 @@
       '</div>';
     }).join('');
 
+    var wrong = run.questions.filter(function (q, i) {
+      return run.results[i] && !run.results[i].allCorrect;
+    });
+    var wrongLeft = wrong.filter(function (q) {
+      var w = Store.get(q.wordId);
+      return !(w && w.fav);
+    }).length;
+
     var pct = total ? Math.round(score / total * 100) : 0;
     var container = $('#view-quiz');
     container.innerHTML =
@@ -1302,20 +1803,169 @@
           '<div class="score-pct">正确率 ' + pct + '%</div>' +
         '</div>' +
         '<div class="result-list">' + rows + '</div>' +
+        (wrong.length
+          ? '<div class="result-tools">' +
+              '<button type="button" class="btn btn-ghost btn-sm" id="quiz-fav-wrong">' +
+                (wrongLeft ? '⭐ 把 ' + wrongLeft + ' 个错题加入收藏夹' : '★ 错题都已在收藏夹里') +
+              '</button>' +
+            '</div>'
+          : '') +
+        '<p class="quiz-note">结果会一直留在这个页面，点下面的按钮才离开。</p>' +
         '<div class="result-actions">' +
           '<button class="btn btn-primary" id="quiz-again">再来一次</button>' +
           '<button class="btn btn-ghost" id="quiz-back">返回单词库</button>' +
         '</div>' +
       '</div>';
 
+    var favBtn = $('#quiz-fav-wrong');
+    if (favBtn && wrongLeft) {
+      favBtn.addEventListener('click', function () {
+        wrong.forEach(function (q) {
+          try { Store.setFav(q.wordId, true); } catch (e) { /* 忽略 */ }
+        });
+        renderQuizResult(run);
+      });
+    }
+
     $('#quiz-again').addEventListener('click', function () {
-      quizState = null;
+      lastRun = null;
       renderQuizStart();
     });
-    $('#quiz-back').addEventListener('click', function () { showView('library'); });
+    $('#quiz-back').addEventListener('click', function () {
+      lastRun = null;
+      showView('library');
+    });
+  }
 
+  /* ---------- 分类连做：停止 + 成绩页 ---------- */
+  function firstUnanswered(st) {
+    for (var i = 0; i < st.questions.length; i++) {
+      if (!st.results[i]) return i;
+    }
+    return st.questions.length;
+  }
+
+  function stopDrill() {
+    if (!quizState || quizState.kind !== 'drill') return;
+    var st = quizState;
+    var questions = [];
+    var results = [];
+    st.questions.forEach(function (q, i) {
+      if (!st.results[i]) return;   // 只统计答过的题（当前这道没答就不算）
+      questions.push(q);
+      results.push(st.results[i]);
+    });
+    lastRun = {
+      kind: 'drill',
+      cat: st.cat,
+      order: st.order,
+      questions: questions,
+      results: results
+    };
+    // 留着会话本身，点「继续做这个分类」时能接着下一题
+    st.index = firstUnanswered(st);
+    pausedDrill = st;
     quizState = null;
+    renderDrillResult(lastRun);
     updateSidebarStats();
+  }
+
+  function renderDrillResult(run) {
+    var total = run.results.length;
+    var score = run.results.filter(function (r) { return r.allCorrect; }).length;
+    var pct = total ? Math.round(score / total * 100) : 0;
+    var catLabel = run.cat === FAV_KEY ? FAV_LABEL : run.cat;
+    var orderLabel = run.order === 'shuffle' ? '乱序' : '按词库顺序';
+
+    var wrong = [];
+    run.questions.forEach(function (q, i) {
+      if (!run.results[i].allCorrect) wrong.push({ q: q, r: run.results[i] });
+    });
+    var wrongLeft = wrong.filter(function (x) {
+      var w = Store.get(x.q.wordId);
+      return !(w && w.fav);
+    }).length;
+
+    var rows = wrong.map(function (x) {
+      var q = x.q, r = x.r;
+      return '<div class="result-row is-wrong">' +
+        '<span class="r-icon">❌</span>' +
+        '<span class="r-word">' + escapeHtml(q.kanji || q.kana) + ' <small>' + escapeHtml(q.kana) + '</small></span>' +
+        '<span class="r-meaning">' + escapeHtml(q.meaning) + '</span>' +
+        '<span class="r-detail">' +
+          (q.readPart ? ('读音' + (r.readCorrect ? '✓' : '✗') + ' ') : '') +
+          '意思' + (r.meaningCorrect ? '✓' : '✗') +
+          (q.verbPart ? ' 自他' + (r.vtCorrect ? '✓' : '✗') : '') +
+        '</span>' +
+      '</div>';
+    }).join('');
+
+    var container = $('#view-quiz');
+    container.innerHTML =
+      '<div class="card quiz-result">' +
+        '<h2>🔁 分类连做 · 已停止</h2>' +
+        '<div class="drill-result-meta">' + escapeHtml(catLabel) + ' · ' + orderLabel +
+          ' · 答了 ' + total + ' 题</div>' +
+        '<div class="result-score">' +
+          '<div class="score-number">' + score + '<span class="score-total"> / ' + total + '</span></div>' +
+          '<div class="score-pct">正确率 ' + pct + '%</div>' +
+        '</div>' +
+        (total
+          ? (wrong.length
+              ? '<div class="wrong-head">错题 ' + wrong.length + ' 个</div>' +
+                '<div class="result-list">' + rows + '</div>'
+              : '<p class="quiz-note">这次做的题全对 ✓</p>')
+          : '<p class="quiz-note">还没答题就停了，这次没有记录成绩。</p>') +
+        (wrong.length
+          ? '<div class="result-tools">' +
+              '<button type="button" class="btn btn-ghost btn-sm" id="drill-fav-all">' +
+                (wrongLeft ? '⭐ 把 ' + wrongLeft + ' 个错题加入收藏夹' : '★ 错题都已在收藏夹里') +
+              '</button>' +
+            '</div>'
+          : '') +
+        '<p class="quiz-note">每答一题都已记进单词库的正确率；错题可以去「' +
+          FAV_LABEL + '」里复习。</p>' +
+        '<div class="result-actions">' +
+          '<button class="btn btn-primary" id="drill-resume">继续做这个分类</button>' +
+          '<button class="btn btn-ghost" id="drill-restart">换个分类</button>' +
+          '<button class="btn btn-ghost" id="drill-back">返回单词库</button>' +
+        '</div>' +
+      '</div>';
+
+    var favBtn = $('#drill-fav-all');
+    if (favBtn && wrongLeft) {
+      favBtn.addEventListener('click', function () {
+        wrong.forEach(function (x) {
+          try { Store.setFav(x.q.wordId, true); } catch (e) { /* 忽略 */ }
+        });
+        renderDrillResult(run);
+      });
+    }
+
+    $('#drill-resume').addEventListener('click', function () {
+      lastRun = null;
+      var st = pausedDrill;
+      pausedDrill = null;
+      if (st) {
+        // 接着刚才停下的位置：跳过已经答过的题，回到第一道没答的
+        quizState = st;
+        st.index = firstUnanswered(st);
+        ensureDrillQuestions();
+        renderQuestion();
+      } else {
+        startDrill(run.cat);
+      }
+    });
+    $('#drill-restart').addEventListener('click', function () {
+      lastRun = null;
+      pausedDrill = null;
+      renderQuizStart();
+    });
+    $('#drill-back').addEventListener('click', function () {
+      lastRun = null;
+      pausedDrill = null;
+      showView('library');
+    });
   }
 
   /* =========================================================
@@ -1528,6 +2178,7 @@
 
   function finishSentenceSession() {
     var st = sentState;
+    if (!st) return;
     var total = st.questions.length;
     var counts = { correct: 0, almost: 0, wrong: 0, unknown: 0 };
 
@@ -1536,8 +2187,6 @@
       if (!Object.prototype.hasOwnProperty.call(counts, v)) v = 'unknown';
       counts[v]++;
     });
-
-    var pct = total ? Math.round((counts.correct + counts.almost * 0.5) / total * 100) : 0;
 
     // 只有勾了「计入统计」才记录；单独记在 sentAppeared / sentPassed，
     // 不碰读音题/意思题的 appeared/correct（那道正确率和「已掌握」不该被 AI 判定影响）
@@ -1554,8 +2203,28 @@
       try { recorded = Store.recordSentences(ids, pass); } catch (e) { recorded = 0; }
     }
 
-    var rows = st.questions.map(function (q, i) {
-      var r = st.results[i] || {};
+    lastRun = {
+      kind: 'sentence',
+      total: total,
+      counts: counts,
+      questions: st.questions.slice(),
+      results: st.results.slice(),
+      recorded: recorded,
+      record: AI.getRecord()
+    };
+    sentState = null;
+    renderSentenceResult(lastRun);
+    updateSidebarStats();
+  }
+
+  /* 造句成绩页：由 lastRun 渲染，所以同步/重渲染都不会把这一页顶掉 */
+  function renderSentenceResult(run) {
+    var total = run.total;
+    var counts = run.counts;
+    var pct = total ? Math.round((counts.correct + counts.almost * 0.5) / total * 100) : 0;
+
+    var rows = run.questions.map(function (q, i) {
+      var r = run.results[i] || {};
       var res = r.result || {};
       var v = res.verdict || 'unknown';
       var cls = v === 'correct' ? 'is-correct' : (v === 'almost' ? 'is-almost' : 'is-wrong');
@@ -1582,8 +2251,8 @@
           '　❌ 需要修改 ' + counts.wrong +
           (counts.unknown ? '　🤖 无法判定 ' + counts.unknown : '') + '</div>' +
         '<div class="result-list">' + rows + '</div>' +
-        '<p class="quiz-note">' + (AI.getRecord()
-          ? '已把这 ' + recorded + ' 个词的造句结果记入统计（单词库里显示「✍️ 造句 通过 / 次数」）。'
+        '<p class="quiz-note">' + (run.record
+          ? '已把这 ' + run.recorded + ' 个词的造句结果记入统计（单词库里显示「✍️ 造句 通过 / 次数」）。'
           : '这次没有记录统计（开始前取消勾选了「计入统计」）。') + '</p>' +
         '<div class="result-actions">' +
           '<button class="btn btn-primary" id="sent-again">再来一次</button>' +
@@ -1592,13 +2261,14 @@
       '</div>';
 
     $('#sent-again').addEventListener('click', function () {
+      lastRun = null;
       sentState = null;
       renderSentenceStart();
     });
-    $('#sent-back').addEventListener('click', function () { showView('library'); });
-
-    sentState = null;
-    updateSidebarStats();
+    $('#sent-back').addEventListener('click', function () {
+      lastRun = null;
+      showView('library');
+    });
   }
   function initImportExport() {
     $('#btn-export').addEventListener('click', function () {
@@ -1708,8 +2378,12 @@
       renderCategories();
       renderLibrary();
       updateSidebarStats();
-      // 测验进行中就不打断；同步来的数据会在交卷时自然生效
-      if (!quizState && $('#view-quiz').classList.contains('is-active')) renderQuizView();
+      // 只在「测验开始页」重渲染：答题中不打断，成绩页（lastRun）也不会被顶掉。
+      // 这正是以前「结果页几秒后自动跳走」的原因——同步写回会触发这里重渲染。
+      var viewQuiz = $('#view-quiz');
+      if (!quizState && !sentState && !lastRun && viewQuiz.classList.contains('is-active')) {
+        renderQuizView();
+      }
     });
 
     connectBtn.addEventListener('click', connect);
@@ -1807,7 +2481,11 @@
     refreshVtSelects();
 
     $$('.nav-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () { showView(btn.dataset.view); });
+      btn.addEventListener('click', function () {
+        // 已经停在成绩页时再点「测验练习」，等于重新开始：成绩页收起、回到开始页
+        if (btn.dataset.view === 'quiz' && lastRun) { lastRun = null; pausedDrill = null; }
+        showView(btn.dataset.view);
+      });
     });
 
     $('#library-groups').addEventListener('click', onLibraryClick);
