@@ -75,9 +75,18 @@
   function quizStyle() { return lsGet(LS_QUIZ_STYLE) === 'drill' ? 'drill' : 'random'; }
   function setQuizStyle(s) { lsSet(LS_QUIZ_STYLE, s === 'drill' ? 'drill' : 'random'); }
 
-  /* 分类连做：按词库顺序 / 乱序 */
-  function drillOrder() { return lsGet(LS_QUIZ_ORDER) === 'shuffle' ? 'shuffle' : 'seq'; }
-  function setDrillOrder(o) { lsSet(LS_QUIZ_ORDER, o === 'shuffle' ? 'shuffle' : 'seq'); }
+  /* 分类连做：顺序（旧→新）/ 倒序（新→旧）/ 乱序 */
+  function drillOrder() {
+    var v = lsGet(LS_QUIZ_ORDER);
+    return v === 'shuffle' || v === 'rev' ? v : 'seq';
+  }
+  function setDrillOrder(o) {
+    lsSet(LS_QUIZ_ORDER, o === 'shuffle' ? 'shuffle' : (o === 'rev' ? 'rev' : 'seq'));
+  }
+  function drillOrderLabel(order) {
+    if (order === 'shuffle') return '乱序';
+    return order === 'rev' ? '倒序（新→旧）' : '按词库顺序';
+  }
 
   /* 答错自动加入收藏夹（默认开） */
   function autoFavOn() { return lsGet(LS_QUIZ_AUTOFAV) !== '0'; }
@@ -1124,10 +1133,13 @@
   }
 
   function drillOrderHtml() {
+    var cur = drillOrder();
     return '<div class="quiz-style drill-order" role="group" aria-label="出题顺序">' +
-      '<button type="button" class="mode-btn' + (drillOrder() === 'seq' ? ' is-active' : '') +
-        '" data-qorder="seq">按词库顺序</button>' +
-      '<button type="button" class="mode-btn' + (drillOrder() === 'shuffle' ? ' is-active' : '') +
+      '<button type="button" class="mode-btn' + (cur === 'seq' ? ' is-active' : '') +
+        '" data-qorder="seq">顺序</button>' +
+      '<button type="button" class="mode-btn' + (cur === 'rev' ? ' is-active' : '') +
+        '" data-qorder="rev">倒序</button>' +
+      '<button type="button" class="mode-btn' + (cur === 'shuffle' ? ' is-active' : '') +
         '" data-qorder="shuffle">乱序</button>' +
     '</div>';
   }
@@ -1267,6 +1279,8 @@
             '</select>' +
           '</label>' +
           '<div class="drill-row"><span class="drill-label">顺序</span>' + drillOrderHtml() + '</div>' +
+          '<p class="drill-order-hint">顺序＝从旧到新（单词库原来的顺序）；倒序＝从新到旧（单词库倒着来）；' +
+            '乱序＝每一轮重新打乱。</p>' +
         '</div>' +
         vtToggleHtml(pool, vtOn) +
         (pool.some(function (w) { return isVerbPos(w.pos); }) &&
@@ -1406,6 +1420,7 @@
       var lastId = st.questions.length ? st.questions[st.questions.length - 1].wordId : '';
       var cycle = Quiz.makeDrillCycle(pool, {
         shuffle: st.order === 'shuffle',
+        reverse: st.order === 'rev',
         withVerbType: st.withVerbType,
         lastId: lastId,
         distractors: wordLibrary()
@@ -1455,7 +1470,7 @@
     var inCycle = st.index - st.cycleStart + 1;
     return '<div class="drill-meta">' +
       '<span class="pos-badge">' + escapeHtml(st.cat === FAV_KEY ? FAV_LABEL : st.cat) + '</span>' +
-      '<span>' + (st.order === 'shuffle' ? '乱序' : '按词库顺序') + '</span>' +
+      '<span>' + drillOrderLabel(st.order) + '</span>' +
       '<span>本轮 ' + inCycle + ' / ' + st.cycleLen + '</span>' +
     '</div>';
   }
@@ -1875,7 +1890,7 @@
     var score = run.results.filter(function (r) { return r.allCorrect; }).length;
     var pct = total ? Math.round(score / total * 100) : 0;
     var catLabel = run.cat === FAV_KEY ? FAV_LABEL : run.cat;
-    var orderLabel = run.order === 'shuffle' ? '乱序' : '按词库顺序';
+    var orderLabel = drillOrderLabel(run.order);
 
     var wrong = [];
     run.questions.forEach(function (q, i) {

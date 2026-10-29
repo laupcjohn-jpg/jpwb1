@@ -653,6 +653,14 @@ mark {
   font-size: 14px;
 }
 .drill-order { margin: 0; background: #f0f4f2; }
+.drill-order .mode-btn { padding: 7px 12px; }
+/* 顺序 / 倒序 / 乱序 各自是什么意思 */
+.drill-order-hint {
+  margin: -2px 0 0 50px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
 .drill-autofav { justify-content: center; margin: 4px 0 14px; }
 
 /* 连做时题目头部多一行：分类 / 顺序 / 本轮进度 */
@@ -1020,6 +1028,7 @@ mark {
   .drill-row { flex-wrap: wrap; }
   .drill-row .drill-select { flex: 1 1 100%; }
   .drill-order { width: 100%; }
+  .drill-order-hint { margin-left: 0; }
 
   /* 窄屏隐藏三列统计后，用独占一行的统计行补上 */
   .c-statline {

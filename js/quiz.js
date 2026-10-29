@@ -7,7 +7,7 @@
  *  - 例句随题目带出，但只在答完后的反馈里展示（答题时展示会剧透意思题）
  *  - 判分与假名归一化（平假名/片假名视为等价）
  *
- * 分类连做（makeDrillCycle）：同一个分类按顺序或乱序一轮一轮出题，
+ * 分类连做（makeDrillCycle）：同一个分类按顺序、倒序或乱序一轮一轮出题，
  * 不再限制 10 题，由界面上的「停止做题」结束。
  *
  * 造句题（makeSentenceSession）：只负责出题，判分交给 AI（functions/api/ai.js）。
@@ -218,6 +218,7 @@ window.Quiz = (function () {
   /**
    * 分类连做：给某个分类生成「一轮」题目。
    *  - shuffle=false：按词库顺序（Store.all 的顺序，也就是录入/导入顺序）
+   *  - reverse=true：倒序，把词库顺序反过来（从新到旧；shuffle 优先，两个都传时按乱序）
    *  - shuffle=true：这一轮打乱顺序；lastId 用来避免和上一轮最后一题重复
    *  - opts.distractors：意思选项的取词范围（默认就用这个分类里的词）
    */
@@ -232,6 +233,7 @@ window.Quiz = (function () {
       }
     } else {
       words = words.slice();
+      if (opts.reverse) words.reverse();   // 倒序：单词库顺序反过来（新→旧）
     }
     var distractorPool = opts.distractors || words;
     return words.map(function (w) { return buildQuestion(w, distractorPool, !!opts.withVerbType); });
